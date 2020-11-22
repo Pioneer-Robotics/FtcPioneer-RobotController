@@ -4,7 +4,7 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 
 // Two dimensional double vector
 public class Vector2 {
-    public static Vector2 zero = new Vector2(0, 0);
+    public static final Vector2 zero = new Vector2(0, 0);
 
     // Adds the x and y values of vector A and B and returns the resulting vector
     public static Vector2 add(Vector2 a, Vector2 b) {
