@@ -16,8 +16,9 @@ public class Robot  extends Thread{
     //all the other stuff in the Hardware package should be instantiated here as private variables
     private DriveTrain chassis;
     private Launcher launcher;
-
+    public PositionTracker odometer;
     public HardwareMap hwMap;
+
 
     //private constructor because we don't want anybody instantiating Robot more than once
     private Robot(HardwareMap hwMap){
