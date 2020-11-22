@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+
 // Two dimensional double vector
 public class Vector2 {
+    public static final Vector2 zero = new Vector2(0, 0);
     protected double x;
     protected double y;
-    public static Vector2 zero = new Vector2(0, 0);
 
     // Creates the vector (0,0)
     public Vector2() {
