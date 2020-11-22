@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import android.renderscript.Double2;
-
 //This class has all of the names and data for all of the things in one place for easy of access / sanity!
-public class RobotConfiguration {
+public class Config {
 
     //The IMU's names
     public static final String imu_0 = "imu";
@@ -11,10 +9,10 @@ public class RobotConfiguration {
 
 
     //Configuration names for all of our DriveTrain motors
-    public static final String motorFT = "Front Top";
-    public static final String motorFB = "Front Bottom";
-    public static final String motorBT = "Back Top";
-    public static final String motorBB = "Back Bottom";
+    public static final String motorLT = "Left Top";
+    public static final String motorLB = "Left Bottom";
+    public static final String motorRT = "Right Top";
+    public static final String motorRB = "Right Bottom";
 
     //Info on the specs of the odometers
     public static final int odoTicksPerRotation = 8192; //encoder ticks per full rotation

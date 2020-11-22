@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import org.firstinspires.ftc.teamcode.Hardware.RobotConfiguration;
+import org.firstinspires.ftc.teamcode.Hardware.Config;
 
 public class bMath {
 
     //converts odometry ticks to cm moved
     public static double odoTicksToCm(int ticks){
-        return ticks * RobotConfiguration.odoTicksToCm;
+        return ticks * Config.odoTicksToCm;
     }
     public static double pi() {
         return 3.14159265359;
@@ -60,6 +60,7 @@ public class bMath {
     }
     //End of clamp methods
 
+    @Deprecated
     public static double mod(double value, double modulus) { //another way to do mod
         //mod(a,b) == a % b
         return value - Math.floor(value / modulus) * modulus;

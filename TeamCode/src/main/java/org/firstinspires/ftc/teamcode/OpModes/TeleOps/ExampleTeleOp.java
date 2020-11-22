@@ -2,23 +2,27 @@ package org.firstinspires.ftc.teamcode.OpModes.TeleOps;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.SingleController;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.SingleController1Example;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.SingleController2Example;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.DriverProgramScript;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.Driver1ProgramExample;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.Driver2ProgramExample;
 
 public class ExampleTeleOp extends TeleOpScript {
     ElapsedTime deltaTime = new ElapsedTime();
-    SingleController controller1;
-    SingleController controller2;
+    DriverProgramScript controller1;
+    DriverProgramScript controller2;
 
     @Override
-    public void main() {
-        init();
-        controller1.main();
-        controller2.main();
+    public void loop() {
+        controller1.loop();
+        controller2.loop();
     }
+    public ExampleTeleOp(){
+        init();
+    }
+
+    //this is the only method you should need to change to make new TeleOps
     private void init(){
-        controller1 = new SingleController1Example();
-        controller1 = new SingleController2Example();
+        controller1 = new Driver1ProgramExample();
+        controller2 = new Driver2ProgramExample();
     }
 }

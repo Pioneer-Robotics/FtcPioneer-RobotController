@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import java.sql.Time;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -14,22 +17,33 @@ public class Robot  extends Thread{
     private DriveTrain chassis;
     private Launcher launcher;
 
+    public HardwareMap hwMap;
+
     //private constructor because we don't want anybody instantiating Robot more than once
-    private Robot(){
+    private Robot(HardwareMap hwMap){
+        this.hwMap = hwMap;
         chassis = new DriveTrain();
         launcher = new Launcher();
     }
-
+    public static void init(HardwareMap hwMap){
+        robot = new Robot(hwMap);
+    }
     //this is the method all other classes will use to access the robot
     public static Robot get(){
-        if(robot == null){
-            robot = new Robot();
-        }
         return robot;
     }
 
-    //TODO make all these methods actually do stuff
-    public static void driveForward(double distanceCM){
-
+    public void stopRobot(){
+        stopAllMotors();
+        chassis.setDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void stopAllMotors(){ //TODO keep this up to date
+        setDrivePowers(0,0);
+    }
+    public void setDrivePowers(double leftPower, double rightPower){
+        chassis.setMotorPowers(leftPower,rightPower);
+    }
+    public void setDrivePowers(double forwardPower){
+        chassis.setMotorPowers(forwardPower,forwardPower);
     }
 }

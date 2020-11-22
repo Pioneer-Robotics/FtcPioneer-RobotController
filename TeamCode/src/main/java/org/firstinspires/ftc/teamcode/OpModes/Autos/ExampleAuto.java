@@ -9,15 +9,10 @@ public class ExampleAuto extends AutoScript {
     double someValue = 4.6587912;
 
     @Override
-    public void main() {
-        Robot.get();
-        Robot.driveForward(12);
-        if(deltaTime.milliseconds() < someValue){
-            doTheThing();
-        }
-        else {
-            doTheOtherThing();
-        }
+    public void loop() {
+        Robot.get().setDrivePowers(12, 12);
+        doTheThing();
+        doTheOtherThing();
     }
 
     private void doTheThing() {
