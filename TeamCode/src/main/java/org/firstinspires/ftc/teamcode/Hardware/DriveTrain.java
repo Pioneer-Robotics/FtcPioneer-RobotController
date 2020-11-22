@@ -57,7 +57,7 @@ public class DriveTrain {
     }
 
     public Vector2 getLocation() {
-        return Robot.get().odometer.position;
+        return Robot.get().odometer.getLocation();
     }
     public double getRotation() {
         return Robot.get().odometer.getRotation();

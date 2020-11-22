@@ -13,11 +13,12 @@ public class Robot  extends Thread{
     //static robot so that it is the same everywhere (redundant)
     static Robot robot;
 
-    //all the other stuff in the Hardware package should be instantiated here as private variables
-    private DriveTrain chassis;
-    private Launcher launcher;
-    public PositionTracker odometer;
-    public HardwareMap hwMap;
+    //all the other stuff in the Hardware package should be instantiated here
+    //don't put modifier on them like "public" or "private". the default is "package" and is perfect
+    DriveTrain chassis;
+    Launcher launcher;
+    PositionTracker odometer;
+    HardwareMap hwMap;
 
 
     //private constructor because we don't want anybody instantiating Robot more than once

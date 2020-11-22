@@ -1,10 +1,36 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-
 // Two dimensional double vector
 public class Vector2 {
+    protected double x;
+    protected double y;
     public static Vector2 zero = new Vector2(0, 0);
+
+    // Creates the vector (0,0)
+    public Vector2() {
+        x = 0;
+        y = 0;
+    }
+    public Vector2(double xValue, double yValue) {
+        x = xValue;
+        y = yValue;
+    }
+    public double getX() {
+        return x;
+    }
+    public double getY() {
+        return y;
+    }
+    public void setX(double value){
+        x = value;
+    }
+    public void setY(double value){
+        y = value;
+    }
+    public void sexXandY(double x, double y){
+        this.x = x;
+        this.y = y;
+    }
 
     // Adds the x and y values of vector A and B and returns the resulting vector
     public static Vector2 add(Vector2 a, Vector2 b) {
@@ -56,17 +82,4 @@ public class Vector2 {
         return new Vector2(Math.cos(angle), Math.sin(angle));
     }
 
-    protected double x;
-    protected double y;
-
-    // Creates the vector (0,0)
-    public Vector2() {
-        x = 0;
-        y = 0;
-    }
-
-    public Vector2(double xValue, double yValue) {
-        x = xValue;
-        y = yValue;
-    }
 }

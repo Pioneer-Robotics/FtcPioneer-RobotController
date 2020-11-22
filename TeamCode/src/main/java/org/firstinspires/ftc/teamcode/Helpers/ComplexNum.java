@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.Helpers;
 
 //this class is gonna deal with complex numbers, probably will make "Position" class obsolete
 public class ComplexNum {
-    double real; //real component
-    double imag; //imaginary component
+    public double real; //real component
+    public double imag; //imaginary component
 
-    public ComplexNum(){ //just here so using the default constructor is still possible
-
+    public ComplexNum(){
+        real = 0;
+        imag = 0;
     }
     public ComplexNum(double real, double imag){
         this.real = real;
@@ -23,6 +24,12 @@ public class ComplexNum {
         Ans.real = (a.real * b.real) - (a.imag * b.imag);
         Ans.imag = (a.imag * b.real) + (a.real * b.imag);
         return Ans;
+    }
+    public void rotateAboutOrigin(double angle){
+        this.timesEquals(bMath.cis(angle));
+    }
+    public void timesEquals(ComplexNum input){
+        this.equals(multiply(this, input));
     }
     public void plusEquals(ComplexNum input){
         this.equals(add(this,input));
