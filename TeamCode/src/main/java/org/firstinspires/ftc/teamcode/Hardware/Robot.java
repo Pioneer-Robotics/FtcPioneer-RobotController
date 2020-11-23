@@ -22,13 +22,14 @@ public class Robot  extends Thread{
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
-    private Robot(HardwareMap hwMap){
+    private Robot(HardwareMap hwMap, double startX, double startY){
         this.hwMap = hwMap;
         chassis = new DriveTrain();
         launcher = new Launcher();
+        odometer = new PositionTracker(startX, startY);
     }
-    public static void init(HardwareMap hwMap){
-        robot = new Robot(hwMap);
+    public static void init(HardwareMap hwMap, double startX, double startY){
+        robot = new Robot(hwMap, startX, startY);
     }
     //this is the method all other classes will use to access the robot
     public static Robot get(){

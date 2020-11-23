@@ -4,8 +4,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Helpers.*;
 
+//this class is to do odometry and track the position of the robot. Specifically,
+//we measure "position" as the location of the CENTRAL ODOMETRY WHEEL
 public class PositionTracker {
-    public ComplexNum complexPos;
+    private ComplexNum complexPos;
     private Vector2 Vpos;
     private DcMotor left;
     private DcMotor right;
@@ -20,11 +22,7 @@ public class PositionTracker {
     private double deltaMiddle;
     private double deltaRotation;
 
-    public PositionTracker(){
-        setUpEncoders();
-        Vpos = new Vector2(0,0);
-        complexPos = new ComplexNum(0,0);
-    }
+
     public PositionTracker(double startX, double startY){
         setUpEncoders();
         Vpos = new Vector2(startX, startY);

@@ -20,7 +20,8 @@ public abstract class GenericOpMode extends LinearOpMode {
     }
     public void handelInits(){
         init();
-        Robot.init(hardwareMap); //TODO make sure the code actually runs like this, it might not
+        Robot.init(hardwareMap, auto.startX, auto.startY);
+        //TODO make sure the code actually runs like this, it might not (hardwareMap stuff)
         shouldTakeDriverInput = false;
         deltaTime = new ElapsedTime();
         shouldTakeDriverInput = false;

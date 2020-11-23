@@ -29,9 +29,12 @@ process for adding OpModes is straightforward.
 
 1) Make a copy of "ExampleAuto" and retitle it something meaningful
 
-2) Delete the body of the "loop()" method and replace it with what you actually want
+2) Change the values of "startX" and "startY" to the coordinates the robot will start at fot this
+    auto (units are cm, the back left corner is  (0,0), measure from the center odometry wheel)
 
-3) You're Done!
+3) Delete the body of the "loop()" method and replace it with what you actually want
+
+4) You're Done!
 
 
 ## Creating your own TeleOps

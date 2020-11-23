@@ -6,7 +6,8 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
 public class ExampleAuto extends AutoScript {
     ElapsedTime deltaTime = new ElapsedTime();
-    double someValue = 4.6587912;
+    double startX = 0.0;
+    double startY = 0.0;
 
     @Override
     public void loop() {
