@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class MotorPair {
+ class MotorPair {
     public DcMotor motor1;
     public DcMotor motor2;
 

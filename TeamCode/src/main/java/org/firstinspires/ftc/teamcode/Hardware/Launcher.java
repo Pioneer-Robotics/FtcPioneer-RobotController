@@ -1,4 +1,4 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-public class Launcher {
+ class Launcher {
 }

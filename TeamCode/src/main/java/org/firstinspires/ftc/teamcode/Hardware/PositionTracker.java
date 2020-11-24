@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Helpers.*;
 
 //this class is to do odometry and track the position of the robot. Specifically,
-//we measure "position" as the location of the CENTRAL ODOMETRY WHEEL
+    //we measure "position" as the location of the CENTRAL ODOMETER WHEEL
+//if it doesn't track position accurately, start by looking at updatePositionComplex()
 public class PositionTracker {
     private ComplexNum complexPos;
     private Vector2 Vpos;
@@ -16,6 +17,7 @@ public class PositionTracker {
     private double leftLast;
     private double rightLast;
     private double middleLast;
+    private double rotationLast;
 
     private double deltaLeft;
     private double deltaRight;
@@ -27,17 +29,28 @@ public class PositionTracker {
         setUpEncoders();
         Vpos = new Vector2(startX, startY);
         complexPos = new ComplexNum(startX, startY);
+        updateLastValues();
     }
-    private void setUpEncoders(){ //sets where left and right and middle will pull from
+    private void setUpEncoders(){ //sets where left, right, and middle will pull from
         left = Robot.get().hwMap.get(DcMotor.class, Config.motorLT);
         right = Robot.get().hwMap.get(DcMotor.class, Config.motorRT);
         middle = Robot.get().hwMap.get(DcMotor.class, Config.motorLB);
     }
-    public void trackPosition(){
-        calculateDeltas();
-        updateLastValues();
-        updatePositionComplex();
-        VposUpdate();
+    public void trackPosition(){ //this method is the heart of the class
+        calculateDeltas(); //finds all the "delta" values
+        updatePositionComplex(); //calculates the actual change in position and applies it
+        VposUpdate(); //updates Vpos with the new position
+        updateLastValues(); //sets all the "Last" doubles to the current values
+    }
+    private void updatePositionComplex(){
+        ComplexNum middleOdometer = findMiddleOdometerRelativeToCenterOfTurn();
+        ComplexNum relativePosition = middleOdometer.safeRotateAboutOrigin(deltaRotation);
+        //relativePosition is initially relative to the center of the turn
+        relativePosition.minusEquals(middleOdometer);
+        //minusEquals() makes it relative to the robot's "current" reference frame
+        ComplexNum deltaPosition = relativePosition.safeRotateAboutOrigin(-rotationLast);
+        //deltaPosition is the change in position of the robot, relative to the entire field
+        complexPos.plusEquals(deltaPosition);
     }
     private void calculateDeltas(){
         deltaLeft = getLeft() - leftLast;
@@ -54,15 +67,15 @@ public class PositionTracker {
     private double getMiddle(){
         return bMath.odoTicksToCm(middle.getCurrentPosition());
     }
+    public double getRotation() {
+        return ( getRight() - getLeft() ) / Config.distanceBetweenLeftAndRightOdometersCm;
+    }
+
     private void updateLastValues(){
         leftLast = getLeft();
         rightLast = getRight();
         middleLast = getMiddle();
-    }
-    private void updatePositionComplex(){
-        ComplexNum middleOdometer = findMiddleOdometerRelativeToCenterOfTurn();
-        middleOdometer.rotateAboutOrigin(deltaRotation);
-        complexPos.plusEquals(middleOdometer);
+        rotationLast = getRotation();
     }
 
     private ComplexNum findMiddleOdometerRelativeToCenterOfTurn() {
@@ -86,8 +99,5 @@ public class PositionTracker {
         VposUpdate();
         return Vpos;
     }
-    // TODO - implement me!
-    public double getRotation() {
-        return ( getRight() - getLeft() ) / Config.distanceBetweenLeftAndRightOdometersCm;
-    }
+
 }

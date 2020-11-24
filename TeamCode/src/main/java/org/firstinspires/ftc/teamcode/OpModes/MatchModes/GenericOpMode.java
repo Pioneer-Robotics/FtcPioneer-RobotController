@@ -8,37 +8,25 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
 
 public abstract class GenericOpMode extends LinearOpMode {
-    public ElapsedTime deltaTime;
-    public boolean shouldTakeDriverInput = false;
-    public AutoScript auto;
-    public TeleOpScript teleOp;
+    ElapsedTime deltaTime;
+    AutoScript auto;
+    TeleOpScript teleOp;
     public abstract void selectAutoAndTeleOp();
     public void initAndWaitForStart(){
         handelInits();
-        selectAutoAndTeleOp();
         waitForStart();
     }
     public void handelInits(){
         init();
-        Robot.init(hardwareMap, auto.startX, auto.startY);
         //TODO make sure the code actually runs like this, it might not (hardwareMap stuff)
-        shouldTakeDriverInput = false;
+        Robot.init(hardwareMap, auto.startX, auto.startY);
         deltaTime = new ElapsedTime();
-        shouldTakeDriverInput = false;
     }
-    public void handleShouldTakeDriverInput(){
-        if(gamepad1.right_trigger > 0.5 && gamepad1.left_trigger > 0.5){
-            shouldTakeDriverInput = true;
-        }
-        if (deltaTime.seconds() < 30){
-            shouldTakeDriverInput = false;
+    public void makeSureRobotDoesntMoveBetweenAutoAndTeleOp(){
+        if(30 < deltaTime.seconds() && deltaTime.seconds() < 31){
+            Robot.get().stopAllMotors();
         }
     }
-    @Deprecated
-    public void handleTeleOp(){
-        handleShouldTakeDriverInput();
-        if(shouldTakeDriverInput){
-            teleOp.loop();
-        }
-    }
+
+
 }

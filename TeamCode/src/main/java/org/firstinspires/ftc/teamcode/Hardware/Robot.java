@@ -7,7 +7,6 @@ import java.sql.Time;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-//ALL METHODS IN THIS CLASS SHOULD BE EITHER private OR static OR BOTH!!!!!
 public class Robot  extends Thread{
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)
@@ -36,9 +35,8 @@ public class Robot  extends Thread{
         return robot;
     }
 
-    public void stopRobot(){
-        stopAllMotors();
-        chassis.setDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    public void update(){
+        odometer.trackPosition();
     }
     public void stopAllMotors(){ //TODO keep this up to date
         setDrivePowers(0,0);

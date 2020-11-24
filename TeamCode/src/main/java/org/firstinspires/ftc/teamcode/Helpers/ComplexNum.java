@@ -19,10 +19,21 @@ public class ComplexNum {
         Ans.imag = a.imag + b.imag;
         return Ans;
     }
+    public static ComplexNum subtract(ComplexNum a, ComplexNum b){ //do a - b
+        ComplexNum Ans = new ComplexNum();
+        Ans.real = a.real - b.real;
+        Ans.imag = a.imag - b.imag;
+        return Ans;
+    }
     public static ComplexNum multiply(ComplexNum a, ComplexNum b){
         ComplexNum Ans = new ComplexNum();
         Ans.real = (a.real * b.real) - (a.imag * b.imag);
         Ans.imag = (a.imag * b.real) + (a.real * b.imag);
+        return Ans;
+    }
+    public ComplexNum safeRotateAboutOrigin(double angle){
+        ComplexNum Ans = this.clone();
+        Ans.rotateAboutOrigin(angle);
         return Ans;
     }
     public void rotateAboutOrigin(double angle){
@@ -33,6 +44,9 @@ public class ComplexNum {
     }
     public void plusEquals(ComplexNum input){
         this.equals(add(this,input));
+    }
+    public void minusEquals(ComplexNum input){
+        this.equals(subtract(this,input));
     }
 
     //changes the ComplexNum object to have values equal to the input

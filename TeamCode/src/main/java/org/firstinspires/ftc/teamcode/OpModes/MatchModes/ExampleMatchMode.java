@@ -8,6 +8,7 @@ public class ExampleMatchMode extends GenericOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        selectAutoAndTeleOp();
         initAndWaitForStart();
         while(opModeIsActive()) {
             if(deltaTime.seconds() < 30.0){
@@ -16,8 +17,11 @@ public class ExampleMatchMode extends GenericOpMode {
             else{
                 teleOp.loop();
             }
+            makeSureRobotDoesntMoveBetweenAutoAndTeleOp();
+            Robot.get().update();
+            telemetry.update();
         }
-        Robot.get().stopRobot();
+        Robot.get().stopAllMotors();
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 
 
-public class DriveTrain {
+ class DriveTrain {
     MotorPair leftMotors;
     MotorPair rightMotors;
 
