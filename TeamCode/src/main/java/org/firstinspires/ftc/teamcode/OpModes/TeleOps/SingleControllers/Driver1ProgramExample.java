@@ -7,6 +7,6 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gam
 public class Driver1ProgramExample extends DriverProgramScript {
     @Override
     public void loop(){ //TODO make this something you can actually use to drive around with
-        Robot.get().setDrivePowers(gamepad1.left_stick_y);
+        basicTankControlls(gamepad1, whichStick.RIGHT);
     }
 }

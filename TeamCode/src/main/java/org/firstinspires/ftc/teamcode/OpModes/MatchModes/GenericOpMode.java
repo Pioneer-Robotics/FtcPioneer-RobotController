@@ -18,15 +18,13 @@ public abstract class GenericOpMode extends LinearOpMode {
     }
     public void handelInits(){
         init();
-        //TODO make sure the code actually runs like this, it might not (hardwareMap stuff)
-        Robot.init(hardwareMap, auto.startX, auto.startY);
         deltaTime = new ElapsedTime();
+        //TODO make sure the code actually runs like this, it might not (hardwareMap stuff)
+        Robot.init(hardwareMap, telemetry, auto.startX, auto.startY);
     }
     public void makeSureRobotDoesntMoveBetweenAutoAndTeleOp(){
         if(30 < deltaTime.seconds() && deltaTime.seconds() < 31){
             Robot.get().stopAllMotors();
         }
     }
-
-
 }

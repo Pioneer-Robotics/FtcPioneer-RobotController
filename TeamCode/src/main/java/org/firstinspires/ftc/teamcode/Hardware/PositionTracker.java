@@ -34,7 +34,7 @@ public class PositionTracker {
     private void setUpEncoders(){ //sets where left, right, and middle will pull from
         left = Robot.get().hwMap.get(DcMotor.class, Config.motorLT);
         right = Robot.get().hwMap.get(DcMotor.class, Config.motorRT);
-        middle = Robot.get().hwMap.get(DcMotor.class, Config.motorLB);
+        middle = Robot.get().hwMap.get(DcMotor.class, Config.motorRB);
     }
     public void trackPosition(){ //this method is the heart of the class
         calculateDeltas(); //finds all the "delta" values
@@ -98,6 +98,7 @@ public class PositionTracker {
     public Vector2 getLocation() {
         VposUpdate();
         return Vpos;
-    }
 
+    }
+    //TODO make a "motion profiler" to handle rotations
 }

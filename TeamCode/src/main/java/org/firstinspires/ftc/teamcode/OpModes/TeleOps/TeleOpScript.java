@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOps;
 
-import com.qualcomm.robotcore.hardware.Gamepad;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.DriverProgramScript;
 
 public abstract class TeleOpScript {
+    DriverProgramScript controller1;
+    DriverProgramScript controller2;
     public abstract void loop();
 }

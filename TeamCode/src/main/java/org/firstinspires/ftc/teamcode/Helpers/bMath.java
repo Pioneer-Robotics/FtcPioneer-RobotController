@@ -17,12 +17,6 @@ public class bMath {
     public static double sq2() {
         return 1.41421356237309;
     }
-    public static double toRadians(double degrees) {
-        return degrees * 0.0174;
-    }
-    public static double toDegrees(double radians) {
-        return radians * 57.2957;
-    }
     public static double squared(double value) {
         return (value * value);
     }
@@ -77,5 +71,15 @@ public class bMath {
             return 0.0;
         }
         return (input > 0 ? 1.0: -1.0);
+    }
+
+    //toRadians and toDegrees are both in the standard Math class, so why did we make them again?
+    @Deprecated
+    public static double toRadians(double degrees) {
+        return degrees * 0.0174;
+    }
+    @Deprecated
+    public static double toDegrees(double radians) {
+        return radians * 57.2957;
     }
 }

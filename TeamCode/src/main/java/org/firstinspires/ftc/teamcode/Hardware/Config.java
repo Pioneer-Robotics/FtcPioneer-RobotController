@@ -20,11 +20,12 @@ public class Config {
     public static final double odoDiameterCM = odoDiameterIn * 2.54; //diameter of the wheel in cm
     public static final double odoCircumferenceCM = odoDiameterCM * Math.PI;
     public static final double odoTicksToCm = odoCircumferenceCM / odoTicksPerRotation;
-    public static final double distanceBetweenLeftAndRightOdometersCm = 32.6; //TODO measure this
-    public static final double distanceFromLeftOdoToMiddleOdoCm = 18.9; //TODO measure this
+    public static final double distanceBetweenLeftAndRightOdometersCm = 19.1;
+    public static final double distanceFromLeftOdoToMiddleOdoCm = 7.5;
 
     //The max speed our wheel motors will ever rotate (in ticks per second),
         // 3 rotations per second. Used in calibration.
+    @Deprecated
     public static final int wheel_maxTicksPerSecond = 4320; //TODO see if this is still needed + correct
 
 }
