@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
     public MotorPair(DcMotor motorA, DcMotor motorB, DcMotor.RunMode mode){
         motor1 = motorA;
-        motor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor1.setMode(mode);
         motor2 = motorB;
-        motor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor2.setMode(mode);
     }
     public void setPower(double power){

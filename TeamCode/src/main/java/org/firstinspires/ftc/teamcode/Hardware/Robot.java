@@ -20,13 +20,13 @@ public class Robot{
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
-    private Robot(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
+    public Robot(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
+        this.telemetry = telemetry;
         this.hwMap = hwMap;
         chassis = new DriveTrain();
         launcher = new Launcher();
         odometer = new PositionTracker(startX, startY);
         motorData = new MotorData();
-        this.telemetry = telemetry;
     }
     public static void init(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
         robot = new Robot(hwMap, telemetry, startX, startY);

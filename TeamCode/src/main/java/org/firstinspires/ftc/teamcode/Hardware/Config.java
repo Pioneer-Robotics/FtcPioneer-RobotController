@@ -3,16 +3,11 @@ package org.firstinspires.ftc.teamcode.Hardware;
 //This class has all of the names and data for all of the things in one place for easy of access / sanity!
 public class Config {
 
-    //The IMU's names
-    public static final String imu_0 = "imu";
-
-
-
     //Configuration names for all of our DriveTrain motors
-    public static final String motorLT = "Left Top";
-    public static final String motorLB = "Left Bottom";
-    public static final String motorRT = "Right Top";
-    public static final String motorRB = "Right Bottom";
+    public static final String motorLT = "LT";
+    public static final String motorLB = "LB";
+    public static final String motorRT = "RT";
+    public static final String motorRB = "RB";
 
     //Info on the specs of the odometers
     public static final int odoTicksPerRotation = 8192; //encoder ticks per full rotation

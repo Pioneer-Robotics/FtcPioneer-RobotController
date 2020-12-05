@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Hardware.BasicRobot;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
 
-public abstract class GenericOpMode extends LinearOpMode {
+public abstract class BasicGenericOpMode extends LinearOpMode {
     ElapsedTime deltaTime;
     AutoScript auto;
     TeleOpScript teleOp;
@@ -19,12 +20,7 @@ public abstract class GenericOpMode extends LinearOpMode {
     }
     public void handelInits(){
         deltaTime = new ElapsedTime();
-        //TODO make sure the code actually runs like this, it might not (hardwareMap stuff)
-        Robot.init(hardwareMap, telemetry, auto.startX, auto.startY);
+        BasicRobot.init(hardwareMap, telemetry);
     }
-    public void makeSureRobotDoesntMoveBetweenAutoAndTeleOp(){
-        if(30 < deltaTime.seconds() && deltaTime.seconds() < 31){
-            Robot.get().stopAllMotors();
-        }
-    }
+
 }
