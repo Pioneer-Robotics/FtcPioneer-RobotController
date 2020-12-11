@@ -12,9 +12,9 @@ public class Robot{
     public Telemetry telemetry;
     //all the other stuff in the Hardware package should be instantiated here
     //don't put modifier on them like "public" or "private". the default is "package" and is perfect
-    DriveTrain chassis;
-    Launcher launcher;
-    PositionTracker odometer;
+    static DriveTrain chassis;
+    static Launcher launcher;
+    static PositionTracker odometer;
     HardwareMap hwMap;
     MotorData motorData;
 
@@ -23,13 +23,15 @@ public class Robot{
     public Robot(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
         this.telemetry = telemetry;
         this.hwMap = hwMap;
-        chassis = new DriveTrain();
-        launcher = new Launcher();
-        odometer = new PositionTracker(startX, startY);
         motorData = new MotorData();
+        //the robot object does not exist until this method completes, so trying to create
+            //new "DriveTrain" objects and similer such will not work
     }
     public static void init(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
         robot = new Robot(hwMap, telemetry, startX, startY);
+        chassis = new DriveTrain();
+        launcher = new Launcher();
+        odometer = new PositionTracker(startX, startY);
     }
     //this is the method all other classes will use to access the robot
     public static Robot get(){

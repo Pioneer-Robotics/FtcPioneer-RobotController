@@ -20,7 +20,7 @@ public abstract class BasicGenericOpMode extends LinearOpMode {
     }
     public void handelInits(){
         deltaTime = new ElapsedTime();
-        BasicRobot.init(hardwareMap, telemetry);
+        BasicRobot.init(hardwareMap, telemetry, auto.startX, auto.startY);
     }
 
 }

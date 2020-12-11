@@ -19,7 +19,6 @@ public abstract class GenericOpMode extends LinearOpMode {
     }
     public void handelInits(){
         deltaTime = new ElapsedTime();
-        //TODO make sure the code actually runs like this, it might not (hardwareMap stuff)
         Robot.init(hardwareMap, telemetry, auto.startX, auto.startY);
     }
     public void makeSureRobotDoesntMoveBetweenAutoAndTeleOp(){

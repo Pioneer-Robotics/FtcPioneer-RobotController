@@ -4,37 +4,26 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 
 public class BasicRobot {
     static BasicRobot robot;
-    static DcMotor motorRT;
-    static DcMotor motorRB;
-    static DcMotor motorLT;
-    static DcMotor motorLB;
     static MotorData motorData;
+    static BasicDriveTrain chassis;
+    static BasicPosTracker odometer;
+    static Launcher launcher; //note: this will break things once "Launcher" class does things
     Telemetry telemetry;
+    HardwareMap hwMap;
     private BasicRobot(HardwareMap hwMap, Telemetry telemetry){
+        this.hwMap = hwMap;
         motorData = new MotorData();
         this.telemetry = telemetry;
-        motorLT = hwMap.get(DcMotor.class, "LT");
-        motorLB = hwMap.get(DcMotor.class, "LB");
-        motorRT = hwMap.get(DcMotor.class, "RT");
-        motorRB = hwMap.get(DcMotor.class, "RB");
-        motorLT.setDirection(DcMotor.Direction.FORWARD);
-        motorLB.setDirection(DcMotor.Direction.FORWARD);
-        motorRT.setDirection(DcMotor.Direction.REVERSE);
-        motorRB.setDirection(DcMotor.Direction.REVERSE);
-        motorLT.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorRT.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorLT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
-    public static void init(HardwareMap hwMap, Telemetry telemetry){
+    public static void init(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
         robot = new BasicRobot(hwMap, telemetry);
+        chassis = new BasicDriveTrain();
+        odometer = new BasicPosTracker(startX, startY);
+        launcher = new Launcher();
     }
     public static BasicRobot get(){
         return robot;
@@ -44,11 +33,15 @@ public class BasicRobot {
         motorData.rightPower = right;
     }
     public void update(){
-        motorLT.setPower(motorData.leftPower);
-        motorLB.setPower(motorData.leftPower);
-        motorRT.setPower(motorData.rightPower);
-        motorRB.setPower(motorData.rightPower);
+        chassis.setDrivePowers(motorData.leftPower, motorData.rightPower);
         telemetry.addData("left power", motorData.rightPower);
         telemetry.addData("right power", motorData.leftPower);
+        odometer.trackPosition();
+    }
+    public Vector2 getLocation(){
+        return odometer.getLocation();
+    }
+    public double getRotation(){
+        return odometer.getRotation();
     }
 }

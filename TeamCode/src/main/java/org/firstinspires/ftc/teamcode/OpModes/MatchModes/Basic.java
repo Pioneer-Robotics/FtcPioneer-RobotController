@@ -17,8 +17,8 @@ public class Basic extends BasicGenericOpMode {
     @Override
     public void runOpMode() throws InterruptedException
     {
-        initAndWaitForStart();
         selectAutoAndTeleOp();
+        initAndWaitForStart();
         while (opModeIsActive())
         {
             teleOp.loop();
@@ -30,5 +30,6 @@ public class Basic extends BasicGenericOpMode {
     @Override
     public void selectAutoAndTeleOp() {
         teleOp = new BasicTeleop(gamepad1, telemetry);
+        auto = new ExampleAuto();
     }
 }

@@ -42,6 +42,9 @@ public class BasicTeleop extends TeleOpScript{
         tgtPowerRight = Range.clip(tgtPowerRight, -1.0,1.0);
         BasicRobot.get().setMotorPowers(tgtPowerLeft, tgtPowerRight);
         telemetry.addLine("working???");
+        telemetry.addData("xPos", BasicRobot.get().getLocation().getX());
+        telemetry.addData("yPos", BasicRobot.get().getLocation().getY());
+        telemetry.addData("rotation", BasicRobot.get().getRotation());
     }
 
 }
