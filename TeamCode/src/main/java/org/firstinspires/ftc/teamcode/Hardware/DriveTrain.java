@@ -12,20 +12,29 @@ import org.firstinspires.ftc.teamcode.Helpers.Vector2;
     DriveTrain(){
         DcMotor leftTop = Robot.get().hwMap.get(DcMotor.class,Config.motorLT);
         DcMotor leftBottom = Robot.get().hwMap.get(DcMotor.class,Config.motorLB);
-        leftMotors = new MotorPair(leftTop, leftBottom, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftMotors = new MotorPair(leftTop, leftBottom);
 
         DcMotor rightTop = Robot.get().hwMap.get(DcMotor.class,Config.motorRT);
         DcMotor rightBottom = Robot.get().hwMap.get(DcMotor.class,Config.motorRB);
-        rightMotors = new MotorPair(rightTop, rightBottom,DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotors = new MotorPair(rightTop, rightBottom);
+
+        leftMotors.setDirection(DcMotor.Direction.FORWARD);
+        rightMotors.setDirection(DcMotor.Direction.REVERSE);
+        setDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     void setMotorPowers(double leftPower, double rightPower){
         leftMotors.setPower(leftPower);
         rightMotors.setPower(rightPower);
     }
-
     void setDriveMode(DcMotor.RunMode mode) {
         leftMotors.setDriveMode(mode);
         rightMotors.setDriveMode(mode);
+    }
+    void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior){
+        leftMotors.setZeroPowerBehavior(behavior);
+        rightMotors.setZeroPowerBehavior(behavior);
     }
 
     // WIP, not commented or formatted
@@ -62,6 +71,6 @@ import org.firstinspires.ftc.teamcode.Helpers.Vector2;
         return Robot.get().getLocation();
     }
     public double getRotation() {
-        return Robot.get().getRotation();
+        return Robot.get().getRotationRad();
     }
 }

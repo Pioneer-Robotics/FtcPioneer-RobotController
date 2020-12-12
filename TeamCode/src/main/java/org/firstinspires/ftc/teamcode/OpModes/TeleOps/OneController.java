@@ -5,11 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Hardware.BasicRobot;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.DriverProgramScript;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.Driver1ProgramExample;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.Driver2ProgramExample;
 
 public class OneController extends TeleOpScript {
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale;
@@ -40,10 +36,13 @@ public class OneController extends TeleOpScript {
         tgtPowerLeft = Range.clip(tgtPowerLeft, -1.0,1.0);
         tgtPowerRight = Range.clip(tgtPowerRight, -1.0,1.0);
         Robot.get().setDrivePowers(tgtPowerLeft,tgtPowerRight);
-        telemetry.addLine("working!!!");
         telemetry.addData("xPos", Robot.get().getLocation().getX());
         telemetry.addData("yPos", Robot.get().getLocation().getY());
-        telemetry.addData("rotation", Robot.get().getRotation());
+        telemetry.addData("rotation (deg)", Robot.get().getRotationDeg());
+        telemetry.addLine();
+        telemetry.addData("left odo", Robot.get().getLeftOdo());
+        telemetry.addData("right odo", Robot.get().getRightOdo());
+        telemetry.addData("mid odo", Robot.get().getMidOdo());
     }
     public OneController(Gamepad gamepad, Telemetry telemetry){
         this.gamepad = gamepad;

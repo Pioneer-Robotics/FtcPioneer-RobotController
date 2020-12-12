@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.Helpers.*;
     //we measure "position" as the location of the CENTRAL ODOMETER WHEEL
 //if it doesn't track position accurately, start by looking at updatePositionComplex()
 public class PositionTracker {
-    private ComplexNum complexPos;
-    private Vector2 Vpos;
+    private final ComplexNum complexPos;
+    private final Vector2 Vpos;
     private DcMotor left;
     private DcMotor right;
     private DcMotor middle;
@@ -32,8 +32,8 @@ public class PositionTracker {
         updateLastValues();
     }
     private void setUpEncoders(){ //sets where left, right, and middle will pull from
-        left = Robot.get().hwMap.get(DcMotor.class, Config.motorLT);
-        right = Robot.get().hwMap.get(DcMotor.class, Config.motorRT);
+        left = Robot.get().hwMap.get(DcMotor.class, Config.motorRT);
+        right = Robot.get().hwMap.get(DcMotor.class, Config.motorLT);
         middle = Robot.get().hwMap.get(DcMotor.class, Config.motorRB);
     }
     public void trackPosition(){ //this method is the heart of the class
@@ -42,7 +42,7 @@ public class PositionTracker {
         VposUpdate(); //updates Vpos with the new position
         updateLastValues(); //sets all the "Last" doubles to the current values
     }
-    private void updatePositionComplex(){
+    private void updatePositionComplex(){ //this is the meat of the class, most complex bit (puns)
         ComplexNum middleOdometer = findMiddleOdometerRelativeToCenterOfTurn();
         ComplexNum relativePosition = middleOdometer.safeRotateAboutOrigin(deltaRotation);
         //relativePosition is initially relative to the center of the turn
@@ -58,16 +58,16 @@ public class PositionTracker {
         deltaMiddle = getMiddle() - middleLast;
         deltaRotation = (deltaRight - deltaLeft) / Config.distanceBetweenLeftAndRightOdometersCm;
     }
-    private double getLeft(){
+    double getLeft(){
         return bMath.odoTicksToCm(left.getCurrentPosition());
     }
-    private double getRight(){
+    double getRight(){
         return bMath.odoTicksToCm(right.getCurrentPosition());
     }
-    private double getMiddle(){
+    double getMiddle(){
         return bMath.odoTicksToCm(middle.getCurrentPosition());
     }
-    public double getRotation() {
+    double getRotationRad() {
         return ( getRight() - getLeft() ) / Config.distanceBetweenLeftAndRightOdometersCm;
     }
 
@@ -75,14 +75,14 @@ public class PositionTracker {
         leftLast = getLeft();
         rightLast = getRight();
         middleLast = getMiddle();
-        rotationLast = getRotation();
+        rotationLast = getRotationRad();
     }
 
     private ComplexNum findMiddleOdometerRelativeToCenterOfTurn() {
         ComplexNum Ans = new ComplexNum();
         if(deltaRotation != 0){
-            Ans.real = (getLeft() / deltaRotation) + Config.distanceFromLeftOdoToMiddleOdoCm;
-            Ans.imag = getMiddle() / deltaRotation;
+            Ans.real = (deltaLeft / deltaRotation) + Config.distanceFromLeftOdoToMiddleOdoCm;
+            Ans.imag = deltaMiddle / deltaRotation;
         }
         else{
             Ans.real = deltaLeft;

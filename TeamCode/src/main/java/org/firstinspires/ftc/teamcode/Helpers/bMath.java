@@ -3,20 +3,16 @@ package org.firstinspires.ftc.teamcode.Helpers;
 import org.firstinspires.ftc.teamcode.Hardware.Config;
 
 public class bMath {
+    public static double pi = 3.14159265359;
+    public static double pi2 = 2 * pi;
+    public static double sq2 = 1.41421356237309;
+
 
     //converts odometry ticks to cm moved
     public static double odoTicksToCm(int ticks){
         return ticks * Config.odoTicksToCm;
     }
-    public static double pi() {
-        return 3.14159265359;
-    }
-    public static double pi2() {
-        return pi() * 2;
-    }
-    public static double sq2() {
-        return 1.41421356237309;
-    }
+
     public static double squared(double value) {
         return (value * value);
     }
@@ -71,6 +67,9 @@ public class bMath {
             return 0.0;
         }
         return (input > 0 ? 1.0: -1.0);
+    }
+    public static double toDeg(double angleRad){
+        return angleRad / pi * 180.0;
     }
 
     //toRadians and toDegrees are both in the standard Math class, so why did we make them again?

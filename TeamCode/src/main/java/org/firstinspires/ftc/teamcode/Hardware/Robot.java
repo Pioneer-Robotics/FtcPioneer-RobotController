@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helpers.Vector2;
+import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class Robot{
     //this class is meant to be a singleton
@@ -53,7 +54,19 @@ public class Robot{
     public Vector2 getLocation(){
         return odometer.getLocation();
     }
-    public double getRotation(){
-        return odometer.getRotation();
+    public double getRotationRad(){
+        return odometer.getRotationRad();
+    }
+    public double getRotationDeg(){
+        return bMath.toDeg(odometer.getRotationRad());
+    }
+    public double getLeftOdo(){
+        return odometer.getLeft();
+    }
+    public double getRightOdo(){
+        return odometer.getRight();
+    }
+    public double getMidOdo(){
+        return odometer.getMiddle();
     }
 }
