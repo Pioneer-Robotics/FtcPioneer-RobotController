@@ -13,6 +13,9 @@ public class ComplexNum {
         this.real = real;
         this.imag = imag;
     }
+    public static ComplexNum newComplexNumPolar(double magnitude, double direction){
+        return new ComplexNum(magnitude*Math.cos(direction), magnitude*Math.sin(direction));
+    }
     public static ComplexNum add(ComplexNum a, ComplexNum b){
         ComplexNum Ans = new ComplexNum();
         Ans.real = a.real + b.real;
@@ -36,8 +39,9 @@ public class ComplexNum {
         Ans.rotateAboutOrigin(angle);
         return Ans;
     }
-    public void rotateAboutOrigin(double angle){
+    public ComplexNum rotateAboutOrigin(double angle){
         this.timesEquals(bMath.cis(angle));
+        return this;
     }
     public void timesEquals(ComplexNum input){
         this.equals(multiply(this, input));
