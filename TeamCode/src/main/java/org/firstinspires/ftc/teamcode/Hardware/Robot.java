@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class Robot{
+    static final int ODOMETER_POLL_PERIOD_MS = 250;
+
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)
     static Robot robot;
@@ -18,6 +21,7 @@ public class Robot{
     static PositionTracker2 odometer;
     HardwareMap hwMap;
     MotorData motorData;
+    ElapsedTime odometerPollInterval;
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
@@ -25,6 +29,9 @@ public class Robot{
         this.telemetry = telemetry;
         this.hwMap = hwMap;
         motorData = new MotorData();
+
+        odometerPollInterval = new ElapsedTime();
+
         //the robot object does not exist until this method completes, so trying to create
             //new "DriveTrain" objects and similer such will not work
     }
@@ -40,7 +47,10 @@ public class Robot{
     }
 
     public void update(){
-        odometer.trackPosition();
+        if (odometerPollInterval.milliseconds()>=ODOMETER_POLL_PERIOD_MS) {
+            odometer.trackPosition();
+            odometerPollInterval.reset();
+        }
         motorData.handleFullStop(); //this needs to go before the setMotorPowers stuff
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
     }
