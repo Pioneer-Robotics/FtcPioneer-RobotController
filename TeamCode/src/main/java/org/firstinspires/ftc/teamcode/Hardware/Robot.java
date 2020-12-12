@@ -15,7 +15,7 @@ public class Robot{
     //don't put modifier on them like "public" or "private". the default is "package" and is perfect
     static DriveTrain chassis;
     static Launcher launcher;
-    static PositionTracker odometer;
+    static PositionTracker2 odometer;
     HardwareMap hwMap;
     MotorData motorData;
 
@@ -32,7 +32,7 @@ public class Robot{
         robot = new Robot(hwMap, telemetry, startX, startY);
         chassis = new DriveTrain();
         launcher = new Launcher();
-        odometer = new PositionTracker(startX, startY);
+        odometer = new PositionTracker2(startX, startY);
     }
     //this is the method all other classes will use to access the robot
     public static Robot get(){
@@ -55,10 +55,10 @@ public class Robot{
         return odometer.getLocation();
     }
     public double getRotationRad(){
-        return odometer.getRotationRad();
+        return odometer.getRotationRadians();
     }
     public double getRotationDeg(){
-        return bMath.toDeg(odometer.getRotationRad());
+        return bMath.toDeg(odometer.getRotationRadians());
     }
     public double getLeftOdo(){
         return odometer.getLeft();
