@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
 import org.firstinspires.ftc.teamcode.Helpers.Vector2;
@@ -12,6 +13,10 @@ import org.firstinspires.ftc.teamcode.Helpers.bMath;
 public class PositionTracker2 {
     private final ComplexNum pos;
     private final Vector2 Vpos;
+
+    ElapsedTime deltaTime;
+    double waitIntervalMS;  //MS = milliseconds
+
     private DcMotor left;
     private DcMotor right;
     private DcMotor middle;
@@ -27,13 +32,14 @@ public class PositionTracker2 {
     private double deltaTheta;
 
 
-    public PositionTracker2(double startX, double startY){
+    public PositionTracker2(double startX, double startY, double waitIntervalMS){
         setUpEncoders();
         Vpos = new Vector2(startX, startY);
         pos = new ComplexNum(startX, startY);
+        deltaTime = new ElapsedTime();
+        this.waitIntervalMS = waitIntervalMS;
         updateLastValues();
     }
-
 
     private void setUpEncoders(){ //sets where left, right, and middle will pull from
         left = Robot.get().hwMap.get(DcMotor.class, Config.motorRT);
@@ -42,10 +48,13 @@ public class PositionTracker2 {
     }
 
 
-    public void trackPosition(){ //this method is the heart of the class
-        calculateDeltas(); //finds all the "delta" values
-        updatePositionComplex(); //calculates the actual change in position and applies it
-        updateLastValues(); //sets all the "Last" doubles to the current values
+    public void update(){ //this method is the heart of the class
+        if(deltaTime.milliseconds() > waitIntervalMS) {
+            calculateDeltas(); //finds all the "delta" values
+            updatePositionComplex(); //calculates the actual change in position and applies it
+            updateLastValues(); //sets all the "Last" doubles to the current values
+            deltaTime.reset();
+        }
     }
 
     private void updatePositionComplex() {

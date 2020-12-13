@@ -8,7 +8,13 @@ import org.firstinspires.ftc.teamcode.OpModes.TeleOps.*;
 
 @Autonomous (name = "example", group = "example")
 public class ExampleMatchMode extends GenericOpMode {
-
+    @Override
+    //this is the method you change when you make new MatchModes. Change "ExampleAuto" and
+    //"ExampleTeleOp" to the specific autonomous and teleOp programs you want.
+    public void selectAutoAndTeleOp(){
+        auto = new ExampleAuto();
+        teleOp = new ExampleTeleOp();
+    }
     @Override
     public void runOpMode() throws InterruptedException {
         selectAutoAndTeleOp();
@@ -26,12 +32,4 @@ public class ExampleMatchMode extends GenericOpMode {
         }
         Robot.get().stopAllMotors();
     }
-    @Override
-    //this is the method you change when you make new MatchModes. Change "ExampleAuto" and
-        //"ExampleTeleOp" to the specific autonomous and teleOp programs you want.
-    public void selectAutoAndTeleOp(){
-        auto = new ExampleAuto();
-        teleOp = new ExampleTeleOp();
-    }
-
 }

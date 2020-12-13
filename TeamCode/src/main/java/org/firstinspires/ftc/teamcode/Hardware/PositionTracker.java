@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Helpers.*;
 
@@ -10,6 +11,10 @@ import org.firstinspires.ftc.teamcode.Helpers.*;
 public class PositionTracker {
     private final ComplexNum complexPos;
     private final Vector2 Vpos;
+
+    double waitIntervalMS; //MS = milliseconds
+    ElapsedTime deltaTime;
+
     private DcMotor left;
     private DcMotor right;
     private DcMotor middle;
@@ -25,10 +30,12 @@ public class PositionTracker {
     private double deltaRotation;
 
 
-    public PositionTracker(double startX, double startY){
+    public PositionTracker(double startX, double startY, double waitIntervalMS){
         setUpEncoders();
         Vpos = new Vector2(startX, startY);
         complexPos = new ComplexNum(startX, startY);
+        deltaTime = new ElapsedTime();
+        this.waitIntervalMS = waitIntervalMS;
         updateLastValues();
     }
     private void setUpEncoders(){ //sets where left, right, and middle will pull from
@@ -36,11 +43,13 @@ public class PositionTracker {
         right = Robot.get().hwMap.get(DcMotor.class, Config.motorLT);
         middle = Robot.get().hwMap.get(DcMotor.class, Config.motorRB);
     }
-    public void trackPosition(){ //this method is the heart of the class
-        calculateDeltas(); //finds all the "delta" values
-        updatePositionComplex(); //calculates the actual change in position and applies it
-        VposUpdate(); //updates Vpos with the new position
-        updateLastValues(); //sets all the "Last" doubles to the current values
+    public void update(){ //this method is the heart of the class
+        if(deltaTime.milliseconds() > waitIntervalMS) {
+            calculateDeltas(); //finds all the "delta" values
+            updatePositionComplex(); //calculates the actual change in position and applies it
+            updateLastValues(); //sets all the "Last" doubles to the current values
+            deltaTime.reset();
+        }
     }
     private void updatePositionComplex(){ //this is the meat of the class, most complex bit (puns)
         ComplexNum middleOdometer = findMiddleOdometerRelativeToCenterOfTurn();
@@ -67,7 +76,7 @@ public class PositionTracker {
     double getMiddle(){
         return bMath.odoTicksToCm(middle.getCurrentPosition());
     }
-    double getRotationRad() {
+    double getRotationRadians() {
         return ( getRight() - getLeft() ) / Config.distanceBetweenLeftAndRightOdometersCm;
     }
 
@@ -75,7 +84,7 @@ public class PositionTracker {
         leftLast = getLeft();
         rightLast = getRight();
         middleLast = getMiddle();
-        rotationLast = getRotationRad();
+        rotationLast = getRotationRadians();
     }
 
     private ComplexNum findMiddleOdometerRelativeToCenterOfTurn() {
