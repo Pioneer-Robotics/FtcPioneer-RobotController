@@ -35,24 +35,16 @@ public class ComplexNum {
         return Ans;
     }
     public ComplexNum safeRotateAboutOrigin(double angle){
-        ComplexNum Ans = this.clone();
+        ComplexNum Ans = this.copy();
         Ans.rotateAboutOrigin(angle);
         return Ans;
     }
-    public static ComplexNum exp(ComplexNum input, int iterations){
-        ComplexNum Ans = input.clone();
-        Ans.plusEquals(1);
-        ComplexNum N = input.clone();
-        for(int i = 2; i <= iterations; i++){
-            N.timesEquals(input).divideEquals(i);
-            Ans.plusEquals(N);
-        }
+    public static ComplexNum exp(ComplexNum input){ //verified
+        ComplexNum Ans = bMath.cis(input.imag);
+        Ans.timesEquals(Math.exp(input.real));
         return Ans;
     }
-    public static ComplexNum exp(ComplexNum input){
-        return exp(input, 10);
-    }
-    public static ComplexNum ln(ComplexNum input){
+    public static ComplexNum ln(ComplexNum input){ //doesn't work
         double imag = bMath.acis(input);
         double vectorLengthSquared = input.real * input.real + input.imag * input.imag;
         double vectorLength = Math.sqrt(vectorLengthSquared);
@@ -100,7 +92,7 @@ public class ComplexNum {
         return this;
     }
 
-    public ComplexNum clone(){
+    public ComplexNum copy(){
         return new ComplexNum(this.real, this.imag);
     }
 

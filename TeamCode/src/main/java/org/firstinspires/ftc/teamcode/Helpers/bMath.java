@@ -62,24 +62,21 @@ public class bMath {
         Ans.imag = Math.sin(angle);
         return Ans;
     }
-    public static double acis(ComplexNum input){
-        if(input.imag == 0){ //this means it's on the real number line
-            switch ((int)sign(input.real)){
-                case 1: return 0;
-                case -1: return pi;
-
-            }
+    public static double acis(ComplexNum input){ //works, but inelegant
+        double Ans = 0;
+        if(input.real == 0){
+            Ans = pi / 2 * sign(input.imag);
         }
-        double Ans = acot(input.imag / input.real);
-        Ans *= sign(input.imag);
+        if(input.real > 0){
+            Ans = Math.atan(input.imag / input.real);
+        }
+        if(input.real < 0){
+            Ans = Math.atan(input.imag / input.real) + Math.PI * sign(input.imag);
+        }
         return Ans;
     }
-    public static double acot(double input){
-        double Ans = Math.atan(input);
-        if(Ans < 0){
-            Ans = pi + Ans;
-        }
-        return Ans;
+    public static double acot(double input){ //verified
+        return pi / 2 - Math.atan(input);
     }
     public static double sign(double input){
         if(input == 0){
