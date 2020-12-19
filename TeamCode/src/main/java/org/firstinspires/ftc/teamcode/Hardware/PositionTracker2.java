@@ -58,10 +58,17 @@ public class PositionTracker2 {
     }
 
     private void updatePositionComplex() {
-        double majorRotationRadius = (Config.distanceBetweenLeftAndRightOdometersCm * deltaLeft) / (deltaRight-deltaLeft);
-        ComplexNum f = ComplexNum.newComplexNumPolar(
-                2*(majorRotationRadius+ (Config.distanceBetweenLeftAndRightOdometersCm/2)) * Math.sin(deltaTheta/2),
-                deltaTheta + Math.PI/2);
+        ComplexNum f;
+
+        if (deltaRight != deltaLeft){ //avoid dividing by zero
+            double majorRotationRadius = (Config.distanceBetweenLeftAndRightOdometersCm * deltaLeft) / (deltaRight-deltaLeft);
+            f = ComplexNum.newComplexNumPolar(
+                    (deltaRight+deltaLeft)/2,
+                    deltaTheta + Math.PI/2.0);
+        } else {
+            f = ComplexNum.newComplexNumPolar(deltaRight,deltaTheta + Math.PI/2.0);
+        }
+
         ComplexNum m = ComplexNum.newComplexNumPolar(deltaMiddle, deltaTheta);
         ComplexNum deltaPositionRobot = ComplexNum.add(f,m);
         pos.plusEquals(deltaPositionRobot.rotateAboutOrigin(-rotationLast));

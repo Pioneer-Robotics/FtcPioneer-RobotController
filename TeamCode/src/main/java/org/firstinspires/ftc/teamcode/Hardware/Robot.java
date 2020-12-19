@@ -29,7 +29,7 @@ public class Robot{
         this.hwMap = hwMap;
         motorData = new MotorData();
         //the robot object does not exist until this method completes, so trying to create
-            //new "DriveTrain" objects and similar such will not work
+            //new "DriveTrain" objects and similer such will not work
     }
     public static void init(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
         robot = new Robot(hwMap, telemetry, startX, startY);
