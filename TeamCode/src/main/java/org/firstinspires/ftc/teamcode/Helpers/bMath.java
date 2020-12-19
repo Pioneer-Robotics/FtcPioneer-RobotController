@@ -13,7 +13,7 @@ public class bMath {
         return ticks * Config.odoTicksToCm;
     }
 
-    public static double squared(double value) {
+    public static double sqd(double value) {
         return (value * value);
     }
 
@@ -64,13 +64,18 @@ public class bMath {
     }
     public static double acis(ComplexNum input){ //works, but inelegant
         double Ans = 0;
-        if(input.real == 0){
+        if(input.imag == 0){//on real axis
+            if(input.real > 0) return 0;
+            if(input.real < 0) return pi;
+            if(input.real == 0) return 0; //arbitrary choice, obviously there is no good Ans
+        }
+        if(input.real == 0){//on imaginary axis
             Ans = pi / 2 * sign(input.imag);
         }
-        if(input.real > 0){
+        if(input.real > 0){ //the point is in quadrants 1 or 4
             Ans = Math.atan(input.imag / input.real);
         }
-        if(input.real < 0){
+        if(input.real < 0){ //in quadrants 2 or 3
             Ans = Math.atan(input.imag / input.real) + Math.PI * sign(input.imag);
         }
         return Ans;

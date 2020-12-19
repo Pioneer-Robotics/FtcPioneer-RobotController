@@ -34,26 +34,56 @@ public class ComplexNum {
         Ans.imag = (a.imag * b.real) + (a.real * b.imag);
         return Ans;
     }
+
+    /**
+     * creates a new complex number of the exact same value and rotatoes that about 0 + 0i
+     * @param angle angle you want complex number roated by
+     * @return the new complex number
+     */
     public ComplexNum safeRotateAboutOrigin(double angle){
         ComplexNum Ans = this.copy();
         Ans.rotateAboutOrigin(angle);
         return Ans;
     }
+    /**
+     * returns Euler's number e raised to the power of a complex number
+     * @param input the exponent to raise e to
+     * @return the value of e^input, where e is the base of the natural logarithm
+     */
     public static ComplexNum exp(ComplexNum input){ //verified
         ComplexNum Ans = bMath.cis(input.imag);
         Ans.timesEquals(Math.exp(input.real));
         return Ans;
     }
-    public static ComplexNum ln(ComplexNum input){ //doesn't work
+    /**
+     * @return e raised to the power of this complex number
+     */
+    public ComplexNum expThis() {
+        return exp(this);
+    }
+    /**
+     * finds the natural log of a complex number
+     * @param input the complex number you wish to take the natural log of
+     * @return the simplest natural log of the input
+     * @note There are an infinite number of possible natural logs for any given
+     * complex number, this method returns the one with an imaginary part on
+     * the interval (-π, π]
+     */
+    public static ComplexNum ln(ComplexNum input){ //verified
         double imag = bMath.acis(input);
-        double vectorLengthSquared = input.real * input.real + input.imag * input.imag;
-        double vectorLength = Math.sqrt(vectorLengthSquared);
-        double real = Math.log(vectorLength);
+        double vectorLengthSquared = bMath.sqd(input.imag) + bMath.sqd(input.real);
+        double real = 0.5 * Math.log(vectorLengthSquared);
         return new ComplexNum(real, imag);
     }
     public static ComplexNum power(ComplexNum base, ComplexNum exponent){
         return exp(multiply(ln(base), exponent));
     }
+
+    /**
+     * rotates this complex number about the point 0 + 0i
+     * @param angle angle you want to rotate by (in radians)
+     * @return returns itself after rotation
+     */
     public ComplexNum rotateAboutOrigin(double angle){
         this.timesEquals(bMath.cis(angle));
         return this;
@@ -85,13 +115,22 @@ public class ComplexNum {
         this.timesEquals(this);
         return this;
     }
-    //changes the ComplexNum object to have values equal to the input
+
+    /**
+     * sets a complex number equal to the input complex number
+     * @param input value to set this to
+     * @return returns itself
+     */
     public ComplexNum equals(ComplexNum input){
         real = input.real;
         imag = input.imag;
         return this;
     }
 
+    /**
+     * makes a copy with a different memory address
+     * @return the copy
+     */
     public ComplexNum copy(){
         return new ComplexNum(this.real, this.imag);
     }

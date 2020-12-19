@@ -17,7 +17,7 @@ public class Robot{
     static int testCases = 5;
     static double maxWaitTimeMS = 500;
     static PosTrackerType1population type1odos; //same idea, but slightly different implementations
-    static PosTrackerType2population type2odos;
+    static PosTrackerType2population type2odos; //same idea, but slightly different implementations
     static PositionTracker mainOdometer;
     HardwareMap hwMap;
     MotorData motorData;
