@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
@@ -14,10 +13,10 @@ public abstract class GenericOpMode extends LinearOpMode {
     TeleOpScript teleOp;
     public abstract void selectAutoAndTeleOp();
     public void initAndWaitForStart(){
-        handelInits();
+        handleInits();
         waitForStart();
     }
-    public void handelInits(){
+    public void handleInits(){
         deltaTime = new ElapsedTime();
         Robot.init(hardwareMap, telemetry, auto.startX, auto.startY);
     }

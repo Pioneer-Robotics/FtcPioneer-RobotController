@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
-@Deprecated
-public class ExampleAuto extends AutoScript {
+public class NullAuto extends AutoScript {
     ElapsedTime deltaTime = new ElapsedTime();
     double startX = 0.0;
     double startY = 0.0;
@@ -13,15 +12,6 @@ public class ExampleAuto extends AutoScript {
     @Override
     public void loop() {
         Robot.get().setDrivePowers(0, 0);
-        doTheThing();
-        doTheOtherThing();
-    }
-
-    private void doTheThing() {
-        //some code
-    }
-    private void doTheOtherThing() {
-        //different code
     }
 
 }

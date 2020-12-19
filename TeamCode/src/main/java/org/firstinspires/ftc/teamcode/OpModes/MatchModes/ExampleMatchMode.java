@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.*;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.*;
 
 @Autonomous (name = "example", group = "example")
+@Disabled
 public class ExampleMatchMode extends GenericOpMode {
     @Override
     //this is the method you change when you make new MatchModes. Change "ExampleAuto" and
