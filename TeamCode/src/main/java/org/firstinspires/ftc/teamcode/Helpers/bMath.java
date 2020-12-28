@@ -89,8 +89,28 @@ public class bMath {
         }
         return (input > 0 ? 1.0: -1.0);
     }
-    public static double toDeg(double angleRad){
-        return angleRad / pi * 180.0;
+
+    /**
+     * puts an angle into the range -π to π
+     * @param angleRadians the angle you want "regularized" in radians
+     * @return the corresponding angle in the range -π to π
+     */
+    public static double regularizeAngleRad(double angleRadians){
+        ComplexNum num = cis(angleRadians);
+        double ans = acis(num);
+        return ans;
+    }
+
+    /**
+     * puts an angle into the range -180° to 180°
+     * @param angleDegrees the angle you want "regularized" in degrees
+     * @return the corresponding angle in the range -180° to 180°
+     */
+    public static double regularizeAngleDeg(double angleDegrees){
+        double angleRad = Math.toRadians(angleDegrees);
+        double ans = regularizeAngleRad(angleRad);
+        ans = Math.toDegrees(ans);
+        return ans;
     }
 
     //toRadians and toDegrees are both in the standard Math class, so why did we make them again?

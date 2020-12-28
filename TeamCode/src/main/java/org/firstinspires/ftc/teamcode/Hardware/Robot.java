@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import android.renderscript.Int3;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,12 +11,12 @@ public class Robot{
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)
     static Robot robot;
-    public Telemetry telemetry;
+    Telemetry telemetry;
     //all the other stuff in the Hardware package should be instantiated here
     //don't put modifier on them like "public" or "private". the default is "package" and is perfect
     static DriveTrain chassis;
     static Launcher launcher;
-    static int testCases = 5;
+    static int testCases = 10;
     static double maxWaitTimeMS = 500;
     static PosTrackerType1population type1odos; //same idea, but slightly different implementations
     static PosTrackerType2population type2odos; //same idea, but slightly different implementations
@@ -24,7 +26,7 @@ public class Robot{
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
-    public Robot(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
+    private Robot(HardwareMap hwMap, Telemetry telemetry, double startX, double startY){
         this.telemetry = telemetry;
         this.hwMap = hwMap;
         motorData = new MotorData();
@@ -59,6 +61,17 @@ public class Robot{
     public Vector2 getLocation(){
         return mainOdometer.getLocation();
     }
+
+    /**
+     * gets the raw encoder values from the odometry wheels as a single "Int3" object
+     * @return and Int3 where:
+     *                          x = left,
+     *                          y = right,
+     *                          z = middle
+     */
+    public Int3 getOdometerTicks(){
+        return mainOdometer.getOdoTicks();
+    }
     void updateOdometers(){
         mainOdometer.update();
         type1odos.update();
@@ -67,8 +80,8 @@ public class Robot{
     public double getRotationRad(){
         return mainOdometer.getRotationRadians();
     }
-    public double getRotationDeg(){
-        return bMath.toDeg(mainOdometer.getRotationRadians());
+    public double getRotationDegrees(){
+        return Math.toDegrees(mainOdometer.getRotationRadians());
     }
     public double getLeftOdo(){
         return mainOdometer.getLeft();
@@ -80,7 +93,9 @@ public class Robot{
         return mainOdometer.getMiddle();
     }
     public void doOdometerTelemetry(){
-        telemetry.addData("rotation degress", getRotationDeg());
+        double rotation = getRotationDegrees();
+        rotation = bMath.regularizeAngleDeg(rotation);
+        telemetry.addData("rotation degress", rotation);
         type1odos.doTelemetryReadout();
         type2odos.doTelemetryReadout();
     }

@@ -13,7 +13,7 @@ public class FindBestPosTracker extends GenericOpMode {
     @Override
     public void selectAutoAndTeleOp() {
         auto = new NullAuto();
-        teleOp = new PositionTrackerTester(gamepad1, telemetry);
+        teleOp = new PositionTrackerTester();
     }
 
     @Override

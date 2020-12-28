@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
+import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class OneController extends TeleOpScript {
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale;
@@ -23,8 +24,9 @@ public class OneController extends TeleOpScript {
         goStraight.toggle(gamepad.b);
 
         if(goStraight.getBool()){
-            tgtPowerLeft = -gamepad.left_stick_y;
-            tgtPowerRight = -gamepad.left_stick_y;
+            driveScale = 0.25;
+            tgtPowerLeft = -gamepad.left_stick_y * driveScale;
+            tgtPowerRight = -gamepad.left_stick_y * driveScale;
         }
         if(!goStraight.getBool()){
             // press both bumpers to get full power
@@ -47,7 +49,9 @@ public class OneController extends TeleOpScript {
         Robot.get().setDrivePowers(tgtPowerLeft,tgtPowerRight);
         telemetry.addData("xPos", Robot.get().getLocation().getX());
         telemetry.addData("yPos", Robot.get().getLocation().getY());
-        telemetry.addData("rotation (deg)", Robot.get().getRotationDeg());
+        double rotation = Robot.get().getRotationDegrees();
+        rotation = bMath.regularizeAngleDeg(rotation);
+        telemetry.addData("rotation (deg)", rotation);
         telemetry.addLine();
         telemetry.addData("left odo", Robot.get().getLeftOdo());
         telemetry.addData("right odo", Robot.get().getRightOdo());

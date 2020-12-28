@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
@@ -18,6 +19,7 @@ public abstract class GenericOpMode extends LinearOpMode {
     }
     public void handleInits(){
         deltaTime = new ElapsedTime();
+        DataHub.init(gamepad1,gamepad2,telemetry,hardwareMap); //this should go before Robot.init()
         Robot.init(hardwareMap, telemetry, auto.startX, auto.startY);
     }
     public void makeSureRobotDoesntMoveBetweenAutoAndTeleOp(){
