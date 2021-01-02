@@ -6,15 +6,20 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
 @Deprecated
 public class ExampleAuto extends AutoScript {
-    ElapsedTime deltaTime = new ElapsedTime();
-    double startX = 0.0;
-    double startY = 0.0;
+    ElapsedTime deltaTime;
 
     @Override
     public void loop() {
         Robot.get().setDrivePowers(0, 0);
         doTheThing();
         doTheOtherThing();
+    }
+
+    @Override
+    public void init() {
+        deltaTime = new ElapsedTime();
+        startX = 0.0;
+        startY = 0.0;
     }
 
     private void doTheThing() {

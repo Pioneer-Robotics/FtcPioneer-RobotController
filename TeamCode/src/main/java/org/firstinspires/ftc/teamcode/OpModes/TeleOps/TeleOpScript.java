@@ -8,4 +8,5 @@ public abstract class TeleOpScript{
     DriverProgramScript driverProgram1;
     DriverProgramScript driverProgram2;
     public abstract void loop();
+    public abstract void init();
 }

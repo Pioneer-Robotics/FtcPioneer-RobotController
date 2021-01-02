@@ -83,11 +83,11 @@ public class bMath {
     public static double acot(double input){ //verified
         return pi / 2 - Math.atan(input);
     }
-    public static double sign(double input){
+    public static int sign(double input){
         if(input == 0){
-            return 0.0;
+            return 0;
         }
-        return (input > 0 ? 1.0: -1.0);
+        return (input > 0 ? 1: -1);
     }
 
     /**
@@ -110,6 +110,21 @@ public class bMath {
         double angleRad = Math.toRadians(angleDegrees);
         double ans = regularizeAngleRad(angleRad);
         ans = Math.toDegrees(ans);
+        return ans;
+    }
+
+    /**
+     * meant to allow help you find the shortest angle seperating the angle you're at from the angle
+     * you want
+     * @param angle1 the angle you want the robot to be at
+     * @param angle2 the current angle of the robot
+     * @return an angle between -pi and pi that is the amount you should turn
+     */
+    public static double subtractAnglesRad(double angle1, double angle2){
+        angle1 = regularizeAngleRad(angle1);
+        angle2 = regularizeAngleRad(angle2);
+        double ans = angle1 - angle2;
+        ans = regularizeAngleRad(ans);
         return ans;
     }
 

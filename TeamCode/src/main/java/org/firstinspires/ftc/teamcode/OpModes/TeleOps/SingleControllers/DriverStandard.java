@@ -10,10 +10,10 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
 public class DriverStandard extends DriverProgramScript{
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale;
-    ElapsedTime deltaTime = new ElapsedTime();
+    ElapsedTime deltaTime;
     Telemetry telemetry;
     Gamepad gamepad;
-    Toggle goStraight = new Toggle(false);
+    Toggle goStraight;
 
     @Override
     public void loop() {
@@ -47,9 +47,12 @@ public class DriverStandard extends DriverProgramScript{
         }
         Robot.get().setDrivePowers(tgtPowerLeft,tgtPowerRight);
         telemetry.addData("go straight setting", goStraight.getBool());
+        telemetry.addLine("t1 works");
     }
     public DriverStandard(){
         this.gamepad = DataHub.gamepad1;
         this.telemetry = DataHub.telemetry;
+        goStraight = new Toggle(false);
+        deltaTime = new ElapsedTime();
     }
 }

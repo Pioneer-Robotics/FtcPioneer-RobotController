@@ -19,12 +19,28 @@ public abstract class GenericOpMode extends LinearOpMode {
     }
     public void handleInits(){
         deltaTime = new ElapsedTime();
-        DataHub.init(gamepad1,gamepad2,telemetry,hardwareMap); //this should go before Robot.init()
-        Robot.init(hardwareMap, telemetry, auto.startX, auto.startY);
+        DataHub.init(telemetry,hardwareMap,gamepad1); //this should go before Robot.init()
+        Robot.init(auto.startX, auto.startY);
+        auto.init();
+        teleOp.init();
     }
     public void makeSureRobotDoesntMoveBetweenAutoAndTeleOp(){
         if(30 < deltaTime.seconds() && deltaTime.seconds() < 31){
             Robot.get().stopAllMotors();
         }
+    }
+    public void runStandardLoop(){
+        telemetry.addData("elapsed time", deltaTime.seconds());
+        if(deltaTime.seconds() < 30.0){
+            telemetry.addLine("autonomous mode");
+            auto.loop();
+        }
+        else{
+            telemetry.addLine("teleOp mode");
+            teleOp.loop();
+        }
+        makeSureRobotDoesntMoveBetweenAutoAndTeleOp();
+        Robot.get().update();
+        telemetry.update();
     }
 }

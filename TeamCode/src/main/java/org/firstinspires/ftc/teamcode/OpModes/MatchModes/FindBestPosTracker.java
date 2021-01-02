@@ -6,14 +6,15 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.ExampleAuto;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.OneController;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.PositionTrackerTester;
-@Autonomous(name = "find best odometer", group = "tests")
+@TeleOp(name = "find best odometer", group = "tests")
 public class FindBestPosTracker extends GenericOpMode {
 
     @Override
     public void selectAutoAndTeleOp() {
         auto = new NullAuto();
-        teleOp = new PositionTrackerTester();
+        teleOp = new OneController();
     }
 
     @Override
@@ -23,6 +24,7 @@ public class FindBestPosTracker extends GenericOpMode {
         while (opModeIsActive()) {
             teleOp.loop();
             Robot.get().update();
+            Robot.get().doOdometerTelemetry();
             telemetry.update();
         }
     }

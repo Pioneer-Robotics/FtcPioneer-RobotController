@@ -6,15 +6,16 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
+import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class OneController extends TeleOpScript {
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale;
-    ElapsedTime deltaTime = new ElapsedTime();
+    ElapsedTime deltaTime;
     Telemetry telemetry;
     Gamepad gamepad;
-    Toggle goStraight = new Toggle(false);
+    Toggle goStraight;
 
     @Override
     public void loop() {
@@ -59,8 +60,13 @@ public class OneController extends TeleOpScript {
         telemetry.addData("go strait setting", goStraight.getBool());
         telemetry.addData("elapsed time", deltaTime.seconds());
     }
-    public OneController(Gamepad gamepad, Telemetry telemetry){
-        this.gamepad = gamepad;
-        this.telemetry = telemetry;
+    @Override
+    public void init(){
+        gamepad = DataHub.gamepad1;
+        telemetry = DataHub.telemetry;
+    }
+    public OneController(){
+        deltaTime = new ElapsedTime();
+        goStraight = new Toggle(false);
     }
 }

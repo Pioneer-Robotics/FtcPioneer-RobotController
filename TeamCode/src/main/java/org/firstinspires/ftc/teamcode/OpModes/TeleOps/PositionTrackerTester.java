@@ -1,17 +1,16 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOps;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.DriverStandard;
 
 public class PositionTrackerTester extends TeleOpScript{
-
+    Gamepad gamepad;
     Telemetry telemetry;
-    public PositionTrackerTester(){
-        this.telemetry = DataHub.telemetry;
-        selectDriverPrograms();
-    }
+
     @Override
     public void loop() {
         driverProgram1.loop();
@@ -21,4 +20,14 @@ public class PositionTrackerTester extends TeleOpScript{
     void selectDriverPrograms(){
         driverProgram1 = new DriverStandard();
     }
+
+    public void init(){
+        this.telemetry = DataHub.telemetry;
+        this.gamepad = DataHub.gamepad1;
+        selectDriverPrograms();
+    }
+    public PositionTrackerTester(){
+
+    }
+
 }

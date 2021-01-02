@@ -43,9 +43,9 @@ public class PositionTracker2 {
 
 
     private void setUpEncoders(){ //sets where left, right, and middle will pull from
-        left = Robot.get().hwMap.get(DcMotor.class, Config.motorRT);
-        right = Robot.get().hwMap.get(DcMotor.class, Config.motorLT);
-        middle = Robot.get().hwMap.get(DcMotor.class, Config.motorRB);
+        left = Robot.get().hardwareMap.get(DcMotor.class, Config.motorRT);
+        right = Robot.get().hardwareMap.get(DcMotor.class, Config.motorLT);
+        middle = Robot.get().hardwareMap.get(DcMotor.class, Config.motorRB);
     }
 
 
