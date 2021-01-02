@@ -1,14 +1,21 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import android.renderscript.Int3;
 import com.qualcomm.robotcore.util.Range;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Helpers.*;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Helpers.Vector2;
+import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class Robot{
+    static BNO055IMU imu;
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)
     static Robot robot;
@@ -43,7 +50,19 @@ public class Robot{
         //basically arrays of PositionTracker objects
         type1odos = new PosTrackerType1population(testCases, maxWaitTimeMS);
         type2odos = new PosTrackerType2population(testCases, maxWaitTimeMS);
+        //basically arrays of PositionTracker objects
         launcher = new Launcher();
+        imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
+        imu.initialize(params);
+    }
+    public double getHeading(AngleUnit angleUnit) {
+        double angle;
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
+        angle = 360-angles.firstAngle;
+        if(angle > 360)
+            angle -= 360;
+        return angle;
     }
 
     /**
@@ -71,77 +90,8 @@ public class Robot{
         motorData.leftPower = leftPower;
         motorData.rightPower = rightPower;
     }
-
-    /**
-     * tell the robot if it should drive itself or not. Note:
-     * <li> while in autoPilot mode, robot will ignore user input in terms of
-     * directly setting motor values
-     * @param bool true if you want autoPilot, false if you don't
-     */
-    public void useAutoPilot(boolean bool){
-        if(bool){
-            autoPilot.useAutoPilot();
-        }
-        if(!bool){
-            autoPilot.deactivateAutoPilot();
-        }
-    }
-
-    private void turnToAngle(double targetAngle){
-        double headingOffset = targetAngle - mainOdometer.getRotationRadians();
-        if(-0.1 > headingOffset || headingOffset > 0.1){
-            headingOffset = Range.clip(headingOffset, -1.0, 1.0);
-            double turn = headingOffset * 0.25;
-            setDrivePowers(-turn, turn);
-        }
-    }
-    private void turn(double speed){
-        double turn = speed * 0.5;
-        setDrivePowers(-turn, turn);
-    }
-
-
-    /**
-     * sets the target location the robot will drive to on {@code autoPilot}
-     * @param x the x coordinate you would like to go to
-     * @param y the y coordinate you would like to go to
-     */
-    public ComplexNum setTargetLocation(double x, double y){
-        autoPilot.targetLocation.equals(x,y);
-        return autoPilot.targetLocation;
-    }
-
-    /**
-     * sets the target rotation the robot will turn to
-     * @param angleDegrees the angle, in degrees, that you want to robot to turn to
-     */
-    public void setTargetRotation(double angleDegrees){
-        autoPilot.targetRotationDegrees = angleDegrees;
-    }
-
-    /**
-     * sets the target location the robot will drive to on {@code autoPilot} as exactly forward of
-     * where it is now
-     * @param cmAhead the amount of cm you want it to drive forward
-     */
-    public void setTargetLocation(double cmAhead){
-        double heading = getRotationRad();
-        ComplexNum deltaTargetLocation = ComplexNum.newComplexNumPolar(cmAhead, heading);
-        autoPilot.targetLocation.plusEquals(deltaTargetLocation);
-    }
     public Vector2 getLocation(){
         return mainOdometer.getLocation();
-    }
-    public ComplexNum getLocationComplex(){
-        return mainOdometer.getLocationComplex();
-    }
-
-    /**
-     * gets the raw encoder values from the odometry wheels as a single "Int3" object
-     * @return and Int3 where:  x = left, y = right, z = middle
-     */
-    public Int3 getOdometerTicks(){
-        return mainOdometer.getOdoTicks();
     }
     void updateOdometers(){
         mainOdometer.update();
