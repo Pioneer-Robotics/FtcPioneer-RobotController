@@ -1,11 +1,18 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Helpers.*;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Helpers.Vector2;
+import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class Robot{
+    static BNO055IMU imu;
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)
     static Robot robot;
@@ -39,6 +46,17 @@ public class Robot{
         type2odos = new PosTrackerType2population(testCases, maxWaitTimeMS);
         //basically arrays of PositionTracker objects
         launcher = new Launcher();
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
+        imu.initialize(params);
+    }
+    public double getHeading(AngleUnit angleUnit) {
+        double angle;
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
+        angle = 360-angles.firstAngle;
+        if(angle > 360)
+            angle -= 360;
+        return angle;
     }
     //this is the method all other classes will use to access the robot
     public static Robot get(){
