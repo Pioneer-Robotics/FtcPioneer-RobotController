@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
+import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 public class OneController extends TeleOpScript {
@@ -16,10 +17,10 @@ public class OneController extends TeleOpScript {
     boolean autopilot = false;
     double targetAngle = 0.0;
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale;
-    ElapsedTime deltaTime = new ElapsedTime();
+    ElapsedTime deltaTime;
     Telemetry telemetry;
     Gamepad gamepad;
-    Toggle goStraight = new Toggle(false);
+    Toggle goStraight;
 
     double squareInputWithSign(double input){
         double output = input * input;
@@ -39,7 +40,7 @@ public class OneController extends TeleOpScript {
             if (gamepad.x){
                 autopilot = true;
                 drive = gamepad.right_trigger - gamepad.left_trigger;
-                targetAngle = Robot.get().getRotationDeg();
+                targetAngle = Robot.get().getRotationDegrees();
             }
         }
         if (gamepad.y){
@@ -47,11 +48,11 @@ public class OneController extends TeleOpScript {
             autopilots = false;
         }
         if(autopilot){
-            if(Robot.get().getRotationDeg() >= targetAngle + 3){
+            if(Robot.get().getRotationDegrees() >= targetAngle + 3){
                 drive = gamepad.right_trigger - gamepad.left_trigger;
                 turn = -.5;
             }
-            else if(Robot.get().getRotationDeg() >= targetAngle - 3){
+            else if(Robot.get().getRotationDegrees() >= targetAngle - 3){
                 drive = gamepad.right_trigger - gamepad.left_trigger;
                 turn = .5;
             }
@@ -86,7 +87,7 @@ public class OneController extends TeleOpScript {
 
         telemetry.addData("xPos", Robot.get().getLocation().getX());
         telemetry.addData("yPos", Robot.get().getLocation().getY());
-        telemetry.addData("rotation (deg)", Robot.get().getRotationDeg());
+        telemetry.addData("rotation (deg)", Robot.get().getRotationDegrees());
         telemetry.addData("left odo", Robot.get().getLeftOdo());
         telemetry.addData("right odo", Robot.get().getRightOdo());
         telemetry.addData("mid odo", Robot.get().getMidOdo());
@@ -126,8 +127,14 @@ public class OneController extends TeleOpScript {
         }
     }
 
-    public OneController(Gamepad gamepad, Telemetry telemetry){
-        this.gamepad = gamepad;
-        this.telemetry = telemetry;
+    @Override
+    public void init() {
+        deltaTime = new ElapsedTime();
+        goStraight = new Toggle(false);
+    }
+
+    public OneController(){
+        this.gamepad = DataHub.gamepad1;
+        this.telemetry = DataHub.telemetry;
     }
 }

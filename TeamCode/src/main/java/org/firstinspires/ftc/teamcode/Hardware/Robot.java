@@ -11,6 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
+import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
@@ -92,6 +94,9 @@ public class Robot{
     }
     public Vector2 getLocation(){
         return mainOdometer.getLocation();
+    }
+    public ComplexNum getLocationComplex(){
+        return mainOdometer.getLocationComplex();
     }
     void updateOdometers(){
         mainOdometer.update();

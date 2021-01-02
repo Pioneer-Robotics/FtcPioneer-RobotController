@@ -31,9 +31,6 @@ public class SkipAuto extends GenericOpMode {
             telemetry.addData("mid odo", middle);
             D = (right - left) / bMath.pi2;
             telemetry.addData("D", D);
-            telemetry.addData("left ticks", Robot.get().getOdometerTicks().x);
-            telemetry.addData("right ticks", Robot.get().getOdometerTicks().y);
-            telemetry.addData("middle ticks", Robot.get().getOdometerTicks().z);
             telemetry.update();
         }
     }
