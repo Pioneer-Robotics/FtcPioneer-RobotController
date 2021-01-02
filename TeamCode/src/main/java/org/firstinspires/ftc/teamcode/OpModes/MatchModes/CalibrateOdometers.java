@@ -33,8 +33,8 @@ public class CalibrateOdometers extends GenericOpMode {
         }
     }
     void updateOdoTicks(){
-        leftOdoTicks = Robot.get().getOdometerTicks().x;
-        rightOdoTicks = Robot.get().getOdometerTicks().y;
-        midOdoTicks = Robot.get().getOdometerTicks().z;
+//        leftOdoTicks = Robot.get().getOdometerTicks().x;
+//        rightOdoTicks = Robot.get().getOdometerTicks().y;
+//        midOdoTicks = Robot.get().getOdometerTicks().z;
     }
 }

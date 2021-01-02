@@ -4,26 +4,26 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.OneController;
-@TeleOp(name = "find best odometer", group = "tests")
-public class FindBestPosTracker extends GenericOpMode {
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
+
+@TeleOp (name = "launcher test")
+public class TestLauncher extends GenericOpMode{
 
     @Override
     public void selectAutoAndTeleOp() {
+        teleOp = new TeleOpStandard();
         auto = new NullAuto();
-        teleOp = new OneController();
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
         selectAutoAndTeleOp();
         initAndWaitForStart();
-        while (opModeIsActive()) {
-            teleOp.loop();
+        while(opModeIsActive()){
+            telemetry.addData("elapsed time", deltaTime.seconds());
+            Robot.get().setLauncherPower(gamepad1.left_trigger);
             Robot.get().update();
-            Robot.get().doOdometerTelemetry();
             telemetry.update();
         }
     }
 }
-

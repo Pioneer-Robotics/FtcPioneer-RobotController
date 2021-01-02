@@ -14,15 +14,18 @@ public class DataHub {
     public static Telemetry telemetry;
     public static HardwareMap hardwareMap;
     public static Gamepad gamepad1;
+    public static Gamepad gamepad2;
 
     /**
      * call this method in the init stage of the OpMode, make sure it has everything it needs.
      * @param telemetry the OpMode's telemtery object
      * @param hardwareMap the OpMode's hardwareMap object
      */
-    public static void init(Telemetry telemetry, HardwareMap hardwareMap, Gamepad gamepad1){
+    public static void init(Telemetry telemetry, HardwareMap hardwareMap,
+                            Gamepad gamepad1, Gamepad gamepad2){
         DataHub.telemetry = telemetry;
         DataHub.hardwareMap = hardwareMap;
         DataHub.gamepad1 = gamepad1;
+        DataHub.gamepad2 = gamepad2;
     }
 }

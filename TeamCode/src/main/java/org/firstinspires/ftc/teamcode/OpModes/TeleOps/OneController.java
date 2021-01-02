@@ -7,8 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.Helpers.DataHub;
-import org.firstinspires.ftc.teamcode.Helpers.Toggle;
+import org.firstinspires.ftc.teamcode.Helpers.*;
 
 public class OneController extends TeleOpScript {
     double anglesunit = 0.0;
@@ -57,7 +56,7 @@ public class OneController extends TeleOpScript {
                 turn = .5;
             }
             else {
-                drive = gamepad.right_trigger - gamepad.left_trigger;
+                drive = bMath.squareInputWithSign(gamepad.right_trigger - gamepad.left_trigger);
                 turn = 0.0;
             }
         }
@@ -131,9 +130,6 @@ public class OneController extends TeleOpScript {
     public void init() {
         deltaTime = new ElapsedTime();
         goStraight = new Toggle(false);
-    }
-
-    public OneController(){
         this.gamepad = DataHub.gamepad1;
         this.telemetry = DataHub.telemetry;
     }

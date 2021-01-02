@@ -80,6 +80,7 @@ public class Robot{
                             //when autoPilot is on, it will ignore user input
         motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
+        launcher.setPower(motorData.launcherPower);
         updateOdometers();
     }
     public void stopAllMotors(){
@@ -91,6 +92,9 @@ public class Robot{
     public void setDrivePowers(double leftPower, double rightPower){
         motorData.leftPower = leftPower;
         motorData.rightPower = rightPower;
+    }
+    public void setLauncherPower(double power){
+        motorData.launcherPower = power;
     }
     public Vector2 getLocation(){
         return mainOdometer.getLocation();

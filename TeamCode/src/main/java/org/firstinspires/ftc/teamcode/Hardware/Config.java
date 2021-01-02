@@ -9,6 +9,9 @@ public class Config {
     public static final String motorRT = "RT";
     public static final String motorRB = "RB";
 
+    public static final String launcherMotor1 = "launcher1";
+    public static final String launcherMotor2 = "launcher2";
+
     //Info on the specs of the odometers
     public static final int odoTicksPerRotation = 8192; //encoder ticks per full rotation
     public static final double odoDiameterIn = 2; //diameter of the odometry wheels in inches

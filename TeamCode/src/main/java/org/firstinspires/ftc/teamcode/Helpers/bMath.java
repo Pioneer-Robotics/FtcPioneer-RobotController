@@ -16,6 +16,13 @@ public class bMath {
     public static double sqd(double value) {
         return (value * value);
     }
+    public static double squareInputWithSign(double input){
+        double output = input * input;
+        if (input < 0){
+            output = output * -1;
+        }
+        return output;
+    }
 
     //Clamp methods are to constrain values into a range
     public static double Clamp(double value, double min, double max) {
