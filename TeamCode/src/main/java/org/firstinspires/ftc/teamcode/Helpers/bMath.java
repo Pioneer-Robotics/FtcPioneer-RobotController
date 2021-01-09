@@ -16,6 +16,13 @@ public class bMath {
     public static double sqd(double value) {
         return (value * value);
     }
+    public static double squareInputWithSign(double input){
+        double output = input * input;
+        if (input < 0){
+            output = output * -1;
+        }
+        return output;
+    }
 
     //Clamp methods are to constrain values into a range
     public static double Clamp(double value, double min, double max) {
@@ -83,14 +90,49 @@ public class bMath {
     public static double acot(double input){ //verified
         return pi / 2 - Math.atan(input);
     }
-    public static double sign(double input){
+    public static int sign(double input){
         if(input == 0){
-            return 0.0;
+            return 0;
         }
-        return (input > 0 ? 1.0: -1.0);
+        return (input > 0 ? 1: -1);
     }
-    public static double toDeg(double angleRad){
-        return angleRad / pi * 180.0;
+
+    /**
+     * puts an angle into the range -π to π
+     * @param angleRadians the angle you want "regularized" in radians
+     * @return the corresponding angle in the range -π to π
+     */
+    public static double regularizeAngleRad(double angleRadians){
+        ComplexNum num = cis(angleRadians);
+        double ans = acis(num);
+        return ans;
+    }
+
+    /**
+     * puts an angle into the range -180° to 180°
+     * @param angleDegrees the angle you want "regularized" in degrees
+     * @return the corresponding angle in the range -180° to 180°
+     */
+    public static double regularizeAngleDeg(double angleDegrees){
+        double angleRad = Math.toRadians(angleDegrees);
+        double ans = regularizeAngleRad(angleRad);
+        ans = Math.toDegrees(ans);
+        return ans;
+    }
+
+    /**
+     * meant to allow help you find the shortest angle seperating the angle you're at from the angle
+     * you want
+     * @param angle1 the angle you want the robot to be at
+     * @param angle2 the current angle of the robot
+     * @return an angle between -pi and pi that is the amount you should turn
+     */
+    public static double subtractAnglesRad(double angle1, double angle2){
+        angle1 = regularizeAngleRad(angle1);
+        angle2 = regularizeAngleRad(angle2);
+        double ans = angle1 - angle2;
+        ans = regularizeAngleRad(ans);
+        return ans;
     }
 
     //toRadians and toDegrees are both in the standard Math class, so why did we make them again?

@@ -8,14 +8,14 @@ import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 //this class is to do odometry and track the position of the robot. Specifically,
-    //we measure "position" as the location of the CENTRAL ODOMETER WHEEL
+//we measure "position" as the location of the CENTRAL ODOMETER WHEEL
 //if it doesn't track position accurately, start by looking at updatePositionComplex()
 public class PositionTracker2 {
-    private final ComplexNum pos;
+    private final ComplexNum complexPos;
     private final Vector2 Vpos;
 
+    double waitIntervalMS; //MS = milliseconds
     ElapsedTime deltaTime;
-    double waitIntervalMS;  //MS = milliseconds
 
     private DcMotor left;
     private DcMotor right;
@@ -35,16 +35,17 @@ public class PositionTracker2 {
     public PositionTracker2(double startX, double startY, double waitIntervalMS){
         setUpEncoders();
         Vpos = new Vector2(startX, startY);
-        pos = new ComplexNum(startX, startY);
+        complexPos = new ComplexNum(startX, startY);
         deltaTime = new ElapsedTime();
         this.waitIntervalMS = waitIntervalMS;
         updateLastValues();
     }
 
+
     private void setUpEncoders(){ //sets where left, right, and middle will pull from
-        left = Robot.get().hwMap.get(DcMotor.class, Config.motorRT);
-        right = Robot.get().hwMap.get(DcMotor.class, Config.motorLT);
-        middle = Robot.get().hwMap.get(DcMotor.class, Config.motorRB);
+        left = Robot.get().hardwareMap.get(DcMotor.class, Config.motorRT);
+        right = Robot.get().hardwareMap.get(DcMotor.class, Config.motorLT);
+        middle = Robot.get().hardwareMap.get(DcMotor.class, Config.motorRB);
     }
 
 
@@ -58,13 +59,20 @@ public class PositionTracker2 {
     }
 
     private void updatePositionComplex() {
-        double majorRotationRadius = (Config.distanceBetweenLeftAndRightOdometersCm * deltaLeft) / (deltaRight-deltaLeft);
-        ComplexNum f = ComplexNum.newComplexNumPolar(
-                2*(majorRotationRadius+ (Config.distanceBetweenLeftAndRightOdometersCm/2)) * Math.sin(deltaTheta/2),
-                deltaTheta + Math.PI/2);
+        ComplexNum f;
+
+        if (deltaRight != deltaLeft){ //avoid dividing by zero
+            double majorRotationRadius = (Config.distanceBetweenLeftAndRightOdometersCm * deltaLeft) / (deltaRight-deltaLeft);
+            f = ComplexNum.newComplexNumPolar(
+                    (deltaRight+deltaLeft)/2,
+                    deltaTheta + Math.PI/2.0);
+        } else {
+            f = ComplexNum.newComplexNumPolar(deltaRight,deltaTheta + Math.PI/2.0);
+        }
+
         ComplexNum m = ComplexNum.newComplexNumPolar(deltaMiddle, deltaTheta);
         ComplexNum deltaPositionRobot = ComplexNum.add(f,m);
-        pos.plusEquals(deltaPositionRobot.rotateAboutOrigin(-rotationLast));
+        complexPos.plusEquals(deltaPositionRobot.rotateAboutOrigin(-rotationLast));
     }
 
     private void calculateDeltas(){
@@ -97,7 +105,7 @@ public class PositionTracker2 {
 
 
     private void VposUpdate(){ //makes Vpos match the complex number form of position
-        Vpos.sexXandY(pos.real, pos.imag);
+        Vpos.sexXandY(complexPos.real, complexPos.imag);
     }
 
 

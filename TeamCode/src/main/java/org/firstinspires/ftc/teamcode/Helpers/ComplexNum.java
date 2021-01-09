@@ -88,26 +88,70 @@ public class ComplexNum {
         this.timesEquals(bMath.cis(angle));
         return this;
     }
+    /**
+     * multiplies this complex number by another complex number
+     * @param input the number you would like to multiply by
+     * @return
+     */
     public ComplexNum timesEquals(ComplexNum input){
-        this.equals(multiply(this, input));
+        this.equals(Cmath.multiply(this, input));
         return this;
     }
-    public void timesEquals(double input){
+    /**
+     * multiplies this by a real number
+     * @param input the number you want to multiply by
+     * @return this * input
+     */
+    public ComplexNum timesEquals(double input){
         this.real *= input;
         this.imag *= input;
+        return this;
     }
+
+    /**
+     * makes a new complex number which is equal to {@code this * i}
+     * @return {@code this * i}
+     */
+    public ComplexNum timesI() {
+        return new ComplexNum(-this.imag, this.real);
+    }
+
+    public ComplexNum timesEqualsI() {
+        this.equals(-imag, real);
+        return this;
+    }
+
+    /**
+     * divides this complex number by another complex number
+     * @param input the number you would like to divide by
+     * @return this / input
+     * @note this will cause a runtime error if you try to divide by 0+0i
+     */
+    public ComplexNum divideEquals(ComplexNum input) {
+        this.divideEquals(Cmath.divide(this, input));
+        return this;
+    }
+
+    /**
+     * divides this by another complex number
+     * @param input the number you want to divide by
+     * @return this / input
+     */
     public ComplexNum divideEquals(double input){
         this.real /= input;
         this.imag /= input;
         return this;
     }
-    public void plusEquals(ComplexNum input){
+
+    public ComplexNum plusEquals(ComplexNum input){
         this.equals(add(this,input));
+        return this;
     }
     public void plusEquals(double inputReal){
         this.real += inputReal;}
-    public void minusEquals(ComplexNum input){
+    public ComplexNum minusEquals(ComplexNum input){
         this.equals(subtract(this,input));
+        return this;
     }
     public void minusEquals(double input){
         this.real -= input;}
@@ -124,6 +168,11 @@ public class ComplexNum {
     public ComplexNum equals(ComplexNum input){
         real = input.real;
         imag = input.imag;
+        return this;
+    }
+    public ComplexNum equals(double real, double imag){
+        this.real = real;
+        this.imag = imag;
         return this;
     }
 

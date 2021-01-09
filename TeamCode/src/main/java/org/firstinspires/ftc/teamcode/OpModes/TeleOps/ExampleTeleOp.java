@@ -18,7 +18,7 @@ public class ExampleTeleOp extends TeleOpScript {
     }
 
     //this is the only method you should need to change to make new TeleOps
-    private void init(){
+    public void init(){
         driverProgram1 = new Driver1ProgramExample();
         driverProgram2 = new Driver2ProgramExample();
     }

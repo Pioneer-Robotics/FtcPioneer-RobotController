@@ -6,6 +6,7 @@ class MotorData {
         //multiple values.
     double leftPower;
     double rightPower;
+    double launcherPower;
     boolean fullStop = false;
     void handleFullStop(){
         if(fullStop){ //TODO keep this up to data
@@ -13,5 +14,11 @@ class MotorData {
             rightPower = 0;
             fullStop = false;
         }
+    }
+    MotorData(){
+        leftPower = 0;
+        rightPower = 0;
+        launcherPower = 0;
+        fullStop = false;
     }
 }

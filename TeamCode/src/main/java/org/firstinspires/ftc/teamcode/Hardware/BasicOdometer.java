@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import android.renderscript.Int3;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Helpers.*;
+import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
+import org.firstinspires.ftc.teamcode.Helpers.Vector2;
+import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
-//this class is to do odometry and track the position of the robot. Specifically,
-    //we measure "position" as the location of the CENTRAL ODOMETER WHEEL
-//if it doesn't track position accurately, start by looking at updatePositionComplex()
-public class PositionTracker {
+public class BasicOdometer {
     private final ComplexNum complexPos;
     private final Vector2 Vpos;
 
@@ -32,7 +29,7 @@ public class PositionTracker {
     private double deltaRotation;
 
 
-    public PositionTracker(double startX, double startY, double waitIntervalMS){
+    public BasicOdometer(double startX, double startY, double waitIntervalMS){
         setUpEncoders();
         Vpos = new Vector2(startX, startY);
         complexPos = new ComplexNum(startX, startY);
@@ -41,9 +38,9 @@ public class PositionTracker {
         updateLastValues();
     }
     private void setUpEncoders(){ //sets where left, right, and middle will pull from
-        left = Robot.get().hardwareMap.get(DcMotor.class, Config.motorRT);
-        right = Robot.get().hardwareMap.get(DcMotor.class, Config.motorLT);
-        middle = Robot.get().hardwareMap.get(DcMotor.class, Config.motorRB);
+        left = BasicRobot.get().hwMap.get(DcMotor.class, Config.motorRT);
+        right = BasicRobot.get().hwMap.get(DcMotor.class, Config.motorLT);
+        middle = BasicRobot.get().hwMap.get(DcMotor.class, Config.motorRB);
     }
     public void update(){ //this method is the heart of the class
         if(deltaTime.milliseconds() > waitIntervalMS) {
@@ -81,13 +78,6 @@ public class PositionTracker {
     double getRotationRadians() {
         return ( getRight() - getLeft() ) / Config.distanceBetweenLeftAndRightOdometersCm;
     }
-    Int3 getOdoTicks(){
-        Int3 ans = new Int3();
-        ans.x = left.getCurrentPosition();
-        ans.y = right.getCurrentPosition();
-        ans.z = middle.getCurrentPosition();
-        return ans;
-    }
 
     private void updateLastValues(){
         leftLast = getLeft();
@@ -117,9 +107,4 @@ public class PositionTracker {
         VposUpdate();
         return Vpos;
     }
-
-    public ComplexNum getLocationComplex(){
-        return complexPos;
-    }
-    //TODO make a "motion profiler" to handle rotations
 }

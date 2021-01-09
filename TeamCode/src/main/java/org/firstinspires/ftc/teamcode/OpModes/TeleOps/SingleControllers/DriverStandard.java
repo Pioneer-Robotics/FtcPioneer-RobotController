@@ -5,15 +5,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Helpers.*;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
 public class DriverStandard extends DriverProgramScript{
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale;
-    ElapsedTime deltaTime = new ElapsedTime();
+    ElapsedTime deltaTime;
     Telemetry telemetry;
     Gamepad gamepad;
-    Toggle goStraight = new Toggle(false);
+    Toggle goStraight;
 
     @Override
     public void loop() {
@@ -23,8 +23,9 @@ public class DriverStandard extends DriverProgramScript{
         goStraight.toggle(gamepad.b);
 
         if(goStraight.getBool()){
-            tgtPowerLeft = -gamepad.left_stick_y;
-            tgtPowerRight = -gamepad.left_stick_y;
+            driveScale = 0.25;
+            tgtPowerLeft = -gamepad.left_stick_y * driveScale;
+            tgtPowerRight = -gamepad.left_stick_y * driveScale;
         }
         if(!goStraight.getBool()){
             // press both bumpers to get full power
@@ -45,9 +46,13 @@ public class DriverStandard extends DriverProgramScript{
             tgtPowerRight = Range.clip(tgtPowerRight, -1.0,1.0);
         }
         Robot.get().setDrivePowers(tgtPowerLeft,tgtPowerRight);
+        telemetry.addData("go straight setting", goStraight.getBool());
+        telemetry.addLine("t1 works");
     }
-    public DriverStandard(Gamepad gamepad, Telemetry telemetry){
-        this.gamepad = gamepad;
-        this.telemetry = telemetry;
+    public DriverStandard(){
+        this.gamepad = DataHub.gamepad1;
+        this.telemetry = DataHub.telemetry;
+        goStraight = new Toggle(false);
+        deltaTime = new ElapsedTime();
     }
 }
