@@ -21,9 +21,9 @@ public class OneController extends TeleOpScript {
     Gamepad gamepad;
     Toggle goStraight;
 
-    double squareInputWithSign(double input){
+    double squareInputWithSign(double input) {
         double output = input * input;
-        if (input < 0){
+        if (input < 0) {
             output = output * -1;
         }
         return output;
@@ -32,39 +32,37 @@ public class OneController extends TeleOpScript {
     @Override
     public void loop() {
 
-        if(!autopilot){
+        if (!autopilot && !autopilots) {
             drive = gamepad.right_trigger - gamepad.left_trigger;
             turn = gamepad.left_stick_x;
 
-            if (gamepad.x){
+            if (gamepad.x) {
                 autopilot = true;
                 drive = gamepad.right_trigger - gamepad.left_trigger;
                 targetAngle = Robot.get().getRotationDegrees();
             }
         }
-        if (gamepad.y){
+        if (gamepad.y) {
             autopilot = false;
             autopilots = false;
         }
-        if(autopilot){
-            if(Robot.get().getRotationDegrees() >= targetAngle + 3){
-                drive = gamepad.right_trigger - gamepad.left_trigger;
+        if (autopilot) {
+            if (Robot.get().getRotationDegrees() >= targetAngle + 3) {
+                drive = (gamepad.right_trigger - gamepad.left_trigger);
                 turn = -.5;
-            }
-            else if(Robot.get().getRotationDegrees() >= targetAngle - 3){
-                drive = gamepad.right_trigger - gamepad.left_trigger;
+            } else if (Robot.get().getRotationDegrees() >= targetAngle - 3) {
+                drive = (gamepad.right_trigger - gamepad.left_trigger);
                 turn = .5;
-            }
-            else {
-                drive = bMath.squareInputWithSign(gamepad.right_trigger - gamepad.left_trigger);
+            } else {
+                drive = squareInputWithSign(gamepad.right_trigger - gamepad.left_trigger);
                 turn = 0.0;
             }
         }
-        if(goStraight.getBool()){
+        if (goStraight.getBool()) {
             tgtPowerLeft = -gamepad.left_stick_y;
             tgtPowerRight = -gamepad.left_stick_y;
         }
-        if(!goStraight.getBool()){
+        if (!goStraight.getBool()) {
             // press both bumpers to get full power
             if (gamepad.right_bumper && gamepad.left_bumper)
                 driveScale = 1.0;
@@ -79,10 +77,10 @@ public class OneController extends TeleOpScript {
         tgtPowerRight = -driveScale * turn;
         tgtPowerLeft -= driveScale * drive;
         tgtPowerRight -= driveScale * drive;
-        tgtPowerLeft = Range.clip(tgtPowerLeft, -1.0,1.0);
-        tgtPowerRight = Range.clip(tgtPowerRight, -1.0,1.0);
+        tgtPowerLeft = Range.clip(tgtPowerLeft, -1.0, 1.0);
+        tgtPowerRight = Range.clip(tgtPowerRight, -1.0, 1.0);
 
-        Robot.get().setDrivePowers(tgtPowerLeft,tgtPowerRight);
+        Robot.get().setDrivePowers(tgtPowerLeft, tgtPowerRight);
 
         telemetry.addData("xPos", Robot.get().getLocation().getX());
         telemetry.addData("yPos", Robot.get().getLocation().getY());
@@ -97,33 +95,25 @@ public class OneController extends TeleOpScript {
         telemetry.addData("Is second Autopilot on", autopilots);
         telemetry.addData("Target Angle", anglesunit);
 
-        if ((turn > 0 || turn < 0) && !autopilots){
-            Turn = true;
+        if (autopilots) {
+            Robot.get().getHeading(AngleUnit.DEGREES);
+            turn = 0.5;
+            if (Robot.get().getHeading(AngleUnit.DEGREES) >= 90) {
+                turn = 0;
+            }
         }
-        else {
+
+        if ((turn > 0 || turn < 0) && !autopilots) {
+            Turn = true;
+        } else {
             Turn = false;
         }
-        if(Turn && turn > 0){
+        if (Turn && turn > 0) {
             turn = 0.35;
-        }
-        else if (Turn && turn < 0){
+        } else if (Turn && turn < 0) {
             turn = -0.35;
         }
 
-        if(!autopilots){
-            drive = gamepad.right_trigger - gamepad.left_trigger;
-            turn = gamepad.left_stick_x;
-
-            if (gamepad.b){
-                autopilots = true;
-                turn = 0.5;
-                anglesunit = Robot.get().getHeading(AngleUnit.DEGREES);
-            }
-        }
-        if (anglesunit <= Robot.get().getHeading(AngleUnit.DEGREES)){
-            turn = 0.0;
-            autopilots = false;
-        }
     }
 
     @Override
@@ -132,5 +122,9 @@ public class OneController extends TeleOpScript {
         goStraight = new Toggle(false);
         this.gamepad = DataHub.gamepad1;
         this.telemetry = DataHub.telemetry;
+    }
+
+    public OneController(){
+
     }
 }

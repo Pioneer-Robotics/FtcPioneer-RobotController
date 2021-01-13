@@ -26,6 +26,7 @@ public class Robot{
     //don't put modifier on them like "public" or "private". the default is "package" and is perfect
     static DriveTrain chassis;
     static Launcher launcher;
+    static Collector collector;
     static int testCases = 10;
     static double maxWaitTimeMS = 500;
     static PosTrackerType1population type1odos; //same idea, but slightly different implementations
@@ -54,6 +55,7 @@ public class Robot{
         type2odos = new PosTrackerType2population(testCases, maxWaitTimeMS);
         //basically arrays of PositionTracker objects
         launcher = new Launcher();
+        collector = new Collector();
         imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
@@ -139,4 +141,7 @@ public class Robot{
         type1odos.doTelemetryReadout();
         type2odos.doTelemetryReadout();
     }
+    public void setCollectorSpeed(float collectorSpeed) {collector.setCollectorSpeed(collectorSpeed);}
+    public void startCollecting(){collector.startCollecting();}
+    public void toggleCollector(){}
 }

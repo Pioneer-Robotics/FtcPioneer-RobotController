@@ -23,7 +23,13 @@ public class bMath {
         }
         return output;
     }
-
+    double squareInputWithSign(double input){
+        double output = input * input;
+        if (input < 0){
+            output = output * -1;
+        }
+        return output;
+    }
     //Clamp methods are to constrain values into a range
     public static double Clamp(double value, double min, double max) {
         double Ans = value;
@@ -34,6 +40,8 @@ public class bMath {
             Ans = min;
         }
         return Ans;
+
+
     }
     public static double Clamp(double value) { //Clamps between 1 and 0
         double Ans = value;
