@@ -12,6 +12,9 @@ public class Config {
     public static final String launcherMotor1 = "launcher1";
     public static final String launcherMotor2 = "launcher2";
 
+    public static final String wobblemotor = "wobblemotor";
+    public static final String wobbleservo = "wobbleservo";
+
     public static final String collectorMotor = "collector";
     public static final String collectorServoLeft = "collectorServoLeft";
     public static final String collectorServoRight = "collectorServoRight";
