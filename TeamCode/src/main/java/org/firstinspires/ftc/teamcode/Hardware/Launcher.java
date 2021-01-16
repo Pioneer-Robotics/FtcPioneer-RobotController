@@ -60,7 +60,7 @@ public class Launcher {
             default:
             case IDLE:
                 motors.disable();
-                if (launchRequested) {launchMode = LaunchMode.SPOOL}
+                if (launchRequested) {launchMode = LaunchMode.SPOOL;}
                 break;
             case SPOOL:
                 motors.setVelocity(targetVelocity);
