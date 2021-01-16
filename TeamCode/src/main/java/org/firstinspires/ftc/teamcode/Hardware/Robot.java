@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import android.renderscript.Int3;
-import com.qualcomm.robotcore.util.Range;
-
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -26,6 +24,7 @@ public class Robot{
     //don't put modifier on them like "public" or "private". the default is "package" and is perfect
     static DriveTrain chassis;
     static Launcher launcher;
+    public static WobbleMotor wobblemotor;
     static Collector collector;
     static int testCases = 10;
     static double maxWaitTimeMS = 500;
@@ -59,6 +58,7 @@ public class Robot{
         imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
+        wobblemotor = new WobbleMotor();
     }
     public double getHeading(AngleUnit angleUnit) {
         double angle;
@@ -69,6 +69,20 @@ public class Robot{
         return angle;
     }
 
+    public void setWobblePower(double power) {
+        wobblemotor.setWobblePower(power);
+    }
+    public void servoPosition(double position){
+        wobblemotor.wobbleservo.setPosition(position);
+    }
+    public void WobbleMotorUp(){
+        wobblemotor.wobblemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wobblemotor.wobblemotor.setTargetPosition(10);
+    }
+    public void WobbleMotorDown(){
+        wobblemotor.wobblemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wobblemotor.wobblemotor.setTargetPosition(1);
+    }
     /**
      * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
      * from an OpMode
