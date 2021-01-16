@@ -7,6 +7,7 @@ class MotorData {
     double leftPower;
     double rightPower;
     double launcherPower;
+    double wobblePower;
     boolean fullStop = false;
     void handleFullStop(){
         if(fullStop){ //TODO keep this up to data
@@ -19,6 +20,7 @@ class MotorData {
         leftPower = 0;
         rightPower = 0;
         launcherPower = 0;
+        wobblePower = 0;
         fullStop = false;
     }
 }

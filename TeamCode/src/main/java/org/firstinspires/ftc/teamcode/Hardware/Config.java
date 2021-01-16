@@ -9,14 +9,26 @@ public class Config {
     public static final String motorRT = "RT";
     public static final String motorRB = "RB";
 
+    //LAUNCHER
     public static final String launcherMotor1 = "launcher1";
     public static final String launcherMotor2 = "launcher2";
+
+    public static final String wobblemotor = "wobblemotor";
+    public static final String wobbleservo = "wobbleservo";
 
     public static final String collectorMotor = "collector";
     public static final String collectorServoLeft = "collectorServoLeft";
     public static final String collectorServoRight = "collectorServoRight";
     static final float SERVO_UP_POS = 0.3f, SERVO_DOWN_POS = 0;
 
+
+    public static final String launcherServo = "launcherS";
+    public static final float launcherServoOut = 0.1f, launcherServoIn = 0f;
+
+    public static final double launchVelocityThreshold = 50; //allowable difference in angular velocity before a launch is initiated
+    public static final double launcherServoTime = 2000; //launcher flick time in ms
+
+    //ODOMETERS
     //Info on the specs of the odometers
     public static final int odoTicksPerRotation = 8192; //encoder ticks per full rotation
     public static final double odoDiameterIn = 2; //diameter of the odometry wheels in inches

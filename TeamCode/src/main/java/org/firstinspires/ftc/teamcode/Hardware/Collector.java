@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
@@ -32,6 +31,7 @@ public class Collector{
         collectorSpeed = 1;
         collecting=false;
     }
+
     public Collector setCollectorSpeed(float collectorSpeed){
         this.collectorSpeed = collectorSpeed;
         return this;
@@ -57,7 +57,7 @@ public class Collector{
         return collecting;
     }
 
-//    private CollectorModes setCollectorMode(CollectorModes collectorMode) {
+//   private CollectorModes setCollectorMode(CollectorModes collectorMode) {
 //
 //        for (int i=0; i<3; i++) {
 //            switch (collectorMode) {
