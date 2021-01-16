@@ -101,4 +101,41 @@ public class Launcher {
         return this;
     }
 
+    public void requestLaunch (){
+        launchRequested = true;
+    }
+
+    public void cancelLaunch (){
+        launchRequested = false;
+    }
+
+    public void setLaunchOverride (boolean launchOverride){
+        this.launchOverride = launchOverride;
+    }
+
+    public void setContinuousFire (boolean continuousFire) {
+        this.continuousFire = continuousFire;
+    }
+
+    public void fire (){
+        if (launchMode  == LaunchMode.IDLE){
+            launchMode =  LaunchMode.SPOOL;
+        }
+        launchRequested = true;
+    }
+
+     public void requestSpool(){
+        if (launchMode == LaunchMode.IDLE){
+            launchMode = LaunchMode.SPOOL;
+        }
+     }
+
+     public void cancelSpool(){
+        if (launchMode == LaunchMode.SPOOL){
+            launchMode = LaunchMode.IDLE;
+        }
+     }
+
 }
+
+

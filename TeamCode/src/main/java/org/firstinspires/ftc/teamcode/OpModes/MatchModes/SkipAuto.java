@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.Helpers.bMath;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.ExampleAuto;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.OneController;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoController;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControllerTwo;
 
 @TeleOp (name = "SkipAuto", group = "example")
 public class SkipAuto extends GenericOpMode {
@@ -14,7 +16,7 @@ public class SkipAuto extends GenericOpMode {
     @Override
     public void selectAutoAndTeleOp(){
         auto = new NullAuto(); //you need this even if you don't use it
-        teleOp = new OneController();
+        teleOp = new TwoControllerTwo();
     }
     @Override
     public void runOpMode() throws InterruptedException {

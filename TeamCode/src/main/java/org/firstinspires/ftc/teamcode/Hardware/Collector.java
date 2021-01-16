@@ -33,11 +33,13 @@ public class Collector{
     }
 
     public Collector setCollectorSpeed(float collectorSpeed){
+        //collector motor speed
         this.collectorSpeed = collectorSpeed;
         return this;
     }
 
     public Collector startCollecting(){
+        //lowers servo to down position and activates collector motor
         servos.setServoPosition(Config.SERVO_DOWN_POS);
         collectorMotor.setPower(collectorSpeed);
         collecting=true;
@@ -45,6 +47,7 @@ public class Collector{
     }
 
     public Collector stopCollecting(){
+        //moves to up position as it stops collector motor
         servos.setServoPosition(Config.SERVO_UP_POS);
         collectorMotor.setPower(0);
         collecting=false;

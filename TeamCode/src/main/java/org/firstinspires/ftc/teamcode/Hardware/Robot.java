@@ -97,9 +97,9 @@ public class Robot{
         motorData.leftPower = leftPower;
         motorData.rightPower = rightPower;
     }
-    public void setLauncherPower(double power){
-        motorData.launcherPower = power;
-    }
+    public void setLauncherPower(double power){ motorData.launcherPower = power; }
+    public Launcher setLaunchMode(Launcher.LaunchMode launchMode){return setLaunchMode(launchMode);}
+    public Launcher updateLauncher(){return updateLauncher();}
     public Vector2 getLocation(){
         return mainOdometer.getLocation();
     }
@@ -149,4 +149,13 @@ public class Robot{
     public void isCollecting(){collector.isCollecting();}
 
     public void goStraight(){StraightStraight.StraightStraight();}
+
+    public void requestLaunch(){launcher.requestLaunch();}
+    public void cancelLaunch(){launcher.cancelLaunch();}
+    public void launchOverride(boolean launchOverride){launcher.setLaunchOverride(launchOverride);}
+    public void setContinousFire(boolean setContinousFire){launcher.setContinuousFire(setContinousFire);}
+    public void fire(){launcher.fire();}
+    public void spool(){launcher.requestSpool();}
+    public void cancelSpool(){launcher.cancelSpool();}
+
 }
