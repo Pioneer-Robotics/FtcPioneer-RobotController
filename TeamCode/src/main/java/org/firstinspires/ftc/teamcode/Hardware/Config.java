@@ -15,7 +15,7 @@ public class Config {
     public static final String collectorMotor = "collector";
     public static final String collectorServoLeft = "collectorServoLeft";
     public static final String collectorServoRight = "collectorServoRight";
-    static final float SERVO_UP_POS = 0.3f, SERVO_DOWN_POS = -0.3f;
+    static final float SERVO_UP_POS = 0.3f, SERVO_DOWN_POS = 0;
 
     //Info on the specs of the odometers
     public static final int odoTicksPerRotation = 8192; //encoder ticks per full rotation

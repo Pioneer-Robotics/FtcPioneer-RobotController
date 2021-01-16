@@ -9,27 +9,23 @@ public class bMath {
 
 
     //converts odometry ticks to cm moved
-    public static double odoTicksToCm(int ticks){
+    public static double odoTicksToCm(int ticks) {
         return ticks * Config.odoTicksToCm;
     }
 
     public static double sqd(double value) {
         return (value * value);
     }
-    public static double squareInputWithSign(double input){
+
+    public static double squareInputWithSign(double input) {
         double output = input * input;
-        if (input < 0){
+        if (input < 0) {
             output = output * -1;
         }
         return output;
     }
-    double squareInputWithSign(double input){
-        double output = input * input;
-        if (input < 0){
-            output = output * -1;
-        }
-        return output;
-    }
+
+
     //Clamp methods are to constrain values into a range
     public static double Clamp(double value, double min, double max) {
         double Ans = value;

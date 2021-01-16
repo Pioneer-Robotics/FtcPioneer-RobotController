@@ -50,10 +50,8 @@ public class Collector{
         collecting=false;
         return this;
     }
-    public Collector toggleCollecting(){
-        boolean collecting = toggleCollecting().collecting;
-        return this;
-    }
+
+
 
     public boolean isCollecting(){
         return collecting;

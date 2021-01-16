@@ -35,6 +35,7 @@ public class Robot{
     HardwareMap hardwareMap;
     MotorData motorData;
     static AutoPilot autoPilot;
+    static GoStraight StraightStraight;
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
@@ -56,6 +57,7 @@ public class Robot{
         //basically arrays of PositionTracker objects
         launcher = new Launcher();
         collector = new Collector();
+        StraightStraight = new GoStraight();
         imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
@@ -143,5 +145,8 @@ public class Robot{
     }
     public void setCollectorSpeed(float collectorSpeed) {collector.setCollectorSpeed(collectorSpeed);}
     public void startCollecting(){collector.startCollecting();}
-    public void toggleCollector(){}
+    public void stopCollecting(){collector.stopCollecting();}
+    public void isCollecting(){collector.isCollecting();}
+
+    public void goStraight(){StraightStraight.StraightStraight();}
 }
