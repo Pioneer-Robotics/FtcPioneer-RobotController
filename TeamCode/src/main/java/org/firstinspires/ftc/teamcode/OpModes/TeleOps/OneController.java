@@ -16,10 +16,17 @@ public class OneController extends TeleOpScript {
     boolean autopilot = false;
     double targetAngle = 0.0;
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale;
+    double wobbleSpeed;
     ElapsedTime deltaTime;
     Telemetry telemetry;
     Gamepad gamepad;
     Toggle goStraight;
+    WobbleMotors wobblemotors;
+
+    double getWobbleSpeed(){
+        wobbleSpeed = Robot.get().getWobblePower();
+        return wobbleSpeed;
+    }
 
     double squareInputWithSign(double input) {
         double output = input * input;
@@ -36,7 +43,7 @@ public class OneController extends TeleOpScript {
             drive = gamepad.right_trigger - gamepad.left_trigger;
             turn = gamepad.left_stick_x;
 
-            if (gamepad.x) {
+            if (gamepad.a) {
                 autopilot = true;
                 drive = gamepad.right_trigger - gamepad.left_trigger;
                 targetAngle = Robot.get().getRotationDegrees();
@@ -73,6 +80,8 @@ public class OneController extends TeleOpScript {
             else
                 driveScale = 0.25;
         }
+
+
         tgtPowerLeft = driveScale * turn;
         tgtPowerRight = -driveScale * turn;
         tgtPowerLeft -= driveScale * drive;
@@ -82,6 +91,8 @@ public class OneController extends TeleOpScript {
 
         Robot.get().setDrivePowers(tgtPowerLeft, tgtPowerRight);
 
+        telemetry.addData("wobble motor position", wobblemotors.wobblemotorticks);
+        telemetry.addData("wobble motor speed", wobbleSpeed);
         telemetry.addData("xPos", Robot.get().getLocation().getX());
         telemetry.addData("yPos", Robot.get().getLocation().getY());
         telemetry.addData("rotation (deg)", Robot.get().getRotationDegrees());
@@ -114,14 +125,27 @@ public class OneController extends TeleOpScript {
             turn = -0.35;
         }
 
+        if(gamepad.dpad_up){
+            Robot.get().WobbleMotorUp();
+        }
+        if (gamepad.dpad_down){
+            Robot.get().WobbleMotorDown();
+        }
+        if (gamepad.x){
+            Robot.get().WobbleMotorStartPos();
+        }
+
+
     }
 
     @Override
     public void init() {
+        wobblemotors = new WobbleMotors();
         deltaTime = new ElapsedTime();
         goStraight = new Toggle(false);
         this.gamepad = DataHub.gamepad1;
         this.telemetry = DataHub.telemetry;
+
     }
 
     public OneController(){

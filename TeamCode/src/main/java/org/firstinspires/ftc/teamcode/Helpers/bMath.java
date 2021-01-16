@@ -17,7 +17,7 @@ public class bMath {
         return (value * value);
     }
 
-    double squareInputWithSign(double input){
+    public static double squareInputWithSign(double input){
         double output = input * input;
         if (input < 0){
             output = output * -1;

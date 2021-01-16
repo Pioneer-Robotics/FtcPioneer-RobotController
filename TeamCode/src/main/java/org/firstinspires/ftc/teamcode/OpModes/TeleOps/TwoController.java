@@ -33,7 +33,6 @@ public class TwoController extends TeleOpScript {
 
     @Override
     public void loop() {
-
         if (!autopilot && !autopilots) {
             drive = gamepad.right_trigger - gamepad.left_trigger;
             turn = gamepad.left_stick_x;
@@ -123,6 +122,7 @@ public class TwoController extends TeleOpScript {
         deltaTime = new ElapsedTime();
         goStraight = new Toggle(false);
         this.gamepad = DataHub.gamepad1;
+        this.gamepad = DataHub.gamepad2;
         this.telemetry = DataHub.telemetry;
     }
 

@@ -68,6 +68,9 @@ public class Robot{
             angle -= 360;
         return angle;
     }
+    public double getWobblePower(){
+        return wobblemotor.getWobblePower();
+    }
 
     public void setWobblePower(double power) {
         wobblemotor.setWobblePower(power);
@@ -75,13 +78,19 @@ public class Robot{
     public void servoPosition(double position){
         wobblemotor.wobbleservo.setPosition(position);
     }
-    public void WobbleMotorUp(){
+    public void WobbleMotorStartPos(){
         wobblemotor.wobblemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wobblemotor.wobblemotor.setTargetPosition(10);
+        wobblemotor.wobblemotor.setTargetPosition(0);
+    }
+    public void WobbleMotorUp(){
+        wobblemotor.wobblemotor.setTargetPosition(1200);
+        setWobblePower(0.5);
+        wobblemotor.wobblemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     public void WobbleMotorDown(){
+        wobblemotor.wobblemotor.setTargetPosition(2000);
+        setWobblePower(0.5);
         wobblemotor.wobblemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wobblemotor.wobblemotor.setTargetPosition(1);
     }
     /**
      * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
