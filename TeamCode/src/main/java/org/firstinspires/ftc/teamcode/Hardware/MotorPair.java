@@ -11,20 +11,24 @@ class MotorPair {
          motor1 = motorA;
          motor2 = motorB;
     }
-    public void setDriveMode(DcMotor.RunMode mode) {
+    public MotorPair setDriveMode(DcMotor.RunMode mode) {
          motor1.setMode(mode);
          motor2.setMode(mode);
+         return this;
     }
-    public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior){
+    public MotorPair setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior){
         motor1.setZeroPowerBehavior(behavior);
         motor2.setZeroPowerBehavior(behavior);
+        return this;
     }
-    public void setDirection(DcMotorSimple.Direction direction){
+    public MotorPair setDirection(DcMotorSimple.Direction direction){
         motor1.setDirection(direction);
         motor2.setDirection(direction);
+        return this;
     }
-    public void setPower(double power){
+    public MotorPair setPower(double power){
         motor1.setPower(power);
         motor2.setPower(power);
+        return this;
     }
 }
