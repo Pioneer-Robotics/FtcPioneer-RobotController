@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
-@TeleOp (name = "wobble motor test")
 public class TestWobbleMotor extends AutoScript{
     ElapsedTime deltaTime;
     double time;

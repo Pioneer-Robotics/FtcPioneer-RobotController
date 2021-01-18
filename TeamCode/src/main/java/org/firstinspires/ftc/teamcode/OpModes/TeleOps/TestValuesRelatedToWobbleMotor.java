@@ -6,7 +6,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 
-public class WobbleMotors extends TeleOpScript {
+public class TestValuesRelatedToWobbleMotor extends TeleOpScript {
     Gamepad gamepad;
     Telemetry telemetry;
     int wobblemotorticks;
@@ -45,7 +45,6 @@ public class WobbleMotors extends TeleOpScript {
             servoPosition -= 0.05;
         }
         Robot.get().setWobbleServoPosition(servoPosition);
-        Robot.get().setWobblePower(wobblePower);
         wobblemotorticks = Robot.get().getWobbleTicks();
         telemetry.addData("servo voltage", servoPosition);
         telemetry.addData("wobble ticks", wobblemotorticks);

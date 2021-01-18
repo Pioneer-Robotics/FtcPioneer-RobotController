@@ -24,7 +24,7 @@ public class WobbleMotor {
               break;
           }
       }
-
+      motor.setPower(1);
       motor.setTargetPosition(0);
       motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
       servo = DataHub.hardwareMap.get(Servo.class, Config.WobbleServo);

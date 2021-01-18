@@ -101,9 +101,6 @@ public class Robot{
     public int getWobbleTicks(){
         return wobblemotor.motor.getCurrentPosition();
     }
-    public void setWobblePower(double power) {
-        motorData.wobbleMotorPower = power;
-    }
     public void setWobbleServoPosition(double position){
         motorData.tgtWobbleServoPos = position;
     }

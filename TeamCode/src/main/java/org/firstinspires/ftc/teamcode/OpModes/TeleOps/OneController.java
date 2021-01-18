@@ -21,7 +21,7 @@ public class OneController extends TeleOpScript {
     Telemetry telemetry;
     Gamepad gamepad;
     Toggle goStraight;
-    WobbleMotors wobblemotors;
+    TestValuesRelatedToWobbleMotor wobblemotors;
 
     double getWobbleSpeed(){
         wobbleSpeed = Robot.get().getWobblePower();
@@ -140,7 +140,7 @@ public class OneController extends TeleOpScript {
 
     @Override
     public void init() {
-        wobblemotors = new WobbleMotors();
+        wobblemotors = new TestValuesRelatedToWobbleMotor();
         deltaTime = new ElapsedTime();
         goStraight = new Toggle(false);
         this.gamepad = DataHub.gamepad1;
