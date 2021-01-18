@@ -103,7 +103,7 @@ public class Robot{
     public void update(){
         autoPilot.update(); //needs to go before setMotorPowers stuff
                             //when autoPilot is on, it will ignore user input
-        motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
+        motorData.handleFullStop(); //needs to go immediately before handleBreaking()
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
         launcher.setPower(motorData.launcherPower);
         updateOdometers();

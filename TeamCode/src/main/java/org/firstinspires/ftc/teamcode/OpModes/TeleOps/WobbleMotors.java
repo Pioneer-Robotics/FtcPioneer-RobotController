@@ -30,8 +30,9 @@ public class WobbleMotors extends TeleOpScript {
 
         if(gamepad.left_trigger > 0){
             servoPosition += 0.05;
-            Robot.get().servoPosition(servoPosition);
         }
+        Robot.get().servoPosition(servoPosition);
+        telemetry.addData("servo voltage", servoPosition);
 
 
     }

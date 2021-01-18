@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Helpers;
 import java.util.Random;
 /**
  * like the {@code Math} class, but for complex numbers
+ * there's a lot of stuff in here that is not useful to the robotics team, but I like the
+ * completeness of having it all
  * @author Joseph
  *
  */
@@ -266,10 +268,18 @@ public final class Cmath {
         }
     }
 
+    /**
+     * creates a new complex number with real and imaginary components in the range 0 - 1
+     * @return the new random ComplexNum
+     */
     public static ComplexNum random() {
         return RandomNumberGenerator.nextComplexNum();
     }
 
+    /**
+     * creates a new complex number with real and imaginary components in the range min - max
+     * @return the new random ComplexNum
+     */
     public static ComplexNum random(double min, double max) {
         return RandomNumberGenerator.nextComplexNum(min, max);
     }
@@ -305,6 +315,22 @@ public final class Cmath {
         return ans;
     }
 
+    /**
+     * keeps the direction of a complex number the same while squaring it's magnitude
+     * @param input the number you would like to square the magnitude of
+     * @return the number on the same line but with it's magnitude squared
+     */
+    public static ComplexNum squareMagnitude(ComplexNum input){
+        ComplexNum ans = input.copy();
+        ans.timesEquals(magnitude(input));
+        return ans;
+    }
+
+    /**
+     * gets the distance from 0 + 0i
+     * @param input the complex number who's sign you want
+     * @return the distance from that number to 0 + 0i
+     */
     public static double magnitude(ComplexNum input) {
         return Math.sqrt(magnitudeSqrd(input));
     }
@@ -313,6 +339,12 @@ public final class Cmath {
         return input.real * input.real + input.imag * input.imag;
     }
 
+    /**
+     * Gets the compliment of the input. The compliment of a complex number is the same thing
+     * but with the imaginary component's sign reversed
+     * @param input the complex number who's sign you want
+     * @return the compliment
+     */
     public static ComplexNum compliment(ComplexNum input) {
         ComplexNum ans = new ComplexNum();
         ans.real =  input.real;
