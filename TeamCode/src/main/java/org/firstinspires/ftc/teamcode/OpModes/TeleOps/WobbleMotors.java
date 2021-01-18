@@ -28,8 +28,11 @@ public class WobbleMotors extends TeleOpScript {
 
         telemetry.addData("Ticks", wobblemotorticks);
 
-        if(gamepad.left_trigger > 0){
+        if(gamepad.left_trigger > 0.5){
             servoPosition += 0.05;
+        }
+        if(gamepad.right_trigger > 0.5){
+            servoPosition -= 0.05;
         }
         Robot.get().servoPosition(servoPosition);
         telemetry.addData("servo voltage", servoPosition);
