@@ -58,4 +58,7 @@ class MotorPairEX{
         return (motor1.getVelocity() + motor2.getVelocity())/2;
     }
 
+    public int getCurrentPositionM1() {
+        return motor1.getCurrentPosition();
+    }
 }
