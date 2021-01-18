@@ -6,24 +6,32 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 
 public class WobbleMotor {
-    public DcMotor wobblemotor;
-    public Servo wobbleservo;
+    public DcMotor motor;
+    public Servo servo;
     public int getTicks(){
-        return wobblemotor.getCurrentPosition();
+        return motor.getCurrentPosition();
     }
     public WobbleMotor(){
-      wobblemotor = wobblemotor = DataHub.hardwareMap.get(DcMotor.class, Config.WobbleMotor);
-       wobblemotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-       wobblemotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      motor = DataHub.hardwareMap.get(DcMotor.class, Config.WobbleMotor);
+      motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      servo = DataHub.hardwareMap.get(Servo.class, Config.WobbleServo);
     }
 
-    public double getWobblePower(){
-        return wobblemotor.getPower();
-    }
+    //motor
     void setWobblePower(double power) {
-        wobblemotor.setPower(power);
+        motor.setPower(power);
     }
-   void servoPosition(double position){
-    wobbleservo.setPosition(position);
-   }
+    double getWobblePower(){
+        return motor.getPower();
+    }
+
+    //servo
+    void setServoPosition(double position){
+        servo.setPosition(position);
+    }
+    double getServoPosition(){
+        return servo.getPosition();
+    }
+
 }

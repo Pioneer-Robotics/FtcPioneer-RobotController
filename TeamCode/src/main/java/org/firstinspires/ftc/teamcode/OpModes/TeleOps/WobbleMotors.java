@@ -11,17 +11,18 @@ public class WobbleMotors extends TeleOpScript {
     Telemetry telemetry;
     double wobblemotorticks;
     double servoPosition;
+    double wobblePower;
 
     @Override
     public void loop() {
         if(gamepad.a){
-            Robot.get().setWobblePower(0.05);
+            wobblePower = 0.05;
         }
         else if (gamepad.x){
-            Robot.get().setWobblePower(0.0);
+            wobblePower = 0;
         }
         else if(gamepad.y){
-            Robot.get().setWobblePower(-0.05);
+            wobblePower = -0.05;
         }
 
         wobblemotorticks = Robot.get().wobblemotor.getTicks();
@@ -31,10 +32,12 @@ public class WobbleMotors extends TeleOpScript {
         if(gamepad.left_trigger > 0.5){
             servoPosition += 0.05;
         }
+
         if(gamepad.right_trigger > 0.5){
             servoPosition -= 0.05;
         }
-        Robot.get().servoPosition(servoPosition);
+        Robot.get().setServoPosition(servoPosition);
+        Robot.get().setWobblePower(wobblePower);
         telemetry.addData("servo voltage", servoPosition);
 
 
@@ -43,5 +46,8 @@ public class WobbleMotors extends TeleOpScript {
     public void init(){
         this.telemetry = DataHub.telemetry;
         this.gamepad = DataHub.gamepad1;
+        wobblemotorticks = 0;
+        wobblePower = 0;
+        servoPosition = Robot.get().getWobbleServoPosition();
     }
 }
