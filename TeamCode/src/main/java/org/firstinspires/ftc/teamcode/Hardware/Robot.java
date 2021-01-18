@@ -84,8 +84,8 @@ public class Robot{
         return wobblemotor.getServoPosition();
     }
     public void WobbleMotorStartPos(){
-        wobblemotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         wobblemotor.motor.setTargetPosition(0);
+        wobblemotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
     public void WobbleMotorUp(){
         wobblemotor.motor.setTargetPosition(1200);
