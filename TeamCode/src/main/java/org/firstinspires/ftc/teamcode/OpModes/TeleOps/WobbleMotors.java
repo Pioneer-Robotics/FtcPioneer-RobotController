@@ -38,8 +38,9 @@ public class WobbleMotors extends TeleOpScript {
         }
         Robot.get().setServoPosition(servoPosition);
         Robot.get().setWobblePower(wobblePower);
+        wobblemotorticks = Robot.get().getWobbleTicks();
         telemetry.addData("servo voltage", servoPosition);
-
+        telemetry.addData("wobble ticks", wobblemotorticks);
 
     }
 

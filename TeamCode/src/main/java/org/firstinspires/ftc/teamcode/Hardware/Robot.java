@@ -71,7 +71,9 @@ public class Robot{
     public double getWobblePower(){
         return wobblemotor.getWobblePower();
     }
-
+    public int getWobbleTicks(){
+        return wobblemotor.motor.getCurrentPosition();
+    }
     public void setWobblePower(double power) {
         wobblemotor.setWobblePower(power);
     }
