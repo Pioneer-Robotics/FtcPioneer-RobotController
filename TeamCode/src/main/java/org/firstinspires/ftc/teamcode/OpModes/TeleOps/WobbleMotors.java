@@ -15,14 +15,22 @@ public class WobbleMotors extends TeleOpScript {
 
     @Override
     public void loop() {
-        if(gamepad.a){
+        if(gamepad.left_stick_y < -0.1){ //negative on y means you're pushing up
             wobblePower = 0.05;
         }
-        else if (gamepad.x){
+        else if (gamepad.left_stick_y > 0.1){ //positive on y means pushing down
+            wobblePower = -0.5;
+        }
+        else{
             wobblePower = 0;
         }
-        else if(gamepad.y){
-            wobblePower = -0.05;
+        if(gamepad.a){
+            Robot.get().WobbleMotorUp();
+            telemetry.addLine("moving wobble motor up");
+        }
+        else if(gamepad.b){
+            Robot.get().WobbleMotorDown();
+            telemetry.addLine("moving wobble motor down");
         }
 
         wobblemotorticks = Robot.get().wobblemotor.getTicks();
