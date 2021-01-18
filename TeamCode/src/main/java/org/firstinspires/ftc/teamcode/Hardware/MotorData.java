@@ -7,8 +7,10 @@ class MotorData {
     double leftPower;
     double rightPower;
     double launcherPower;
-    double wobblePower;
-    boolean fullStop = false;
+    int tgtWobbleMotorPos;
+    double tgtWobbleServoPos;
+    public double wobbleMotorPower;
+    boolean fullStop;
     void handleFullStop(){
         if(fullStop){ //TODO keep this up to data
             leftPower = 0;
@@ -20,7 +22,8 @@ class MotorData {
         leftPower = 0;
         rightPower = 0;
         launcherPower = 0;
-        wobblePower = 0;
+        tgtWobbleMotorPos = 0;
+        tgtWobbleServoPos = Config.Wobble_Servo_Closed_Pos;
         fullStop = false;
     }
 }

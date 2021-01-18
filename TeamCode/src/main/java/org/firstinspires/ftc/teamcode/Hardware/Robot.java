@@ -60,6 +60,33 @@ public class Robot{
         imu.initialize(params);
         wobblemotor = new WobbleMotor();
     }
+    /**
+     * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
+     * from an OpMode
+     * @return the singleton {@code Robot} object
+     */
+    public static Robot get(){
+        return robot;
+    }
+    public void update(){
+        autoPilot.update(); //needs to go before setMotorPowers stuff
+                            //when autoPilot is on, it will ignore user input
+        motorData.handleFullStop(); //needs to go immediately before handleBreaking()
+        chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
+        launcher.setPower(motorData.launcherPower);
+        wobblemotor.update();
+        updateOdometers();
+    }
+    public void stopAllMotors(){
+        motorData.fullStop = true;
+    }
+    public void allowMovement(){
+        motorData.fullStop = false;
+    }
+    public void setDrivePowers(double leftPower, double rightPower){
+        motorData.leftPower = leftPower;
+        motorData.rightPower = rightPower;
+    }
     public double getHeading(AngleUnit angleUnit) {
         double angle;
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
@@ -75,53 +102,28 @@ public class Robot{
         return wobblemotor.motor.getCurrentPosition();
     }
     public void setWobblePower(double power) {
-        wobblemotor.setWobblePower(power);
+        motorData.wobbleMotorPower = power;
     }
-    public void setServoPosition(double position){
-        wobblemotor.setServoPosition(position);
+    public void setWobbleServoPosition(double position){
+        motorData.tgtWobbleServoPos = position;
+    }
+    public void closeWobbleServo(){
+        motorData.tgtWobbleServoPos = Config.Wobble_Servo_Closed_Pos;
+    }
+    public void openWobbleServo(){
+        motorData.tgtWobbleServoPos = Config.Wobble_Servo_Open_Pos;
     }
     public double getWobbleServoPosition(){
         return wobblemotor.getServoPosition();
     }
-    public void WobbleMotorStartPos(){
-        wobblemotor.motor.setTargetPosition(0);
-        wobblemotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public void setWobbleMotorToStart(){
+        motorData.tgtWobbleMotorPos = 0;
     }
-    public void WobbleMotorUp(){
-        wobblemotor.motor.setTargetPosition(1200);
-        setWobblePower(0.5);
-        wobblemotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public void pointWobbleMotorUp(){
+        motorData.tgtWobbleMotorPos = Config.WOBBLE_UP_POS;
     }
-    public void WobbleMotorDown(){
-        wobblemotor.motor.setTargetPosition(2000);
-        setWobblePower(0.5);
-        wobblemotor.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-    /**
-     * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
-     * from an OpMode
-     * @return the singleton {@code Robot} object
-     */
-    public static Robot get(){
-        return robot;
-    }
-    public void update(){
-        autoPilot.update(); //needs to go before setMotorPowers stuff
-                            //when autoPilot is on, it will ignore user input
-        motorData.handleFullStop(); //needs to go immediately before handleBreaking()
-        chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
-        launcher.setPower(motorData.launcherPower);
-        updateOdometers();
-    }
-    public void stopAllMotors(){
-        motorData.fullStop = true;
-    }
-    public void allowMovement(){
-        motorData.fullStop = false;
-    }
-    public void setDrivePowers(double leftPower, double rightPower){
-        motorData.leftPower = leftPower;
-        motorData.rightPower = rightPower;
+    public void pointWobbleMotorDown(){
+        motorData.tgtWobbleMotorPos = Config.WOBBLE_DOWN_POS;
     }
     public void setLauncherPower(double power){
         motorData.launcherPower = power;

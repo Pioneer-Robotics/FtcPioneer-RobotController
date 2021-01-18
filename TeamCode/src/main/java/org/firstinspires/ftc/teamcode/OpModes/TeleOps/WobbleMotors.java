@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 public class WobbleMotors extends TeleOpScript {
     Gamepad gamepad;
     Telemetry telemetry;
-    double wobblemotorticks;
+    int wobblemotorticks;
     double servoPosition;
     double wobblePower;
 
@@ -25,11 +25,11 @@ public class WobbleMotors extends TeleOpScript {
             wobblePower = 0;
         }
         if(gamepad.a){
-            Robot.get().WobbleMotorUp();
+            Robot.get().pointWobbleMotorUp();
             telemetry.addLine("moving wobble motor up");
         }
         else if(gamepad.b){
-            Robot.get().WobbleMotorDown();
+            Robot.get().pointWobbleMotorDown();
             telemetry.addLine("moving wobble motor down");
         }
 
@@ -44,7 +44,7 @@ public class WobbleMotors extends TeleOpScript {
         if(gamepad.right_trigger > 0.5){
             servoPosition -= 0.05;
         }
-        Robot.get().setServoPosition(servoPosition);
+        Robot.get().setWobbleServoPosition(servoPosition);
         Robot.get().setWobblePower(wobblePower);
         wobblemotorticks = Robot.get().getWobbleTicks();
         telemetry.addData("servo voltage", servoPosition);

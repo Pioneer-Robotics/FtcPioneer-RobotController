@@ -126,13 +126,13 @@ public class OneController extends TeleOpScript {
         }
 
         if(gamepad.dpad_up){
-            Robot.get().WobbleMotorUp();
+            Robot.get().pointWobbleMotorUp();
         }
         if (gamepad.dpad_down){
-            Robot.get().WobbleMotorDown();
+            Robot.get().pointWobbleMotorDown();
         }
         if (gamepad.x){
-            Robot.get().WobbleMotorStartPos();
+            Robot.get().setWobbleMotorToStart();
         }
 
 

@@ -64,6 +64,32 @@ public class bMath {
         //mod(a,b) == a % b
         return value - Math.floor(value / modulus) * modulus;
     }
+
+    /**
+     * puts an input into the range between the min and the max.
+     * modIntoRange(a, 0, b) == a % b
+     * @param input the number you want put into the range
+     * @param min the minimum value you want it to have
+     * @param max the max value you want it to have
+     * @return the number between min and max which is an integer multiple of the range
+     * (max - min) away from the input
+     */
+    public static double modIntoRange (double input, double min, double max) {
+        double ans = input;
+        if(min < max){ //hopefully true
+            double range = max - min;
+            double helper1 = Math.ceil( (min - input) / range );
+            ans = input + (helper1 * range);
+        }
+        if(max < min) { //this shouldn't happen, but if it does, don't worry about it
+            ans = modIntoRange(input, max, min);
+        }
+        if(min == max) { //if they are exactly the same, just return that value
+            ans = min;
+        }
+        return ans;
+    }
+
     //cis(theta) = cos(theta) + ( i * sin(theta) )
     public static ComplexNum cis(double angle){
         ComplexNum Ans = new ComplexNum();
