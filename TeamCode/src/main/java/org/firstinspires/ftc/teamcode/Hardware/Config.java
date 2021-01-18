@@ -23,7 +23,8 @@ public class Config {
 
 
     public static final String launcherServo = "launcherS";
-    public static final float launcherServoOut = 0.1f, launcherServoIn = 0f;
+    public static final float launcherServoOut = 0.5f, launcherServoIn = 0.42f;
+    public static double maxLauncherSpeed =  2500;
 
     public static final double launchVelocityThreshold = 50; //allowable difference in angular velocity before a launch is initiated
     public static final double launcherServoTime = 2000; //launcher flick time in ms

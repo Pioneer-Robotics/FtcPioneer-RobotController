@@ -15,17 +15,17 @@ class MotorPairEX{
          motor1 = motorA;
          motor2 = motorB;
     }
-    public MotorPairEX setDriveMode(DcMotor.RunMode mode) {
+    public MotorPairEX setDriveMode(DcMotorEx.RunMode mode) {
          motor1.setMode(mode);
          motor2.setMode(mode);
          return this;
     }
-    public MotorPairEX setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior){
+    public MotorPairEX setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior behavior){
         motor1.setZeroPowerBehavior(behavior);
         motor2.setZeroPowerBehavior(behavior);
         return this;
     }
-    public MotorPairEX setDirection(DcMotorSimple.Direction direction){
+    public MotorPairEX setDirection(DcMotorEx.Direction direction){
         motor1.setDirection(direction);
         motor2.setDirection(direction);
         return this;
@@ -55,10 +55,11 @@ class MotorPairEX{
     }
 
     public double getAverageVelocity(){
-        return (motor1.getVelocity() + motor2.getVelocity())/2;
+        return (motor1.getVelocity() + motor2.getVelocity()) / 2.0;
     }
 
-    public int getCurrentPositionM1() {
+    public int getCurrentPositionM1(){
         return motor1.getCurrentPosition();
     }
+
 }

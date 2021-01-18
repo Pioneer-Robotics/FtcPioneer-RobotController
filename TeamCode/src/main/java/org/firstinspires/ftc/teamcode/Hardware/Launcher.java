@@ -14,9 +14,9 @@ public class Launcher {
     DcMotorEx m2;
     Servo flicker;
 
-    double flickerTargetPos = Config.launcherServoOut;
+    double flickerTargetPos = SERVO_OUT;
 
-    double targetVelocity = 500;
+    double targetVelocity = 2000;
     boolean launchRequested = false;
     boolean continuousFire = false;
     boolean waitForServo = true;
@@ -45,7 +45,7 @@ public class Launcher {
         flicker = DataHub.hardwareMap.get(Servo.class, Config.launcherServo);
         launchMode = LaunchMode.IDLE;
     }
-
+@Deprecated
     Launcher setPower(double power){
         motors.setPower(power);
         return this;

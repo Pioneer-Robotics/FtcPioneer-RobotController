@@ -84,7 +84,7 @@ public class Robot{
                             //when autoPilot is on, it will ignore user input
         motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
-        launcher.setPower(motorData.launcherPower);
+        launcher.updateLauncher();
         updateOdometers();
     }
     public void stopAllMotors(){
@@ -157,5 +157,7 @@ public class Robot{
     public void fire(){launcher.fire();}
     public void spool(){launcher.requestSpool();}
     public void cancelSpool(){launcher.cancelSpool();}
+    public Launcher.LaunchMode getLaunchMode() {return launcher.launchMode;}
+    public double getLauncherVelocity() {return launcher.getLaunchVelocity();}
 
 }
