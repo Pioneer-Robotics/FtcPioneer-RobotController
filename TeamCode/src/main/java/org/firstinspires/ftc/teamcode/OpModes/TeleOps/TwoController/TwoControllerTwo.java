@@ -14,17 +14,16 @@ import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
 public class TwoControllerTwo extends TeleOpScript {
     private static float TRIGGER_DEADZONE = 0.1f;
 
-    double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale;
+    double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale, turnScale;
     ElapsedTime deltaTime;
     ElapsedTime loopTime;
     Telemetry telemetry;
     Gamepad gamepad1;
     Gamepad gamepad2;
-    Toggle moveStraightFast;
     Toggle collecting;
     Toggle stopCollecting;
-    Toggle gamepad2LeftTrigger;
-    Toggle gamepad2RightTrigger;
+    Toggle increaseLaunchSpeedToggle;
+    Toggle decreaseLaunchSpeedToggle;
 
 
     double launcherSpeedFraction = 0.8;
@@ -33,19 +32,18 @@ public class TwoControllerTwo extends TeleOpScript {
 
     @Override
     public void loop() {
-        drive = gamepad1.left_stick_y;
-        turn = gamepad1.right_stick_x;
+
 
         /*============
         Launcher Control
          ============*/
         //overrides the launch conditions to initiate the launch asap
-        Robot.get().launchOverride(gamepad2.right_bumper);
+        Robot.get().launchOverride(gamepad2.a);
 
         //spools without initiating a launch
-        if (gamepad1.y){
-            Robot.get().spool();
-        }
+//        if (gamepad1.y || gamepad2.y){
+//            Robot.get().spool();
+//        }
 
         //sets the launchmode to IDLE; should be used if there is an issue and a launch cannot be completed
         if (gamepad1.dpad_down || gamepad2.dpad_down){
@@ -53,15 +51,15 @@ public class TwoControllerTwo extends TeleOpScript {
         }
 
         //fires
-        if (gamepad1.right_bumper) {
+        if (gamepad1.a) {
             Robot.get().fire();
         }
 
-        gamepad2RightTrigger.toggle(gamepad2.right_trigger>=TRIGGER_DEADZONE);
-        gamepad2LeftTrigger.toggle(gamepad2.left_trigger>=TRIGGER_DEADZONE);
-        if (gamepad2RightTrigger.justChanged()){
+        decreaseLaunchSpeedToggle.toggle(gamepad2.dpad_left);
+        increaseLaunchSpeedToggle.toggle(gamepad2.dpad_right);
+        if (decreaseLaunchSpeedToggle.justChanged()){
             launcherSpeedFraction += 0.1;
-        } else if (gamepad2LeftTrigger.justChanged()){
+        } else if (increaseLaunchSpeedToggle.justChanged()){
             launcherSpeedFraction -= 0.1;
         }
         launcherSpeedFraction = Range.clip(launcherSpeedFraction,0.1,1);
@@ -86,30 +84,38 @@ public class TwoControllerTwo extends TeleOpScript {
         /*============
         Drive Control
          ============*/
-
-        if (moveStraightFast.getBool()) {
-            tgtPowerLeft = -gamepad1.left_stick_y;
-            tgtPowerRight = -gamepad1.left_stick_y;
+        if (gamepad1.right_trigger >= TRIGGER_DEADZONE || gamepad1.left_trigger >= TRIGGER_DEADZONE) {
+            drive = gamepad1.left_trigger-gamepad1.right_trigger;
+        } else {
+            drive = 0;
         }
 
-        if (!moveStraightFast.getBool()) {
-            // press both bumpers to get full power
-            if (gamepad1.b) {
-                driveScale = 0.65;
-                // press neither bumper to get quarter power
-            }else {
-                driveScale = 0.35;
-            }
+        turn = gamepad1.left_stick_x;
+
+        if (gamepad1.right_bumper && gamepad1.left_bumper){
+            driveScale = 1;
+            turnScale = 1;
+        } else if (gamepad1.left_bumper || gamepad1.right_bumper){
+            driveScale = 0.7;
+            turnScale = 0.7;
+        } else {
+            driveScale = 0.4;
         }
 
-        tgtPowerLeft = driveScale * turn;
-        tgtPowerRight = -driveScale * turn;
+
+
+        tgtPowerLeft = turnScale * turn;
+        tgtPowerRight = -turnScale * turn;
         tgtPowerLeft -= driveScale * drive;
         tgtPowerRight -= driveScale * drive;
         tgtPowerLeft = Range.clip(tgtPowerLeft, -1.0, 1.0);
         tgtPowerRight = Range.clip(tgtPowerRight, -1.0, 1.0);
         Robot.get().setDrivePowers(tgtPowerLeft, tgtPowerRight);
         Robot.get().update();
+
+        /*============
+        Telemetry
+         ============*/
 //        telemetry.addData("xPos", Robot.get().getLocation().getX());
 //        telemetry.addData("yPos", Robot.get().getLocation().getY());
 //        telemetry.addData("rotation (deg)", Robot.get().getRotationDegrees());
@@ -129,7 +135,7 @@ public class TwoControllerTwo extends TeleOpScript {
         telemetry.addData("Current Velocity", Robot.get().getLauncherVelocity());
         telemetry.addData("Target Velocity", Config.maxLauncherSpeed*launcherSpeedFraction);
         telemetry.addLine("====DRIVE====");
-        telemetry.addData("FastSetting On/Off", moveStraightFast.getBool());
+
         telemetry.addLine("====COLLECTOR====");
         telemetry.addData("collector on/off", collecting.getBool());
 
@@ -140,13 +146,17 @@ public class TwoControllerTwo extends TeleOpScript {
     @Override
     public void init() {
         deltaTime = new ElapsedTime();
+        loopTime = new ElapsedTime();
         this.gamepad1 = DataHub.gamepad1;
         this.gamepad2 = DataHub.gamepad2;
         this.telemetry = DataHub.telemetry;
+        driveScale = 0.5;
+        turnScale = 0.5;
 
-        moveStraightFast = new Toggle(false);
         collecting = new Toggle(false);
         stopCollecting = new Toggle(false);
+        increaseLaunchSpeedToggle = new Toggle(false);
+        decreaseLaunchSpeedToggle = new Toggle(false);
 
     }
     public TwoControllerTwo(){

@@ -131,6 +131,7 @@ public class Launcher {
         if (launchMode == LaunchMode.IDLE){
             launchMode = LaunchMode.SPOOL;
         }
+        launchRequested = false;
      }
 
      public void emergencyStop(){
