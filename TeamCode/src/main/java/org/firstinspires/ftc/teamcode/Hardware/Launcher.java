@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,7 +10,8 @@ public class Launcher {
     static final double SERVO_OUT = Config.launcherServoOut, SERVO_IN = Config.launcherServoIn;
 
     MotorPairEX motors;
-    DcMotor m1;
+    DcMotorEx m1;
+    DcMotorEx m2;
     Servo flicker;
 
     double flickerTargetPos = Config.launcherServoOut;
@@ -35,14 +35,15 @@ public class Launcher {
 
 
     Launcher(){
-        m1 = DataHub.hardwareMap.get(DcMotor.class, Config.launcherMotor1);
-        DcMotor m2 = DataHub.hardwareMap.get(DcMotor.class, Config.launcherMotor2);
-        motors = new MotorPairEX( (DcMotorEx) m1, (DcMotorEx) m2);
-        motors.setDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
-                .setDriveMode(DcMotor.RunMode.RUN_USING_ENCODER)
-                .setDirection(DcMotor.Direction.REVERSE)
+        m1 = DataHub.hardwareMap.get(DcMotorEx.class, Config.launcherMotor1);
+        m2 = DataHub.hardwareMap.get(DcMotorEx.class, Config.launcherMotor2);
+        motors = new MotorPairEX(m1, m2);
+        motors.setDriveMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER)
+                .setDriveMode(DcMotorEx.RunMode.RUN_USING_ENCODER)
+                .setDirection(DcMotorEx.Direction.REVERSE)
         ;
         flicker = DataHub.hardwareMap.get(Servo.class, Config.launcherServo);
+        launchMode = LaunchMode.IDLE;
     }
 
     Launcher setPower(double power){
@@ -63,6 +64,7 @@ public class Launcher {
                 if (launchRequested) {launchMode = LaunchMode.SPOOL;}
                 break;
             case SPOOL:
+                motors.enable();
                 motors.setVelocity(targetVelocity);
 
                 //Checks if the servo is in the right position and instructs the program to wait until it is, otherwise
@@ -135,6 +137,11 @@ public class Launcher {
             launchMode = LaunchMode.IDLE;
         }
      }
+
+     public LaunchMode getLaunchMode() {return launchMode;}
+
+     public double getLaunchVelocity() {return motors.getAverageVelocity();}
+    public int getLaunchPos() {return motors.getCurrentPositionM1();}
 
 }
 
