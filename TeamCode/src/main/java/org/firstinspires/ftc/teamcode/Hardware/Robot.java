@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import android.renderscript.Int3;
-import com.qualcomm.robotcore.util.Range;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -156,8 +154,9 @@ public class Robot{
     public void setContinousFire(boolean setContinousFire){launcher.setContinuousFire(setContinousFire);}
     public void fire(){launcher.fire();}
     public void spool(){launcher.requestSpool();}
-    public void cancelSpool(){launcher.cancelSpool();}
+    public void emergencyStop(){launcher.emergencyStop();}
     public Launcher.LaunchMode getLaunchMode() {return launcher.launchMode;}
     public double getLauncherVelocity() {return launcher.getLaunchVelocity();}
+    public void setLauncherTargetVelocity(double targetVelocity) {launcher.setTargetVelocity(targetVelocity);}
 
 }

@@ -23,11 +23,12 @@ public class Config {
 
 
     public static final String launcherServo = "launcherS";
-    public static final float launcherServoOut = 0.5f, launcherServoIn = 0.42f;
+    public static final float launcherServoOut = 0.55f, launcherServoIn = 0.425f;
     public static double maxLauncherSpeed =  2500;
+    public static double defaultTargetLauncherSpeed = 2000;
 
     public static final double launchVelocityThreshold = 50; //allowable difference in angular velocity before a launch is initiated
-    public static final double launcherServoTime = 2000; //launcher flick time in ms
+    public static final double launcherServoTime = 200; //launcher flick time in ms
 
     //ODOMETERS
     //Info on the specs of the odometers

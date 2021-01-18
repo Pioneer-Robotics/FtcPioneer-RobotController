@@ -16,7 +16,7 @@ public class Launcher {
 
     double flickerTargetPos = SERVO_OUT;
 
-    double targetVelocity = 2000;
+    double targetVelocity = Config.defaultTargetLauncherSpeed;
     boolean launchRequested = false;
     boolean continuousFire = false;
     boolean waitForServo = true;
@@ -106,9 +106,10 @@ public class Launcher {
     public void requestLaunch (){
         launchRequested = true;
     }
-
+@Deprecated
     public void cancelLaunch (){
         launchRequested = false;
+
     }
 
     public void setLaunchOverride (boolean launchOverride){
@@ -132,16 +133,19 @@ public class Launcher {
         }
      }
 
-     public void cancelSpool(){
+     public void emergencyStop(){
         if (launchMode == LaunchMode.SPOOL){
             launchMode = LaunchMode.IDLE;
         }
+        launchRequested = false;
      }
 
      public LaunchMode getLaunchMode() {return launchMode;}
 
      public double getLaunchVelocity() {return motors.getAverageVelocity();}
-    public int getLaunchPos() {return motors.getCurrentPositionM1();}
+     public void setTargetVelocity(double targetVelocity) {this.targetVelocity = targetVelocity;}
+
+     public int getLaunchPos() {return motors.getCurrentPositionM1();}
 
 }
 

@@ -1,17 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Hardware.Config;
-import org.firstinspires.ftc.teamcode.Hardware.Launcher;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
@@ -50,7 +43,7 @@ public class TwoControllerTwo extends TeleOpScript {
             Robot.get().spool();
         }
         if (gamepad1.dpad_down || gamepad2.dpad_down){
-            Robot.get().cancelSpool();
+            Robot.get().emergencyStop();
         }
 
         if (gamepad1.right_bumper) {
