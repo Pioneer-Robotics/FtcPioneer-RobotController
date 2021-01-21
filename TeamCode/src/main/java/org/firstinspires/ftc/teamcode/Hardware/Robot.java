@@ -60,33 +60,6 @@ public class Robot{
         imu.initialize(params);
         wobblemotor = new WobbleMotor();
     }
-    /**
-     * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
-     * from an OpMode
-     * @return the singleton {@code Robot} object
-     */
-    public static Robot get(){
-        return robot;
-    }
-    public void update(){
-        autoPilot.update(); //needs to go before setMotorPowers stuff
-                            //when autoPilot is on, it will ignore user input
-        motorData.handleFullStop(); //needs to go immediately before handleBreaking()
-        chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
-        launcher.setPower(motorData.launcherPower);
-        wobblemotor.update();
-        updateOdometers();
-    }
-    public void stopAllMotors(){
-        motorData.fullStop = true;
-    }
-    public void allowMovement(){
-        motorData.fullStop = false;
-    }
-    public void setDrivePowers(double leftPower, double rightPower){
-        motorData.leftPower = leftPower;
-        motorData.rightPower = rightPower;
-    }
     public double getHeading(AngleUnit angleUnit) {
         double angle;
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
@@ -98,29 +71,52 @@ public class Robot{
     public double getWobblePower(){
         return wobblemotor.getWobblePower();
     }
-    public int getWobbleTicks(){
-        return wobblemotor.motor.getCurrentPosition();
+
+    public void setWobblePower(double power) {
+        wobblemotor.setWobblePower(power);
     }
-    public void setWobbleServoPosition(double position){
-        motorData.tgtWobbleServoPos = position;
+    public void servoPosition(double position){
+        wobblemotor.wobbleservo.setPosition(position);
     }
-    public void closeWobbleServo(){
-        motorData.tgtWobbleServoPos = Config.Wobble_Servo_Closed_Pos;
+    public void WobbleMotorStartPos(){
+        wobblemotor.wobblemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wobblemotor.wobblemotor.setTargetPosition(0);
     }
-    public void openWobbleServo(){
-        motorData.tgtWobbleServoPos = Config.Wobble_Servo_Open_Pos;
+    public void WobbleMotorUp(){
+        wobblemotor.wobblemotor.setTargetPosition(0);
+        setWobblePower(0.5);
+        wobblemotor.wobblemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-    public double getWobbleServoPosition(){
-        return wobblemotor.getServoPosition();
+    public void WobbleMotorDown(){
+        wobblemotor.wobblemotor.setTargetPosition(1900);
+        setWobblePower(0.5);
+        wobblemotor.wobblemotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-    public void setWobbleMotorToStart(){
-        motorData.tgtWobbleMotorPos = 0;
+    /**
+     * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
+     * from an OpMode
+     * @return the singleton {@code Robot} object
+     */
+    public static Robot get(){
+        return robot;
     }
-    public void pointWobbleMotorUp(){
-        motorData.tgtWobbleMotorPos = Config.WOBBLE_UP_POS;
+    public void update(){
+        autoPilot.update(); //needs to go before setMotorPowers stuff
+                            //when autoPilot is on, it will ignore user input
+        motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
+        chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
+        launcher.setPower(motorData.launcherPower);
+        updateOdometers();
     }
-    public void pointWobbleMotorDown(){
-        motorData.tgtWobbleMotorPos = Config.WOBBLE_DOWN_POS;
+    public void stopAllMotors(){
+        motorData.fullStop = true;
+    }
+    public void allowMovement(){
+        motorData.fullStop = false;
+    }
+    public void setDrivePowers(double leftPower, double rightPower){
+        motorData.leftPower = leftPower;
+        motorData.rightPower = rightPower;
     }
     public void setLauncherPower(double power){
         motorData.launcherPower = power;
