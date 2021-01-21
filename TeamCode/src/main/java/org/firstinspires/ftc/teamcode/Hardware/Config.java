@@ -19,7 +19,7 @@ public class Config {
     public static final String collectorMotor = "collector";
     public static final String collectorServoLeft = "collectorServoLeft";
     public static final String collectorServoRight = "collectorServoRight";
-    static final float SERVO_UP_POS = 0.3f, SERVO_DOWN_POS = 0;
+    static final float COLLECTOR_SERVO_UP_POS = -0.8f, COLLECTOR_SERVO_DOWN_POS = 0.4f, COLLECTOR_SERVO_MID_POS = 0.3f;
 
 
     public static final String launcherServo = "launcherS";

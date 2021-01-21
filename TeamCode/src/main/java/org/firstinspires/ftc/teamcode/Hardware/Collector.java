@@ -38,17 +38,25 @@ public class Collector{
         return this;
     }
 
-    public Collector startCollecting(){
+    public Collector start(){
         //lowers servo to down position and activates collector motor
-        servos.setServoPosition(Config.SERVO_DOWN_POS);
+        servos.setServoPosition(Config.COLLECTOR_SERVO_DOWN_POS);
         collectorMotor.setPower(collectorSpeed);
         collecting=true;
         return this;
     }
 
-    public Collector stopCollecting(){
+    public Collector stop(){
         //moves to up position as it stops collector motor
-        servos.setServoPosition(Config.SERVO_UP_POS);
+        servos.setServoPosition(Config.COLLECTOR_SERVO_MID_POS);
+        collectorMotor.setPower(0);
+        collecting=false;
+        return this;
+    }
+
+    public Collector retract(){
+        //moves to up position as it stops collector motor
+        servos.setServoPosition(Config.COLLECTOR_SERVO_UP_POS);
         collectorMotor.setPower(0);
         collecting=false;
         return this;

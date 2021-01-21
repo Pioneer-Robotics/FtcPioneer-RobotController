@@ -142,8 +142,9 @@ public class Robot{
         type2odos.doTelemetryReadout();
     }
     public void setCollectorSpeed(float collectorSpeed) {collector.setCollectorSpeed(collectorSpeed);}
-    public void startCollecting(){collector.startCollecting();}
-    public void stopCollecting(){collector.stopCollecting();}
+    public void startCollecting(){collector.start();}
+    public void stopCollecting(){collector.stop();}
+    public void retractCollector(){collector.retract();}
     public void isCollecting(){collector.isCollecting();}
 
     public void goStraight(){StraightStraight.StraightStraight();}

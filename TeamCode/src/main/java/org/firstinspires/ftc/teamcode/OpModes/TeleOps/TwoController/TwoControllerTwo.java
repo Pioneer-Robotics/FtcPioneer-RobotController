@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
 //comment
 public class TwoControllerTwo extends TeleOpScript {
     private static float TRIGGER_DEADZONE = 0.1f;
+    private static float STICK_DEADZONE = 0.1f;
 
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale, turnScale;
     ElapsedTime deltaTime;
@@ -20,13 +21,13 @@ public class TwoControllerTwo extends TeleOpScript {
     Telemetry telemetry;
     Gamepad gamepad1;
     Gamepad gamepad2;
-    Toggle collecting;
-    Toggle stopCollecting;
+    Toggle collectorRetracted;
     Toggle increaseLaunchSpeedToggle;
     Toggle decreaseLaunchSpeedToggle;
 
 
     double launcherSpeedFraction = 0.8;
+    String collectorState = "null";
 
 
 
@@ -69,17 +70,24 @@ public class TwoControllerTwo extends TeleOpScript {
         Collector Control
          ============*/
 
-        collecting.toggle(gamepad1.left_bumper);
-        if (collecting.getBool()){
+
+
+        collectorRetracted.toggle(gamepad1.b);
+        Robot.get().setCollectorSpeed(gamepad1.right_stick_y * 0.8f);
+        if (Math.abs(gamepad1.right_stick_y) >= STICK_DEADZONE){
             Robot.get().startCollecting();
-        } else {
+            collectorState = "started";
+        } else if (collectorRetracted.getBool()){
             Robot.get().stopCollecting();
+            collectorState = "stopped";
+        } else {
+            Robot.get().retractCollector();
+            collectorState = "retracted";
         }
 
-        stopCollecting.toggle(gamepad2.y);
-        if (stopCollecting.justChanged()){
-            Robot.get().stopCollecting();
-        }
+
+
+
 
         /*============
         Drive Control
@@ -100,6 +108,7 @@ public class TwoControllerTwo extends TeleOpScript {
             turnScale = 0.7;
         } else {
             driveScale = 0.4;
+            turnScale = 0.4;
         }
 
 
@@ -137,7 +146,7 @@ public class TwoControllerTwo extends TeleOpScript {
         telemetry.addLine("====DRIVE====");
 
         telemetry.addLine("====COLLECTOR====");
-        telemetry.addData("collector on/off", collecting.getBool());
+        telemetry.addData("collector", collectorState);
 
         //telemetry.addData("LaunchVelocityDirectRef", ((DcMotorEx)DataHub.hardwareMap.get(DcMotor.class, Config.launcherMotor1)).getCurrentPosition() );
         loopTime.reset();
@@ -153,8 +162,7 @@ public class TwoControllerTwo extends TeleOpScript {
         driveScale = 0.5;
         turnScale = 0.5;
 
-        collecting = new Toggle(false);
-        stopCollecting = new Toggle(false);
+        collectorRetracted = new Toggle(false);
         increaseLaunchSpeedToggle = new Toggle(false);
         decreaseLaunchSpeedToggle = new Toggle(false);
 
