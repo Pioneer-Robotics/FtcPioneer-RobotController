@@ -150,7 +150,6 @@ public class Robot{
     public void goStraight(){StraightStraight.StraightStraight();}
 
     public void requestLaunch(){launcher.requestLaunch();}
-    public void cancelLaunch(){launcher.cancelLaunch();}
     public void launchOverride(boolean launchOverride){launcher.setLaunchOverride(launchOverride);}
     public void setContinousFire(boolean setContinousFire){launcher.setContinuousFire(setContinousFire);}
     public void fire(){launcher.fire();}

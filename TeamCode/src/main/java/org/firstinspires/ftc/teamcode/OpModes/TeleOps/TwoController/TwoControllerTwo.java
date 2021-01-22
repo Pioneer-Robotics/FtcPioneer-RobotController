@@ -15,6 +15,8 @@ public class TwoControllerTwo extends TeleOpScript {
     private static float TRIGGER_DEADZONE = 0.1f;
     private static float STICK_DEADZONE = 0.1f;
 
+    private Robot robot;
+
     double drive, turn, tgtPowerLeft, tgtPowerRight, driveScale, turnScale;
     ElapsedTime deltaTime;
     ElapsedTime loopTime;
@@ -28,7 +30,7 @@ public class TwoControllerTwo extends TeleOpScript {
 
     double launcherSpeedFraction = 0.8;
     String collectorState = "null";
-
+    Toggle collecting;
 
 
     @Override
@@ -38,51 +40,57 @@ public class TwoControllerTwo extends TeleOpScript {
         /*============
         Launcher Control
          ============*/
-        //overrides the launch conditions to initiate the launch asap
-        Robot.get().launchOverride(gamepad2.a);
+
+        //overrides the launch conditions to initiate the launch asap; should be used if there is
+            // an issue and a launch cannot be completed automatically
+        robot.launchOverride(gamepad2.a);
 
         //spools without initiating a launch
-//        if (gamepad1.y || gamepad2.y){
-//            Robot.get().spool();
-//        }
+        if (gamepad1.y || gamepad2.y){
+            robot.spool();
+        }
 
-        //sets the launchmode to IDLE; should be used if there is an issue and a launch cannot be completed
+        //sets the launchmode to IDLE; should be used to cancel a launch
         if (gamepad1.dpad_down || gamepad2.dpad_down){
-            Robot.get().emergencyStop();
+            robot.emergencyStop();
         }
 
         //fires
         if (gamepad1.a) {
-            Robot.get().fire();
+            robot.fire();
         }
 
         decreaseLaunchSpeedToggle.toggle(gamepad2.dpad_left);
         increaseLaunchSpeedToggle.toggle(gamepad2.dpad_right);
         if (decreaseLaunchSpeedToggle.justChanged()){
-            launcherSpeedFraction += 0.1;
+            launcherSpeedFraction += 0.05;
         } else if (increaseLaunchSpeedToggle.justChanged()){
-            launcherSpeedFraction -= 0.1;
+            launcherSpeedFraction -= 0.05;
         }
         launcherSpeedFraction = Range.clip(launcherSpeedFraction,0.1,1);
-        Robot.get().setLauncherTargetVelocity(Config.maxLauncherSpeed*launcherSpeedFraction);
+        robot.setLauncherTargetVelocity(Config.maxLauncherSpeed*launcherSpeedFraction);
 
         /*============
         Collector Control
          ============*/
 
-
-
+        collecting.toggle(gamepad1.right_stick_y<=0.5);
         collectorRetracted.toggle(gamepad1.b);
-        Robot.get().setCollectorSpeed(gamepad1.right_stick_y * 0.8f);
-        if (Math.abs(gamepad1.right_stick_y) >= STICK_DEADZONE){
-            Robot.get().startCollecting();
-            collectorState = "started";
-        } else if (collectorRetracted.getBool()){
-            Robot.get().stopCollecting();
-            collectorState = "stopped";
-        } else {
-            Robot.get().retractCollector();
+        if (gamepad1.right_stick_y >= STICK_DEADZONE){
+            collecting.set(false);
+        }
+
+        if (collectorRetracted.getBool()){
+            robot.retractCollector();
             collectorState = "retracted";
+        } else if(collecting.getBool()){
+            robot.startCollecting();
+            robot.setCollectorSpeed(-0.6f);
+        } else if(gamepad1.right_stick_y >= STICK_DEADZONE){
+            robot.startCollecting();
+            robot.setCollectorSpeed(gamepad1.right_stick_y * Config.COLLECTOR_MAX_SPEED_FRACTION);
+        } else {
+            robot.stopCollecting();
         }
 
 
@@ -119,41 +127,44 @@ public class TwoControllerTwo extends TeleOpScript {
         tgtPowerRight -= driveScale * drive;
         tgtPowerLeft = Range.clip(tgtPowerLeft, -1.0, 1.0);
         tgtPowerRight = Range.clip(tgtPowerRight, -1.0, 1.0);
-        Robot.get().setDrivePowers(tgtPowerLeft, tgtPowerRight);
-        Robot.get().update();
+        robot.setDrivePowers(tgtPowerLeft, tgtPowerRight);
+
+
+        robot.update();
 
         /*============
         Telemetry
          ============*/
-//        telemetry.addData("xPos", Robot.get().getLocation().getX());
-//        telemetry.addData("yPos", Robot.get().getLocation().getY());
-//        telemetry.addData("rotation (deg)", Robot.get().getRotationDegrees());
-//        telemetry.addData("left odo", Robot.get().getLeftOdo());
-//        telemetry.addData("right odo", Robot.get().getRightOdo());
-//        telemetry.addData("mid odo", Robot.get().getMidOdo());
+//        telemetry.addData("xPos", robot.getLocation().getX());
+//        telemetry.addData("yPos", robot.getLocation().getY());
+//        telemetry.addData("rotation (deg)", robot.getRotationDegrees());
+//        telemetry.addData("left odo", robot.getLeftOdo());
+//        telemetry.addData("right odo", robot.getRightOdo());
+//        telemetry.addData("mid odo", robot.getMidOdo());
         telemetry.addLine("========\uD83D\uDD28===========\uD83D\uDD28=====");
         telemetry.addLine("MR.SWANKHAMMER CONTROL PANEL");
         telemetry.addLine("============================");
         telemetry.addData("Mission Time: T+", deltaTime.seconds());
         telemetry.addData("Loop Time:", loopTime.milliseconds());
-//        telemetry.addData("Rotation(IMU)", Robot.get().getHeading(AngleUnit.DEGREES));
-        //telemetry.addData("Go straight on/off", goStraight.getBool());
+
 
         telemetry.addLine("====LAUNCHER====");
-        telemetry.addData("Mode", Robot.get().getLaunchMode() );
-        telemetry.addData("Current Velocity", Robot.get().getLauncherVelocity());
+        telemetry.addData("Mode", robot.getLaunchMode() );
+        telemetry.addData("Current Velocity", robot.getLauncherVelocity());
         telemetry.addData("Target Velocity", Config.maxLauncherSpeed*launcherSpeedFraction);
-        telemetry.addLine("====DRIVE====");
-
-        telemetry.addLine("====COLLECTOR====");
+        telemetry.addLine("=====DRIVE =====");
+        telemetry.addData("TurnScale", turnScale);
+        telemetry.addData("DriveScale", driveScale);
+        telemetry.addLine("===COLLECTOR ===");
         telemetry.addData("collector", collectorState);
 
-        //telemetry.addData("LaunchVelocityDirectRef", ((DcMotorEx)DataHub.hardwareMap.get(DcMotor.class, Config.launcherMotor1)).getCurrentPosition() );
         loopTime.reset();
     }
 
     @Override
     public void init() {
+        robot = Robot.get();
+
         deltaTime = new ElapsedTime();
         loopTime = new ElapsedTime();
         this.gamepad1 = DataHub.gamepad1;
@@ -162,9 +173,10 @@ public class TwoControllerTwo extends TeleOpScript {
         driveScale = 0.5;
         turnScale = 0.5;
 
-        collectorRetracted = new Toggle(false);
+        collectorRetracted = new Toggle(true);
         increaseLaunchSpeedToggle = new Toggle(false);
         decreaseLaunchSpeedToggle = new Toggle(false);
+        collecting = new Toggle(false);
 
     }
     public TwoControllerTwo(){

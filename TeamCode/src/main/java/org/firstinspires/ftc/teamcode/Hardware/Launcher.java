@@ -74,10 +74,11 @@ public class Launcher {
 
                 //Checks if all conditions are met and actuates the launcher if they are
                 if ( launchRequested &&
-                        launchOverride ||
+                        (launchOverride ||
                         (
                                 Math.abs(targetVelocity - motors.getAverageVelocity()) <= Config.launchVelocityThreshold //Velocity good
                             && (!waitForServo || launchTimer.milliseconds() >= Config.launcherServoTime) //Servo has had enough time to move
+                        )
                         )
 
                 ){
@@ -105,11 +106,6 @@ public class Launcher {
 
     public void requestLaunch (){
         launchRequested = true;
-    }
-@Deprecated
-    public void cancelLaunch (){
-        launchRequested = false;
-
     }
 
     public void setLaunchOverride (boolean launchOverride){
