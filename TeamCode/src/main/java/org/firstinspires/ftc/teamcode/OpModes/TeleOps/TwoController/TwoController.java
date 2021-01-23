@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
 
-@TeleOp(name="Two_Controlller", group = "example")
+//@TeleOp(name="Two_Controlller", group = "example")
 public class TwoController extends OpMode {
     double anglesunit = 0.0;
     boolean Turn = false;

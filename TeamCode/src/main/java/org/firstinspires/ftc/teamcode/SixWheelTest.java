@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "SixWheelTest", group = "Test")
+//@TeleOp(name = "SixWheelTest", group = "Test")
 public class SixWheelTest extends LinearOpMode
 {
     static final double DRIVE_SCALING = 0.5;

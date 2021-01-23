@@ -24,15 +24,14 @@ public class SkipAuto extends GenericOpMode {
         initAndWaitForStart();
         while(opModeIsActive()) {
             teleOp.loop();
-            Robot.get().update();
-            left = Robot.get().getLeftOdo();
-            right = Robot.get().getRightOdo();
-            middle = Robot.get().getMidOdo();
-            telemetry.addData("left odo", left);
-            telemetry.addData("right odo", right);
-            telemetry.addData("mid odo", middle);
-            D = (right - left) / bMath.pi2;
-            telemetry.addData("D", D);
+//            left = Robot.get().getLeftOdo();
+//            right = Robot.get().getRightOdo();
+//            middle = Robot.get().getMidOdo();
+//            telemetry.addData("left odo", left);
+//            telemetry.addData("right odo", right);
+//            telemetry.addData("mid odo", middle);
+//            D = (right - left) / bMath.pi2;
+//            telemetry.addData("D", D);
             telemetry.update();
         }
     }

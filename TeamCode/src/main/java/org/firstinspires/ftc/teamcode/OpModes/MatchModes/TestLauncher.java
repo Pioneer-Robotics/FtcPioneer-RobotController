@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
 
-@TeleOp (name = "launcher test")
+//@TeleOp (name = "launcher test")
 public class TestLauncher extends GenericOpMode{
 
     @Override
@@ -22,7 +22,7 @@ public class TestLauncher extends GenericOpMode{
         while(opModeIsActive()){
             telemetry.addData("elapsed time", deltaTime.seconds());
             Robot.get().setLauncherPower(gamepad1.left_trigger);
-            Robot.get().update();
+            Robot.get().update(false);
             telemetry.update();
         }
     }

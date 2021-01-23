@@ -28,7 +28,7 @@ public class TwoControllerTwo extends TeleOpScript {
     Toggle decreaseLaunchSpeedToggle;
 
 
-    double launcherSpeedFraction = 0.8;
+    double launcherSpeedFraction = 0.70;
     String collectorState = "null";
     Toggle collecting;
 
@@ -74,7 +74,7 @@ public class TwoControllerTwo extends TeleOpScript {
         Collector Control
          ============*/
 
-        collecting.toggle(gamepad1.right_stick_y<=0.5);
+        collecting.toggle(gamepad1.x);
         collectorRetracted.toggle(gamepad1.b);
         if (gamepad1.right_stick_y >= STICK_DEADZONE){
             collecting.set(false);
@@ -85,12 +85,15 @@ public class TwoControllerTwo extends TeleOpScript {
             collectorState = "retracted";
         } else if(collecting.getBool()){
             robot.startCollecting();
-            robot.setCollectorSpeed(-0.6f);
+            robot.setCollectorSpeed(0.6f);
+            collectorState = "collecting";
         } else if(gamepad1.right_stick_y >= STICK_DEADZONE){
             robot.startCollecting();
-            robot.setCollectorSpeed(gamepad1.right_stick_y * Config.COLLECTOR_MAX_SPEED_FRACTION);
+            robot.setCollectorSpeed(-gamepad1.right_stick_y * Config.COLLECTOR_MAX_SPEED_FRACTION);
+            collectorState = "backdriving";
         } else {
             robot.stopCollecting();
+            collectorState = "stopped";
         }
 
 
@@ -112,11 +115,11 @@ public class TwoControllerTwo extends TeleOpScript {
             driveScale = 1;
             turnScale = 1;
         } else if (gamepad1.left_bumper || gamepad1.right_bumper){
-            driveScale = 0.7;
-            turnScale = 0.7;
+            driveScale = 0.75;
+            turnScale = 0.75;
         } else {
             driveScale = 0.4;
-            turnScale = 0.4;
+            turnScale = 0.55;
         }
 
 
@@ -130,7 +133,6 @@ public class TwoControllerTwo extends TeleOpScript {
         robot.setDrivePowers(tgtPowerLeft, tgtPowerRight);
 
 
-        robot.update();
 
         /*============
         Telemetry
@@ -141,6 +143,7 @@ public class TwoControllerTwo extends TeleOpScript {
 //        telemetry.addData("left odo", robot.getLeftOdo());
 //        telemetry.addData("right odo", robot.getRightOdo());
 //        telemetry.addData("mid odo", robot.getMidOdo());
+        telemetry.addData("Target Velocity", Config.maxLauncherSpeed*launcherSpeedFraction);
         telemetry.addLine("========\uD83D\uDD28===========\uD83D\uDD28=====");
         telemetry.addLine("MR.SWANKHAMMER CONTROL PANEL");
         telemetry.addLine("============================");
@@ -151,7 +154,7 @@ public class TwoControllerTwo extends TeleOpScript {
         telemetry.addLine("====LAUNCHER====");
         telemetry.addData("Mode", robot.getLaunchMode() );
         telemetry.addData("Current Velocity", robot.getLauncherVelocity());
-        telemetry.addData("Target Velocity", Config.maxLauncherSpeed*launcherSpeedFraction);
+
         telemetry.addLine("=====DRIVE =====");
         telemetry.addData("TurnScale", turnScale);
         telemetry.addData("DriveScale", driveScale);
@@ -159,6 +162,11 @@ public class TwoControllerTwo extends TeleOpScript {
         telemetry.addData("collector", collectorState);
 
         loopTime.reset();
+
+
+
+
+        robot.update(false);
     }
 
     @Override

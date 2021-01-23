@@ -77,13 +77,13 @@ public class Robot{
     public static Robot get(){
         return robot;
     }
-    public void update(){
+    public void update(boolean useOdometers){
         autoPilot.update(); //needs to go before setMotorPowers stuff
                             //when autoPilot is on, it will ignore user input
         motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
         launcher.updateLauncher();
-        updateOdometers();
+        if (useOdometers) {updateOdometers();}
     }
     public void stopAllMotors(){
         motorData.fullStop = true;

@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
 
-@TeleOp (name = "CalibrateOdometers", group = "test")
+//@TeleOp (name = "CalibrateOdometers", group = "test")
 public class CalibrateOdometers extends GenericOpMode {
     int leftOdoTicks = 0;
     int rightOdoTicks = 0;
@@ -23,7 +23,7 @@ public class CalibrateOdometers extends GenericOpMode {
         initAndWaitForStart();
         while(opModeIsActive()) {
             teleOp.loop();
-            Robot.get().update();
+            Robot.get().update(true);
            // updateOdoTicks();
             telemetry.addData("left ticks", leftOdoTicks);
             telemetry.addData("right ticks", rightOdoTicks);
