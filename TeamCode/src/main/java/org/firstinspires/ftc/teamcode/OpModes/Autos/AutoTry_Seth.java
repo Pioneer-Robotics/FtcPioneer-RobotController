@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 public class AutoTry_Seth extends AutoScript {
     Gamepad gamepad1;
     double drive = 0.0;
-    DcMotor autoMotor;
 
     enum SquareMode {
         IDLE,
@@ -28,12 +27,7 @@ public class AutoTry_Seth extends AutoScript {
     }
 
     @Override
-    public void init() {
-        autoMotor = HardwareMap.get(DcMotor.class, "autoMotor");
-        autoMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-    }
+    public void init() {}
 
 
     AutoTry_Seth(SquareMode CodeMode){
@@ -55,7 +49,7 @@ public class AutoTry_Seth extends AutoScript {
             break;
 
             case STOP_IN_POSITION:{
-                if (autoMotor.ticks >= 1200) {
+                if (Robot.get().getLeftOdo() >= 165) {
                     drive = 0;
                 }
                 CodeMode = SquareMode.BACKWARD;
@@ -67,16 +61,17 @@ public class AutoTry_Seth extends AutoScript {
             case BACKWARD:{
                     drive = -0.5;
 
-                CodeMode = SquareMode.IDLE;
+                CodeMode = SquareMode.PARK;
                 //move backward
                 //back into IDLE
             }
             break;
 
             case PARK:{
-                if (autoMotor.ticks <= 750){
+                if (Robot.get().getLeftOdo() <= 750){
                     drive = 0;
                 }
+                CodeMode = SquareMode.IDLE;
 
             }
         }
