@@ -25,10 +25,6 @@ public class Robot{
     static DriveTrain chassis;
     static Launcher launcher;
     static Collector collector;
-    static int testCases = 10;
-    static double maxWaitTimeMS = 500;
-    static PosTrackerType1population type1odos; //same idea, but slightly different implementations
-    static PosTrackerType2population type2odos; //same idea, but slightly different implementations
     static PositionTracker mainOdometer;
     HardwareMap hardwareMap;
     MotorData motorData;
@@ -49,10 +45,6 @@ public class Robot{
         chassis = new DriveTrain();
         mainOdometer = new PositionTracker(startX, startY, 0);
         autoPilot = new AutoPilot();
-        //basically arrays of PositionTracker objects
-        type1odos = new PosTrackerType1population(testCases, maxWaitTimeMS);
-        type2odos = new PosTrackerType2population(testCases, maxWaitTimeMS);
-        //basically arrays of PositionTracker objects
         launcher = new Launcher();
         collector = new Collector();
         StraightStraight = new GoStraight();
@@ -106,8 +98,6 @@ public class Robot{
     }
     void updateOdometers(){
         mainOdometer.update();
-        type1odos.update();
-        type2odos.update();
     }
     public double getX(){
         return mainOdometer.getLocationComplex().real;
@@ -138,8 +128,6 @@ public class Robot{
         double rotation = getRotationDegrees();
         rotation = bMath.regularizeAngleDeg(rotation);
         telemetry.addData("rotation degress", rotation);
-        type1odos.doTelemetryReadout();
-        type2odos.doTelemetryReadout();
     }
     public void setCollectorSpeed(float collectorSpeed) {collector.setCollectorSpeed(collectorSpeed);}
     public void startCollecting(){collector.start();}
