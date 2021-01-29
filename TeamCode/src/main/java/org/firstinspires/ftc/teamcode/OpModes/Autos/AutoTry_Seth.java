@@ -1,42 +1,36 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.android.dex.Code;
-import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
 public class AutoTry_Seth extends AutoScript {
-    Gamepad gamepad1;
     double drive = 0.0;
+    SquareMode CodeMode;
 
     enum SquareMode {
         IDLE,
         DRIVE2POSITION,
         STOP_IN_POSITION,
         BACKWARD,
-        PARK
+        PARK,
+        DONE
 
     }
     @Override
     public void loop() {
-
+        Switch();
     }
 
     @Override
-    public void init() {}
+    public void init() {
+        CodeMode = SquareMode.IDLE;
+        drive = 0;
+    }
 
 
-    AutoTry_Seth(SquareMode CodeMode){
+    void Switch(){
         switch (CodeMode){
             case IDLE:{
-                if (gamepad1.y){
-                    CodeMode = SquareMode.DRIVE2POSITION;
-
-                }
+                this.CodeMode = SquareMode.DRIVE2POSITION;
             }
             break;
 
@@ -73,6 +67,11 @@ public class AutoTry_Seth extends AutoScript {
                 }
                 CodeMode = SquareMode.IDLE;
 
+            }
+            break;
+
+            case DONE:{
+                drive = 0;
             }
         }
 
