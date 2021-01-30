@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class AutoPilot {
+    //these are used for the main autoPilot program
     ComplexNum targetLocation;
     double targetRotationDegrees;
     double targetHeadingRadians;
@@ -15,6 +16,16 @@ public class AutoPilot {
     double rotationToleranceDegrees;
     double distanceToleranceCM;
 
+    //these are used for when you just need to drive forward
+    boolean driveStraightNeeded;
+    double startingRightOdoDistance;
+    double startingLeftOdoDistance;
+    double startingRotation;
+    double forwardSpeed;
+    double sign;
+    double threshold;
+    DriveMode driveMode;
+
     AutoPilot(){
         useAutoPilot = false;
         stateNumber = 0;
@@ -22,6 +33,20 @@ public class AutoPilot {
         targetRotationDegrees = 0;
         targetHeadingRadians = 0;
         rotationToleranceDegrees = 4;
+
+        driveStraightNeeded = false;
+        startingRightOdoDistance = 0;
+        startingLeftOdoDistance = 0;
+        startingRotation = 0;
+        forwardSpeed = 0.2;
+        sign = 0;
+        threshold = 10;
+        driveMode = DriveMode.EXIT_AUTOPILOT;
+    }
+    enum DriveMode{
+        CALCULATE,
+        DRIVE_FORWARD,
+        EXIT_AUTOPILOT
     }
 
     void useAutoPilot(){
@@ -43,6 +68,31 @@ public class AutoPilot {
                 Math.toDegrees(targetHeadingRadians));
     }
 
+    /**
+     * will drive straight forward
+     * @param distanceCM distance to be driven in a straight line (positive or negative)
+     */
+    void driveStraight(double distanceCM){
+        if(driveStraightNeeded){
+            switch(driveMode){
+                case CALCULATE:
+                    startingRotation = Robot.get().getRotationRad();
+                    startingLeftOdoDistance = Robot.get().getLeftOdo();
+                    startingRightOdoDistance = Robot.get().getRightOdo();
+                    driveMode = DriveMode.DRIVE_FORWARD;
+                case DRIVE_FORWARD:
+                    if(Math.abs(avgChangeInLeftAndRightOdo() - distanceCM) > threshold){
+                        //startDriving
+                    }
+            }
+        }
+    }
+
+    double avgChangeInLeftAndRightOdo(){
+        double ansLeft = startingLeftOdoDistance - Robot.get().getLeftOdo();
+        double ansRight = startingRightOdoDistance - Robot.get().getRightOdo();
+        return (ansLeft + ansRight) / 2.0;
+    }
     /**
      * we could have called this "{@code doAutoPilot()}". It handles all the movement.
      * <b> Important: if this doesn't work, suspect {@code bMath.regularizeAngle()} and
@@ -93,7 +143,7 @@ public class AutoPilot {
     }
 
     void state2_driveForwardToTargetPosition(){ //TODO finish
-                                                //TODO put in a "safty" so it doesn't overshoot
+                                                //TODO put in a "safety" so it doesn't overshoot
         double xOffset = Robot.get().getLocationComplex().real - targetLocation.real;
         double yOffset = Robot.get().getLocationComplex().imag - targetLocation.imag;
         double distanceToTargetSqrd = bMath.sqd(xOffset) + bMath.sqd(yOffset);
