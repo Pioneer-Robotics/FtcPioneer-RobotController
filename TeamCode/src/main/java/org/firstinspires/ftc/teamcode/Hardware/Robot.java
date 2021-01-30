@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.DcMotor;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -24,16 +24,12 @@ public class Robot{
     //don't put modifier on them like "public" or "private". the default is "package" and is perfect
     static DriveTrain chassis;
     static Launcher launcher;
-    public static WobbleMotor wobblemotor;
     static Collector collector;
-    static int testCases = 10;
-    static double maxWaitTimeMS = 500;
-    static PosTrackerType1population type1odos; //same idea, but slightly different implementations
-    static PosTrackerType2population type2odos; //same idea, but slightly different implementations
     static PositionTracker mainOdometer;
     HardwareMap hardwareMap;
     MotorData motorData;
     static AutoPilot autoPilot;
+    static GoStraight StraightStraight;
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
@@ -49,17 +45,22 @@ public class Robot{
         chassis = new DriveTrain();
         mainOdometer = new PositionTracker(startX, startY, 0);
         autoPilot = new AutoPilot();
-        //basically arrays of PositionTracker objects
-        type1odos = new PosTrackerType1population(testCases, maxWaitTimeMS);
-        type2odos = new PosTrackerType2population(testCases, maxWaitTimeMS);
-        //basically arrays of PositionTracker objects
         launcher = new Launcher();
         collector = new Collector();
+        StraightStraight = new GoStraight();
         imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
-        wobblemotor = new WobbleMotor();
     }
+    public double getHeading(AngleUnit angleUnit) {
+        double angle;
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
+        angle = 360-angles.firstAngle;
+        if(angle > 360)
+            angle -= 360;
+        return angle;
+    }
+
     /**
      * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
      * from an OpMode
@@ -68,14 +69,13 @@ public class Robot{
     public static Robot get(){
         return robot;
     }
-    public void update(){
+    public void update(boolean useOdometers){
         autoPilot.update(); //needs to go before setMotorPowers stuff
                             //when autoPilot is on, it will ignore user input
-        motorData.handleFullStop(); //needs to go immediately before handleBreaking()
+        motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
-        launcher.setPower(motorData.launcherPower);
-        wobblemotor.update();
-        updateOdometers();
+        launcher.updateLauncher();
+        if (useOdometers) {updateOdometers();}
     }
     public void stopAllMotors(){
         motorData.fullStop = true;
@@ -87,44 +87,9 @@ public class Robot{
         motorData.leftPower = leftPower;
         motorData.rightPower = rightPower;
     }
-    public double getHeading(AngleUnit angleUnit) {
-        double angle;
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
-        angle = 360-angles.firstAngle;
-        if(angle > 360)
-            angle -= 360;
-        return angle;
-    }
-    public double getWobblePower(){
-        return wobblemotor.getWobblePower();
-    }
-    public int getWobbleTicks(){
-        return wobblemotor.motor.getCurrentPosition();
-    }
-    public void setWobbleServoPosition(double position){
-        motorData.tgtWobbleServoPos = position;
-    }
-    public void closeWobbleServo(){
-        motorData.tgtWobbleServoPos = Config.Wobble_Servo_Closed_Pos;
-    }
-    public void openWobbleServo(){
-        motorData.tgtWobbleServoPos = Config.Wobble_Servo_Open_Pos;
-    }
-    public double getWobbleServoPosition(){
-        return wobblemotor.getServoPosition();
-    }
-    public void setWobbleMotorToStart(){
-        motorData.tgtWobbleMotorPos = 0;
-    }
-    public void pointWobbleMotorUp(){
-        motorData.tgtWobbleMotorPos = Config.WOBBLE_UP_POS;
-    }
-    public void pointWobbleMotorDown(){
-        motorData.tgtWobbleMotorPos = Config.WOBBLE_DOWN_POS;
-    }
-    public void setLauncherPower(double power){
-        motorData.launcherPower = power;
-    }
+    public void setLauncherPower(double power){ motorData.launcherPower = power; }
+    public Launcher setLaunchMode(Launcher.LaunchMode launchMode){return setLaunchMode(launchMode);}
+    public Launcher updateLauncher(){return updateLauncher();}
     public Vector2 getLocation(){
         return mainOdometer.getLocation();
     }
@@ -133,8 +98,6 @@ public class Robot{
     }
     void updateOdometers(){
         mainOdometer.update();
-        type1odos.update();
-        type2odos.update();
     }
     public double getX(){
         return mainOdometer.getLocationComplex().real;
@@ -161,14 +124,37 @@ public class Robot{
     public double getMidOdo(){
         return mainOdometer.getMiddle();
     }
+
+    /**
+     * averages the distance travelled by the left and right odometry wheels
+     * @return the average distance, in cm, that the right and left odos have measured
+     */
+    public double avgRightAndLeftOdos(){
+        double ans = getLeftOdo() + getRightOdo();
+        ans /= 2;
+        return ans;
+    }
     public void doOdometerTelemetry(){
         double rotation = getRotationDegrees();
         rotation = bMath.regularizeAngleDeg(rotation);
         telemetry.addData("rotation degress", rotation);
-        type1odos.doTelemetryReadout();
-        type2odos.doTelemetryReadout();
     }
     public void setCollectorSpeed(float collectorSpeed) {collector.setCollectorSpeed(collectorSpeed);}
-    public void startCollecting(){collector.startCollecting();}
-    public void toggleCollector(){}
+    public void startCollecting(){collector.start();}
+    public void stopCollecting(){collector.stop();}
+    public void retractCollector(){collector.retract();}
+    public void isCollecting(){collector.isCollecting();}
+
+    public void goStraight(){StraightStraight.StraightStraight();}
+
+    public void requestLaunch(){launcher.requestLaunch();}
+    public void launchOverride(boolean launchOverride){launcher.setLaunchOverride(launchOverride);}
+    public void setContinousFire(boolean setContinousFire){launcher.setContinuousFire(setContinousFire);}
+    public void fire(){launcher.fire();}
+    public void spool(){launcher.requestSpool();}
+    public void emergencyStop(){launcher.emergencyStop();}
+    public Launcher.LaunchMode getLaunchMode() {return launcher.launchMode;}
+    public double getLauncherVelocity() {return launcher.getLaunchVelocity();}
+    public void setLauncherTargetVelocity(double targetVelocity) {launcher.setTargetVelocity(targetVelocity);}
+
 }

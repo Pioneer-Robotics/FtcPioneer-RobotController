@@ -4,17 +4,20 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
+import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoTry_Seth;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.ExampleAuto;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.OneController;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoController;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControllerTwo;
 
 @TeleOp (name = "SkipAuto", group = "example")
 public class SkipAuto extends GenericOpMode {
     double left, right, middle, D;
     @Override
     public void selectAutoAndTeleOp(){
-        auto = new NullAuto(); //you need this even if you don't use it
-        teleOp = new OneController();
+        auto = new AutoTry_Seth(); //you need this even if you don't use it
+        teleOp = new TwoControllerTwo();
     }
     @Override
     public void runOpMode() throws InterruptedException {
@@ -22,15 +25,14 @@ public class SkipAuto extends GenericOpMode {
         initAndWaitForStart();
         while(opModeIsActive()) {
             teleOp.loop();
-            Robot.get().update();
-            left = Robot.get().getLeftOdo();
-            right = Robot.get().getRightOdo();
-            middle = Robot.get().getMidOdo();
-            telemetry.addData("left odo", left);
-            telemetry.addData("right odo", right);
-            telemetry.addData("mid odo", middle);
-            D = (right - left) / bMath.pi2;
-            telemetry.addData("D", D);
+//            left = Robot.get().getLeftOdo();
+//            right = Robot.get().getRightOdo();
+//            middle = Robot.get().getMidOdo();
+//            telemetry.addData("left odo", left);
+//            telemetry.addData("right odo", right);
+//            telemetry.addData("mid odo", middle);
+//            D = (right - left) / bMath.pi2;
+//            telemetry.addData("D", D);
             telemetry.update();
         }
     }

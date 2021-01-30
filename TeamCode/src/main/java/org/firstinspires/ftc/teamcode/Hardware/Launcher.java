@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,12 +10,13 @@ public class Launcher {
     static final double SERVO_OUT = Config.launcherServoOut, SERVO_IN = Config.launcherServoIn;
 
     MotorPairEX motors;
-    DcMotor m1;
+    DcMotorEx m1;
+    DcMotorEx m2;
     Servo flicker;
 
-    double flickerTargetPos = Config.launcherServoOut;
+    double flickerTargetPos = SERVO_OUT;
 
-    double targetVelocity = 500;
+    double targetVelocity = Config.defaultTargetLauncherSpeed;
     boolean launchRequested = false;
     boolean continuousFire = false;
     boolean waitForServo = true;
@@ -35,16 +35,17 @@ public class Launcher {
 
 
     Launcher(){
-        m1 = DataHub.hardwareMap.get(DcMotor.class, Config.launcherMotor1);
-        DcMotor m2 = DataHub.hardwareMap.get(DcMotor.class, Config.launcherMotor2);
-        motors = new MotorPairEX( (DcMotorEx) m1, (DcMotorEx) m2);
-        motors.setDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER)
-                .setDriveMode(DcMotor.RunMode.RUN_USING_ENCODER)
-                .setDirection(DcMotor.Direction.REVERSE)
+        m1 = DataHub.hardwareMap.get(DcMotorEx.class, Config.launcherMotor1);
+        m2 = DataHub.hardwareMap.get(DcMotorEx.class, Config.launcherMotor2);
+        motors = new MotorPairEX(m1, m2);
+        motors.setDriveMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER)
+                .setDriveMode(DcMotorEx.RunMode.RUN_USING_ENCODER)
+                .setDirection(DcMotorEx.Direction.REVERSE)
         ;
         flicker = DataHub.hardwareMap.get(Servo.class, Config.launcherServo);
+        launchMode = LaunchMode.IDLE;
     }
-
+@Deprecated
     Launcher setPower(double power){
         motors.setPower(power);
         return this;
@@ -63,6 +64,7 @@ public class Launcher {
                 if (launchRequested) {launchMode = LaunchMode.SPOOL;}
                 break;
             case SPOOL:
+                motors.enable();
                 motors.setVelocity(targetVelocity);
 
                 //Checks if the servo is in the right position and instructs the program to wait until it is, otherwise
@@ -72,10 +74,11 @@ public class Launcher {
 
                 //Checks if all conditions are met and actuates the launcher if they are
                 if ( launchRequested &&
-                        launchOverride ||
+                        (launchOverride ||
                         (
                                 Math.abs(targetVelocity - motors.getAverageVelocity()) <= Config.launchVelocityThreshold //Velocity good
                             && (!waitForServo || launchTimer.milliseconds() >= Config.launcherServoTime) //Servo has had enough time to move
+                        )
                         )
 
                 ){
@@ -101,4 +104,46 @@ public class Launcher {
         return this;
     }
 
+    public void requestLaunch (){
+        launchRequested = true;
+    }
+
+    public void setLaunchOverride (boolean launchOverride){
+        this.launchOverride = launchOverride;
+    }
+
+    public void setContinuousFire (boolean continuousFire) {
+        this.continuousFire = continuousFire;
+    }
+
+    public void fire (){
+        if (launchMode  == LaunchMode.IDLE){
+            launchMode =  LaunchMode.SPOOL;
+        }
+        launchRequested = true;
+    }
+
+     public void requestSpool(){
+        if (launchMode == LaunchMode.IDLE){
+            launchMode = LaunchMode.SPOOL;
+        }
+        launchRequested = false;
+     }
+
+     public void emergencyStop(){
+        if (launchMode == LaunchMode.SPOOL){
+            launchMode = LaunchMode.IDLE;
+        }
+        launchRequested = false;
+     }
+
+     public LaunchMode getLaunchMode() {return launchMode;}
+
+     public double getLaunchVelocity() {return motors.getAverageVelocity();}
+     public void setTargetVelocity(double targetVelocity) {this.targetVelocity = targetVelocity;}
+
+     public int getLaunchPos() {return motors.getCurrentPositionM1();}
+
 }
+
+

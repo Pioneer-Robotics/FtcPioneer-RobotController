@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Vector2;
         rightMotors.setDirection(DcMotor.Direction.REVERSE);
         setDriveMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setDriveMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
     void setMotorPowers(double leftPower, double rightPower){
         leftMotors.setPower(leftPower);

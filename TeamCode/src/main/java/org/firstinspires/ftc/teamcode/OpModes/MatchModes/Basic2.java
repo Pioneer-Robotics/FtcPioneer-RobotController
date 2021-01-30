@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Hardware.BasicRobot;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 
-@TeleOp(name = "Basic2", group = "Linear Opmode")
+//@TeleOp(name = "Basic2", group = "Linear Opmode")
 public class Basic2 extends BasicGenericOpMode{
     private double driveScale = 0.5;
     double tgtPowerRight, tgtPowerLeft, drive, turn;

@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.*;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.*;
 
-@TeleOp(name = "test auto pilot", group = "example")
+//@TeleOp(name = "test auto pilot", group = "example")
 public class ExampleMatchMode extends GenericOpMode {
     @Override
     //this is the method you change when you make new MatchModes. Change "ExampleAuto" and

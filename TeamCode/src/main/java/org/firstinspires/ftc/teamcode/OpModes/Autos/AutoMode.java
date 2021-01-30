@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Autos;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+
 public class AutoMode {
     Telemetry telemetry;
     double drive = 0.0;
