@@ -124,6 +124,16 @@ public class Robot{
     public double getMidOdo(){
         return mainOdometer.getMiddle();
     }
+
+    /**
+     * averages the distance travelled by the left and right odometry wheels
+     * @return the average distance, in cm, that the right and left odos have measured
+     */
+    public double avgRightAndLeftOdos(){
+        double ans = getLeftOdo() + getRightOdo();
+        ans /= 2;
+        return ans;
+    }
     public void doOdometerTelemetry(){
         double rotation = getRotationDegrees();
         rotation = bMath.regularizeAngleDeg(rotation);
