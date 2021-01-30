@@ -50,15 +50,6 @@ public class Robot{
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
     }
-    public double getHeading(AngleUnit angleUnit) {
-        double angle;
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
-        angle = 360-angles.firstAngle;
-        if(angle > 360)
-            angle -= 360;
-        return angle;
-    }
-
     /**
      * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
      * from an OpMode
@@ -69,12 +60,24 @@ public class Robot{
     }
     public void update(boolean useOdometers){
         autoPilot.update(); //needs to go before setMotorPowers stuff
-                            //when autoPilot is on, it will ignore user input
+        //when autoPilot is on, it will ignore user input
         motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
         launcher.updateLauncher();
         if (useOdometers) {updateOdometers();}
     }
+
+
+
+    public double getHeading(AngleUnit angleUnit) {
+        double angle;
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
+        angle = 360-angles.firstAngle;
+        if(angle > 360)
+            angle -= 360;
+        return angle;
+    }
+
     public void stopAllMotors(){
         motorData.fullStop = true;
     }

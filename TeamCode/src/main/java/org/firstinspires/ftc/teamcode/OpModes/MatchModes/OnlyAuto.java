@@ -20,7 +20,7 @@ public class OnlyAuto extends GenericOpMode{
         initAndWaitForStart();
         while(opModeIsActive()){
             auto.loop();
-            Robot.get().update();
+            Robot.get().update(true);
             telemetry.update();
         }
     }
