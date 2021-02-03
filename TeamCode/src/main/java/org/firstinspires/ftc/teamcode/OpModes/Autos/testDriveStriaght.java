@@ -9,6 +9,8 @@ public class testDriveStriaght extends AutoScript{
     Telemetry telemetry;
     Toggle reachedTarget; //used to make sure the autopilot stops when it should
     State state;
+    boolean check;
+    boolean helper = false;
 
     enum State{
         MOVE,
@@ -16,17 +18,23 @@ public class testDriveStriaght extends AutoScript{
     }
     @Override
     public void loop() {
+        telemetry.addData("state (move or not)", state);
         switch(state){
             case MOVE:
-                reachedTarget.toggle(Robot.get().driveStraight(50)); //looks terrible I know (Joe)
-                if(reachedTarget.justBecameTrue()){
+                helper = Robot.get().driveStraight(60);
+                //reachedTarget.toggle(helper);
+                if(helper){
                     state = State.STOP;
+                    check = true;
                 }
                 break;
             case STOP:
-                Robot.get().stopAllMotors();
+                Robot.get().setDrivePowers(0,0);
+                break;
         }
+        telemetry.addData("helper value", helper);
         telemetry.addData("distance travelled", Robot.get().avgRightAndLeftOdos());
+        telemetry.addData("check value (should be false)", check);
     }
 
     @Override
@@ -36,5 +44,6 @@ public class testDriveStriaght extends AutoScript{
         telemetry = DataHub.telemetry;
         reachedTarget = new Toggle(false);
         state = State.MOVE;
+        check = false;
     }
 }

@@ -14,7 +14,7 @@ public class ExampleMatchMode extends GenericOpMode {
     //this is the method you change when you make new MatchModes. Change "ExampleAuto" and
     //"ExampleTeleOp" to the specific autonomous and teleOp programs you want.
     public void selectAutoAndTeleOp(){
-        auto = new testAutoPilot();
+        auto = new NullAuto();
         teleOp = new TeleOpStandard();
     }
     @Override

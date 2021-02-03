@@ -1,17 +1,16 @@
 package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.OneController;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
+
 //@TeleOp(name = "find best odometer", group = "tests")
 public class FindBestPosTracker extends GenericOpMode {
 
     @Override
     public void selectAutoAndTeleOp() {
         auto = new NullAuto();
-        teleOp = new OneController();
+        teleOp = new TeleOpStandard();
     }
 
     @Override

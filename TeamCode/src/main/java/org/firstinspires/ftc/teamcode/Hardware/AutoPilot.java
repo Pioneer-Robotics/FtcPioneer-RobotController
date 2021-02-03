@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
@@ -17,17 +18,21 @@ public class AutoPilot {
     double threshold;
     double forwardDistance;
     DriveMode driveMode;
+    Telemetry telemetry;
 
     AutoPilot(){
         driveStraightNeeded = false;
         startingRightOdoDistance = 0;
         startingLeftOdoDistance = 0;
         startingRotation = 0;
-        forwardSpeed = 0.2;
+        forwardSpeed = 0.3;
         sign = 0;
         threshold = 10;
         driveMode = DriveMode.EXIT_AUTOPILOT;
         forwardDistance = 0;
+
+
+        telemetry = DataHub.telemetry;
     }
     enum DriveMode{
         CALCULATE,
@@ -53,6 +58,8 @@ public class AutoPilot {
                     startingLeftOdoDistance = Robot.get().getLeftOdo(); //what does the left odo measure right now?
                     startingRightOdoDistance = Robot.get().getRightOdo(); //what does the right odo measure rn?
                     driveMode = DriveMode.DRIVE_FORWARD; //move on the next state
+
+                    telemetry.addLine("calculating");
                     break;
                 case DRIVE_FORWARD:
                     if((avgChangeInLeftAndRightOdo() - forwardDistance) > threshold){ //we've overshot (gone to far)
@@ -64,13 +71,20 @@ public class AutoPilot {
                     else{ //this means we're in the target range
                         driveMode = DriveMode.EXIT_AUTOPILOT;
                     }
+                    telemetry.addLine("driving forward");
+                    telemetry.addData("distance travelled", avgChangeInLeftAndRightOdo());
                     break;
                 case EXIT_AUTOPILOT:
                     driveStraightNeeded = false;
                     ans = true;
+                    driveMode = DriveMode.CALCULATE;
                     break;
             }
         }
+        else{
+            telemetry.addLine("skipping the if statement");
+        }
+        telemetry.addData("distance travelled", avgChangeInLeftAndRightOdo());
         return ans;
     }
 
@@ -85,9 +99,7 @@ public class AutoPilot {
      * {@code bMath.subtractAnglesRad()}</b>
      */
     void update(){ //TODO test everything
-        if(driveStraightNeeded){
-            driveStraight();
-        }
+        //driveStraight();
     }
 
 }

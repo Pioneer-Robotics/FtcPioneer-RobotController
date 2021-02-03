@@ -68,7 +68,7 @@ public class Toggle { //use this class when you want to have a boolean you toggl
      * state was assigned ( either by {@code toggle()} or {@code set()} )
      * @return {@code true} if it did; {@code false} if it didn't.
      */
-    public boolean justBecameTrue(){
+    public boolean justBecameTrue(){ //TODO make this work, right now it doesn't
         return (justChangedFlag && state);
     }
 

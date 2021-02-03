@@ -55,7 +55,6 @@ public class TwoController extends OpMode {
         goStraight.toggle(this.gamepad1.left_stick_button);
         //goStraight is useful during autonomous and driving straight
         if (goStraight.getBool()) {
-            Robot.get().goStraight();
         }
 
         Rturn90.toggle(this.gamepad1.dpad_right);
