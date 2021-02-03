@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
@@ -15,6 +17,8 @@ import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class Robot{
+    static DistanceSensor laserHigh;
+    static DistanceSensor laserLow;
     static BNO055IMU imu;
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)
@@ -41,6 +45,8 @@ public class Robot{
     }
     public static void init(double startX, double startY){
         robot = new Robot();
+        laserLow = Robot.get().hardwareMap.get(DistanceSensor.class, "laserLow");
+        laserHigh = Robot.get().hardwareMap.get(DistanceSensor.class, "laserHigh");
         chassis = new DriveTrain();
         mainOdometer = new PositionTracker(startX, startY, 0);
         autoPilot = new AutoPilot();
@@ -67,6 +73,19 @@ public class Robot{
         if (useOdometers) {updateOdometers();}
     }
 
+    public int amountOfRings(){
+        int amountOfRings;
+        if(laserHigh.getDistance(DistanceUnit.CM) < 6){
+            amountOfRings = 4;
+        }
+        else if(laserLow.getDistance(DistanceUnit.CM) < 6){
+            amountOfRings = 1;
+        }
+        else {
+            amountOfRings = 0;
+        }
+        return amountOfRings;
+    }
 
 
     public double getHeading(AngleUnit angleUnit) {
