@@ -128,11 +128,12 @@ public class Robot{
 
     /**
      * used to switch autopilot on and make it run straight
-     * WARNING, WILL ROBINSON!!!
-     * @param distanceCM
-     * @return
+     * WARNING, WILL ROBINSON!!! this will run forever if you let it, need to always check the output
+     * for when it becomes true and then stop it.
+     * @param distanceCM the distance you want the robot to drive forward
+     * @return true if it has just reached the target distance, false otherwise
      */
-    boolean driveStraight(double distanceCM){
+    public boolean driveStraight(double distanceCM){
         autoPilot.driveStraightNeeded = true;
         autoPilot.forwardDistance = distanceCM;
         return autoPilot.driveStraight();

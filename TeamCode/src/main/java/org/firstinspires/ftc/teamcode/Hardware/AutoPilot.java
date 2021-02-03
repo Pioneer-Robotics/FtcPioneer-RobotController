@@ -56,10 +56,10 @@ public class AutoPilot {
                     break;
                 case DRIVE_FORWARD:
                     if((avgChangeInLeftAndRightOdo() - forwardDistance) > threshold){ //we've overshot (gone to far)
-                        Robot.get().setDrivePowers(forwardSpeed, forwardSpeed);
+                        Robot.get().setDrivePowers(-forwardSpeed, -forwardSpeed);
                     }
                     else if ((avgChangeInLeftAndRightOdo() - forwardDistance) < -threshold){ //haven't gone far enough
-                        Robot.get().setDrivePowers(-forwardSpeed, -forwardSpeed);
+                        Robot.get().setDrivePowers(forwardSpeed, forwardSpeed);
                     }
                     else{ //this means we're in the target range
                         driveMode = DriveMode.EXIT_AUTOPILOT;

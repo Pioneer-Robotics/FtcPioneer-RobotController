@@ -4,13 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.TestWobbleMotor;
+import org.firstinspires.ftc.teamcode.OpModes.Autos.testAutoPilot;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
 
-@TeleOp(name = "wobble motor test")
+@TeleOp(name = "auto pilot test")
 public class OnlyAuto extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {
-        auto = new TestWobbleMotor();
+        auto = new testAutoPilot();
         teleOp = new ExampleTeleOp();
     }
 
