@@ -1,20 +1,15 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Hardware.GoStraight;
-import org.firstinspires.ftc.teamcode.Hardware.Launcher;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
-import org.firstinspires.ftc.teamcode.Helpers.bMath;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
 
 //@TeleOp(name="Two_Controlller", group = "example")
 public class TwoController extends OpMode {
@@ -52,11 +47,6 @@ public class TwoController extends OpMode {
             Robot.get().stopCollecting();
         }
 
-        goStraight.toggle(this.gamepad1.left_stick_button);
-        //goStraight is useful during autonomous and driving straight
-        if (goStraight.getBool()) {
-            Robot.get().goStraight();
-        }
 
         Rturn90.toggle(this.gamepad1.dpad_right);
         //turn 90 is called when making a 90º right turn

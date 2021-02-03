@@ -21,12 +21,6 @@ public class OneController extends TeleOpScript {
     Telemetry telemetry;
     Gamepad gamepad;
     Toggle goStraight;
-    TestValuesRelatedToWobbleMotor wobblemotors;
-
-    double getWobbleSpeed(){
-        wobbleSpeed = Robot.get().getWobblePower();
-        return wobbleSpeed;
-    }
 
     double squareInputWithSign(double input) {
         double output = input * input;
@@ -91,7 +85,6 @@ public class OneController extends TeleOpScript {
 
         Robot.get().setDrivePowers(tgtPowerLeft, tgtPowerRight);
 
-        telemetry.addData("wobble motor position", wobblemotors.wobblemotorticks);
         telemetry.addData("wobble motor speed", wobbleSpeed);
         telemetry.addData("xPos", Robot.get().getLocation().getX());
         telemetry.addData("yPos", Robot.get().getLocation().getY());
@@ -125,22 +118,11 @@ public class OneController extends TeleOpScript {
             turn = -0.35;
         }
 
-        if(gamepad.dpad_up){
-            Robot.get().pointWobbleMotorUp();
-        }
-        if (gamepad.dpad_down){
-            Robot.get().pointWobbleMotorDown();
-        }
-        if (gamepad.x){
-            Robot.get().setWobbleMotorToStart();
-        }
-
-
     }
 
     @Override
     public void init() {
-        wobblemotors = new TestValuesRelatedToWobbleMotor();
+
         deltaTime = new ElapsedTime();
         goStraight = new Toggle(false);
         this.gamepad = DataHub.gamepad1;
