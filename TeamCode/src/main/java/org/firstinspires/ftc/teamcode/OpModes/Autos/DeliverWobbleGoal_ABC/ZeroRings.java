@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.Autos.RingFinder;
+package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;

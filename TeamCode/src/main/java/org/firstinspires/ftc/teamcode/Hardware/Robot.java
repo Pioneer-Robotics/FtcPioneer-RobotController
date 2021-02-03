@@ -146,6 +146,19 @@ public class Robot{
     }
 
     /**
+     * used to switch autopilot on and make it run straight
+     * WARNING, WILL ROBINSON!!! this will run forever if you let it, need to always check the output
+     * for when it becomes true and then stop it.
+     * @param distanceCM the distance you want the robot to drive forward
+     * @return true if it has just reached the target distance, false otherwise
+     */
+    public boolean driveStraight(double distanceCM){
+        autoPilot.driveStraightNeeded = true;
+        autoPilot.forwardDistance = distanceCM;
+        return autoPilot.driveStraight();
+    }
+
+    /**
      * averages the distance travelled by the left and right odometry wheels
      * @return the average distance, in cm, that the right and left odos have measured
      */
@@ -154,6 +167,7 @@ public class Robot{
         ans /= 2;
         return ans;
     }
+
     public void doOdometerTelemetry(){
         double rotation = getRotationDegrees();
         rotation = bMath.regularizeAngleDeg(rotation);
