@@ -32,7 +32,7 @@ public class Robot{
     static PositionTracker mainOdometer;
     HardwareMap hardwareMap;
     MotorData motorData;
-    static AutoPilot autoPilot;
+    public static AutoPilot autoPilot;
 
 
     //private constructor because we don't want anybody instantiating Robot more than once

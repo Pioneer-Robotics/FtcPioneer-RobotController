@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoTry_Seth;
+import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControllerTwo;
 
 @TeleOp (name = "SkipAuto", group = "example")
@@ -10,7 +10,7 @@ public class SkipAuto extends GenericOpMode {
     double left, right, middle, D;
     @Override
     public void selectAutoAndTeleOp(){
-        auto = new AutoTry_Seth(); //you need this even if you don't use it
+        auto = new NullAuto(); //you need this even if you don't use it
         teleOp = new TwoControllerTwo();
     }
     @Override

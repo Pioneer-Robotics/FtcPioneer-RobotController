@@ -12,11 +12,11 @@ public class AutoPilot {
     boolean driveStraightNeeded;
     double startingRightOdoDistance;
     double startingLeftOdoDistance;
-    double startingRotation;
+    double startingRotation; //not used rn
     double forwardSpeed;
-    double sign;
+    double sign; //not used rn
     double threshold;
-    double forwardDistance;
+    public double forwardDistance;
     DriveMode driveMode;
     Telemetry telemetry;
 
@@ -28,7 +28,7 @@ public class AutoPilot {
         forwardSpeed = 0.3;
         sign = 0;
         threshold = 10;
-        driveMode = DriveMode.EXIT_AUTOPILOT;
+        driveMode = DriveMode.CALCULATE;
         forwardDistance = 0;
 
 
@@ -89,8 +89,8 @@ public class AutoPilot {
     }
 
     double avgChangeInLeftAndRightOdo(){
-        double ansLeft = startingLeftOdoDistance - Robot.get().getLeftOdo();
-        double ansRight = startingRightOdoDistance - Robot.get().getRightOdo();
+        double ansLeft = Robot.get().getLeftOdo() - startingLeftOdoDistance;
+        double ansRight = Robot.get().getRightOdo() - startingRightOdoDistance;
         return (ansLeft + ansRight) / 2.0;
     }
     /**
