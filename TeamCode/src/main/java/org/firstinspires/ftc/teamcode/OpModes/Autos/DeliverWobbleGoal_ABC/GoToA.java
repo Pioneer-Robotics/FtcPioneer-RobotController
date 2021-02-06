@@ -1,22 +1,18 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
-public class GoToC extends GoToSquare{
+public class GoToA extends GoToSquare{
     boolean[] boolList = new boolean[3];
     boolean done;
     SquareMode codeMode;
-    Telemetry telemetry;
 
-    GoToC(){
+    GoToA(){
         Utils.setBooleanArrayToFalse(boolList);
         done = false;
         codeMode = SquareMode.goToSquare;
-        telemetry = DataHub.telemetry;
     }
 
     enum SquareMode{
@@ -29,7 +25,6 @@ public class GoToC extends GoToSquare{
     void goToSquareAndThenToShootPos() {
         switch (codeMode) {
             case goToSquare:
-                //drive forward a distance
                 if (!boolList[0]){
                     boolList[0] =Robot.get().driveStraight(230);
                 }
@@ -38,15 +33,14 @@ public class GoToC extends GoToSquare{
                 }
                 break;
             case goToRingShootPos:
-                //drive backwards
                 if (!boolList[1]) {
                     boolList[1] = Robot.get().driveStraight(-150);
                 }
-                if (boolList[1]) { //if it has driven backwards
+                if (boolList[1]) {
                     Robot.get().setDrivePowers(0.4, -0.4);
-                    if (Math.abs(Robot.get().getHeading(AngleUnit.DEGREES)) > 87) { //turn
-                        Robot.get().setDrivePowers(0, 0); //stop movement
-                        if (!boolList[2]) { //drive forwards
+                    if (Math.abs(Robot.get().getHeading(AngleUnit.DEGREES)) > 87) {
+                        Robot.get().setDrivePowers(0, 0);
+                        if (!boolList[2]) {
                             boolList[2] = Robot.get().driveStraight(55);
                         }
                         if (boolList[2]) {

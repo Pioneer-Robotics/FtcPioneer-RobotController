@@ -26,13 +26,15 @@ public class goTo_ABC extends AutoScript {
     Telemetry telemetry;
     int numberOfRings;
 
+    GoToSquare goToSquare;
+
 
     enum SquareMode {
         IDLE,
         driveToRings,
         measureRings,
+        goToSquareThenLineUpForShooting,
         goToSquare,
-        gracePeriod,
         goToRingShootPos,
         shootRings,
         park,
@@ -69,10 +71,33 @@ public class goTo_ABC extends AutoScript {
                 break;
                 case measureRings:{
                     numberOfRings = Robot.get().amountOfRings();
-                    codeMode = SquareMode.goToSquare;
+
+                    //set the square we want to go to
+                    if(numberOfRings == 0){
+                        goToSquare = new GoToA();
+                    }
+                    else if(numberOfRings == 1){
+                        goToSquare = new GoToB();
+                    }
+                    else{
+                        goToSquare = new GoToC();
+                    }
+
+                    goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
+
+                    //move to the next state
+                    codeMode = SquareMode.goToSquareThenLineUpForShooting;
                 }
                 break;
-                case goToSquare: {
+                case goToSquareThenLineUpForShooting:
+                    if(goToSquare.done){
+                        codeMode = SquareMode.shootRings;
+                    }
+                    else{
+                        goToSquare.goToSquareAndThenToShootPos();
+                    }
+                break;
+                case goToSquare: { //this case will not be called
                     if (numberOfRings== 0){
                         if (!moveAUTO[8]){
                             moveAUTO[8] =Robot.get().driveStraight(230);
@@ -95,7 +120,7 @@ public class goTo_ABC extends AutoScript {
                     }
                 }
                 break;
-                case goToRingShootPos:{
+                case goToRingShootPos:{ //this case will not be called
                     if (numberOfRings == 0) {
                         if (!moveAUTO[0]) {
                             moveAUTO[0] = Robot.get().driveStraight(-150);

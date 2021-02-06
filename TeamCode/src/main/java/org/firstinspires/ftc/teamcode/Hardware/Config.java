@@ -22,7 +22,7 @@ public class Config {
     public static final String collectorMotor = "collector";
     public static final String collectorServoLeft = "collectorServoLeft";
     public static final String collectorServoRight = "collectorServoRight";
-    static final float COLLECTOR_SERVO_UP_POS = 0.8f, COLLECTOR_SERVO_DOWN_POS = -0.45f, COLLECTOR_SERVO_MID_POS = -0.3f;
+    static final float COLLECTOR_SERVO_UP_POS = -0.8f, COLLECTOR_SERVO_DOWN_POS = 0.45f, COLLECTOR_SERVO_MID_POS = 0.3f;
     public static final float COLLECTOR_MAX_SPEED_FRACTION = 0.5f;
 
 

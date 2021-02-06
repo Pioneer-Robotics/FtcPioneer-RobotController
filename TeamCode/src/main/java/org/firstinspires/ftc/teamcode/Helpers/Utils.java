@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
+/**
+ * going to have generally useful methods
+ */
 public class Utils {
 
     /**
