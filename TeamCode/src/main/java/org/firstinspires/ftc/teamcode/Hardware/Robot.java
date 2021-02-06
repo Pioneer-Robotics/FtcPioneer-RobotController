@@ -32,7 +32,7 @@ public class Robot{
     static PositionTracker mainOdometer;
     HardwareMap hardwareMap;
     MotorData motorData;
-    static AutoPilot autoPilot;
+    public static AutoPilot autoPilot;
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
@@ -92,6 +92,7 @@ public class Robot{
         }
         return amountOfRings;
     }
+
 
 
     public double getHeading(AngleUnit angleUnit) {
@@ -161,7 +162,7 @@ public class Robot{
     public boolean driveStraight(double distanceCM){
         autoPilot.driveStraightNeeded = true;
         autoPilot.forwardDistance = distanceCM;
-        return autoPilot.driveStraight();
+        return autoPilot.targetReached;
     }
 
     /**
@@ -194,5 +195,6 @@ public class Robot{
     public Launcher.LaunchMode getLaunchMode() {return launcher.launchMode;}
     public double getLauncherVelocity() {return launcher.getLaunchVelocity();}
     public void setLauncherTargetVelocity(double targetVelocity) {launcher.setTargetVelocity(targetVelocity);}
+
 
 }
