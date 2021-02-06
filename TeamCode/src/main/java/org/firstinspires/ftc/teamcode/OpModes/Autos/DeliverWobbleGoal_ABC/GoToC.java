@@ -27,11 +27,13 @@ public class GoToC extends GoToSquare{
 
     @Override
     void goToSquareAndThenToShootPos() {
+        telemetry.addLine("in GoToC");
         switch (codeMode) {
             case goToSquare:
                 //drive forward a distance
                 if (!boolList[0]){
                     boolList[0] =Robot.get().driveStraight(230);
+                    telemetry.addLine("driving forward");
                 }
                 if (boolList[0]){
                     codeMode = SquareMode.goToRingShootPos;
@@ -41,6 +43,7 @@ public class GoToC extends GoToSquare{
                 //drive backwards
                 if (!boolList[1]) {
                     boolList[1] = Robot.get().driveStraight(-150);
+                    telemetry.addLine("driving back");
                 }
                 if (boolList[1]) { //if it has driven backwards
                     Robot.get().setDrivePowers(0.4, -0.4);
