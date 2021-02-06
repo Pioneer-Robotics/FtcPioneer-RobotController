@@ -31,7 +31,7 @@ class GoToB extends GoToSquare {
         }
     }
     void driveDistance(double distance, double leftPower, double rightPower){
-        if(startingPos == 0)
+        if(startingPos == 5)
             startingPos = Robot.get().getLeftOdo();
         DriveDistance = startingPos + distance;
         moveAUTO[1] = false;
