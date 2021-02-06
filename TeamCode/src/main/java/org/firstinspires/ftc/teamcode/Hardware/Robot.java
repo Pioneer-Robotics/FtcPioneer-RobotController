@@ -155,7 +155,7 @@ public class Robot{
     public boolean driveStraight(double distanceCM){
         autoPilot.driveStraightNeeded = true;
         autoPilot.forwardDistance = distanceCM;
-        return autoPilot.driveStraight();
+        return autoPilot.targetReached;
     }
 
     /**
