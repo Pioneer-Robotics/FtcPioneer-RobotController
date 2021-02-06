@@ -71,6 +71,12 @@ public class Robot{
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
         launcher.updateLauncher();
         if (useOdometers) {updateOdometers();}
+
+        //DEBUG
+        telemetry.addLine("---DEBUG---");
+        telemetry.addData("LauncherRollingAverage:",launcher.getCurrentVelocity());
+        telemetry.addData("launcherVDiff:",launcher.getCurrentVelocityDiff());
+        telemetry.addLine("-----------");
     }
 
     public int amountOfRings(){
