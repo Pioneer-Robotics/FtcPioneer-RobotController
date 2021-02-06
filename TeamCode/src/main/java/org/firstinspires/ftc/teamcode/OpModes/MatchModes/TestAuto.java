@@ -2,17 +2,16 @@ package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
+import org.firstinspires.ftc.teamcode.OpModes.Autos.choosingPosition;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
 
-//@TeleOp (name = "launcher test")
-public class TestLauncher extends GenericOpMode{
+@TeleOp(name = "Test Auto", group="example")
+public class TestAuto extends GenericOpMode{
 
     @Override
     public void selectAutoAndTeleOp() {
         teleOp = new TeleOpStandard();
-        auto = new NullAuto();
+        auto = new choosingPosition();
     }
 
     @Override
@@ -20,9 +19,7 @@ public class TestLauncher extends GenericOpMode{
         selectAutoAndTeleOp();
         initAndWaitForStart();
         while(opModeIsActive()){
-            telemetry.addData("elapsed time", deltaTime.seconds());
-            Robot.get().setLauncherPower(gamepad1.left_trigger);
-            Robot.get().update(false);
+            auto.loop();
             telemetry.update();
         }
     }

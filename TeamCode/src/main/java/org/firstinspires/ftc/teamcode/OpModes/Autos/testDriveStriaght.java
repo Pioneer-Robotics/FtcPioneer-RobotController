@@ -20,6 +20,7 @@ public class testDriveStriaght extends AutoScript{
         MOVE_BACK,
         STOP
     }
+
     @Override
     public void loop() {
         telemetry.addData("state (move or not)", state);

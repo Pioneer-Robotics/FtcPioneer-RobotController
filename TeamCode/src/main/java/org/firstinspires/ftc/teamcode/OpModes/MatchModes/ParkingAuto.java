@@ -3,15 +3,13 @@ package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC.goTo_ABC;
-import org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC.goTo_ABC;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
 
 @TeleOp(name = "test auto1", group = "test")
 public class ParkingAuto extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {
-        auto = new goTo_ABC();
+       // auto = new GoToB();
         teleOp = new TeleOpStandard(); //not sure if this is right teleOp, good enough for now
     }
 

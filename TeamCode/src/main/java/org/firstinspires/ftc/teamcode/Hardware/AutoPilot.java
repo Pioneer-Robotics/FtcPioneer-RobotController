@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
-import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class AutoPilot {
     //these are used for when you just need to drive forward
@@ -83,7 +79,7 @@ public class AutoPilot {
         targetReached = ans;
     }
 
-    double avgChangeInLeftAndRightOdo(){
+     double avgChangeInLeftAndRightOdo(){
         double ansLeft = Robot.get().getLeftOdo() - startingLeftOdoDistance;
         double ansRight = Robot.get().getRightOdo() - startingRightOdoDistance;
         return (ansLeft + ansRight) / 2.0;
