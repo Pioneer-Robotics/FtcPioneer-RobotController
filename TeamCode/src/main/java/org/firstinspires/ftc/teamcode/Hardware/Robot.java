@@ -88,6 +88,7 @@ public class Robot{
     }
 
 
+
     public double getHeading(AngleUnit angleUnit) {
         double angle;
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, angleUnit);
@@ -188,5 +189,6 @@ public class Robot{
     public Launcher.LaunchMode getLaunchMode() {return launcher.launchMode;}
     public double getLauncherVelocity() {return launcher.getLaunchVelocity();}
     public void setLauncherTargetVelocity(double targetVelocity) {launcher.setTargetVelocity(targetVelocity);}
+
 
 }
