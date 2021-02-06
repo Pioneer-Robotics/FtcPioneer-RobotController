@@ -4,6 +4,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
+import org.firstinspires.ftc.teamcode.Helpers.Utils;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 
 /**
@@ -18,7 +19,7 @@ public class goTo_ABC extends AutoScript {
     /**
      * the magnitude of power we set the motors to when we want to move
      */
-    boolean[] moveAUTO = new boolean[100];
+    boolean[] moveAUTO = new boolean[15]; //needed a lot of booleans
     int numberOfShots = 0;
     double standardPower;
     SquareMode codeMode;
@@ -195,6 +196,9 @@ public class goTo_ABC extends AutoScript {
         startY = 0;
         standardPower = 0.2; //TODO raise this speed when we feel it's safe
         //standard power needs to be greater than 0.1 or the robot won't move
+
+        //for loop makes sure all the booleans start as false
+        Utils.setBooleanArrayToFalse(moveAUTO);
     }
 }
 
