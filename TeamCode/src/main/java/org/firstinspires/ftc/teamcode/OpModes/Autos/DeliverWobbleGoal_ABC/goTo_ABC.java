@@ -45,13 +45,13 @@ public class goTo_ABC extends AutoScript {
 
     @Override
     public void loop() {
-        Robot.get().setDrivePowers(drive, drive); //set both motors to the same power
+        //Robot.get().setDrivePowers(drive, drive); //set both motors to the same power
         telemetry.addData("current mode / stage", codeMode);
         telemetry.addData("Est distance travelled", Robot.get().avgRightAndLeftOdos());
         telemetry.addData("current power", drive);
         telemetry.addData("number of rings", numberOfRings);
-        telemetry.addData("get heading", Robot.get().getHeading(AngleUnit.DEGREES));
-        telemetry.addData("degrees", Robot.get().getRotationDegrees());
+        telemetry.addData("current heading from IMU", Robot.get().getHeading(AngleUnit.DEGREES));
+        telemetry.addData("degrees from Robot", Robot.get().getRotationDegrees());
 
             switch (codeMode){
                 case IDLE:{
@@ -98,7 +98,7 @@ public class goTo_ABC extends AutoScript {
                     }
                 break;
                 case goToSquare: { //this case will not be called
-                    if (numberOfRings== 0){
+                    if (numberOfRings == 0){
                         if (!moveAUTO[8]){
                             moveAUTO[8] =Robot.get().driveStraight(230);
                         }

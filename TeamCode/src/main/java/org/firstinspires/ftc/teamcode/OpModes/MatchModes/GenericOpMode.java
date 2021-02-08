@@ -42,7 +42,7 @@ public abstract class GenericOpMode extends LinearOpMode {
             teleOp.loop();
         }
         makeSureRobotDoesntMoveBetweenAutoAndTeleOp();
-        Robot.get().update(false);
+        Robot.get().update(true);
         telemetry.update();
     }
 

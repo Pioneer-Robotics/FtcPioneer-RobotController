@@ -3,9 +3,8 @@ package org.firstinspires.ftc.teamcode.Hardware;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
+import org.firstinspires.ftc.teamcode.Helpers.*;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
-import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class AutoPilot {
     //these are used for when you just need to drive forward
@@ -19,6 +18,7 @@ public class AutoPilot {
     public double forwardDistance; //how far does it need to move (if problems suspect this)
     DriveMode driveMode; //basically what state are we in?
     Telemetry telemetry;
+    Toggle stopRepitions; //basically the idea here is to prevent autoPilot from accidentally running forever
 
     AutoPilot(){
         driveStraightNeeded = false;
@@ -30,9 +30,8 @@ public class AutoPilot {
         threshold = 10;
         forwardDistance = 0;
         driveMode = DriveMode.CALCULATE;
-
-
         telemetry = DataHub.telemetry;
+        stopRepitions = new Toggle(false);
     }
     enum DriveMode{
         CALCULATE,
@@ -94,7 +93,11 @@ public class AutoPilot {
      * {@code bMath.subtractAnglesRad()}</b>
      */
     void update(){ //TODO test everything
-        if(driveStraightNeeded) {driveStraight();}
+        stopRepitions.set(driveStraightNeeded);
+        if(driveStraightNeeded && !stopRepitions.justBecameTrue()) {
+            //this means you have to call driveStraight twice in a row before anything happens
+            driveStraight();
+        }
     }
 
 }
