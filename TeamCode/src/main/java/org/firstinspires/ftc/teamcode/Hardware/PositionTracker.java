@@ -41,9 +41,9 @@ public class PositionTracker {
         updateLastValues();
     }
     private void setUpEncoders(){ //sets where left, right, and middle will pull from
-        left = Robot.get().hardwareMap.get(DcMotor.class, Config.motorRT);
-        right = Robot.get().hardwareMap.get(DcMotor.class, Config.motorLT);
-        middle = Robot.get().hardwareMap.get(DcMotor.class, Config.motorRB);
+        left = DataHub.hardwareMap.get(DcMotor.class, Config.motorRT);
+        right = DataHub.hardwareMap.get(DcMotor.class, Config.motorLT);
+        middle = DataHub.hardwareMap.get(DcMotor.class, Config.motorRB);
     }
     public void update(){ //this method is the heart of the class
         if(deltaTime.milliseconds() > waitIntervalMS) {
@@ -69,30 +69,50 @@ public class PositionTracker {
         deltaMiddle = getMiddle() - middleLast;
         deltaRotation = (deltaRight - deltaLeft) / Config.distanceBetweenLeftAndRightOdometersCm;
     }
-    double getLeft(){
+
+    /*
+     *these methods are not "safe" in that they require data to be read from hardware, which takes
+     * too much time (Gian thinks) to do more than once per cycle, and that is part of why
+     * our odometry quickly becomes inaccurate. Personally, I (Joe) am skeptical that ensuring
+     * data is only read from hardware once per cycle will actually cause any performance benefits,
+     * and in all likelyhood we'll never have time to run the test and find out.
+     */
+    private double getLeft(){
         return bMath.odoTicksToCm(left.getCurrentPosition());
     }
-    double getRight(){
+    private double getRight(){
         return bMath.odoTicksToCm(right.getCurrentPosition());
     }
-    double getMiddle(){
+    private double getMiddle(){
         return bMath.odoTicksToCm(middle.getCurrentPosition());
     }
-    double getRotationRadians() {
+    private double getRotationRadians() {
         return ( getRight() - getLeft() ) / Config.distanceBetweenLeftAndRightOdometersCm;
     }
-    Int3 getOdoTicks(){
-        Int3 ans = new Int3();
-        ans.x = left.getCurrentPosition();
-        ans.y = right.getCurrentPosition();
-        ans.z = middle.getCurrentPosition();
-        return ans;
+
+    /*
+     *these methods are "safe" in that they don't spend any time reading data from hardware, only
+     *pulling from memory. This might cause performance benefits (or maybe not). Either way,
+     *doesn't hurt.
+     */
+    double getLeftSafe(){
+        return leftLast;
+    }
+    double getRightSafe(){
+        return rightLast;
+    }
+    double getMiddleSafe(){
+        return middleLast;
+    }
+    double getRotationRadiansSafe(){
+        return rotationLast;
     }
 
+
     private void updateLastValues(){
-        leftLast = getLeft();
-        rightLast = getRight();
-        middleLast = getMiddle();
+        leftLast = bMath.odoTicksToCm( left.getCurrentPosition() );
+        rightLast = bMath.odoTicksToCm( right.getCurrentPosition() );
+        middleLast = bMath.odoTicksToCm( middle.getCurrentPosition() );
         rotationLast = getRotationRadians();
     }
 

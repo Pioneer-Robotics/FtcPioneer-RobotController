@@ -127,23 +127,23 @@ public class Robot{
         return mainOdometer.getLocationComplex().imag;
     }
     public double getRotationRad(){
-        double rotationRadians = mainOdometer.getRotationRadians();
+        double rotationRadians = mainOdometer.getRotationRadiansSafe();
         rotationRadians = bMath.regularizeAngleRad(rotationRadians);
         return rotationRadians;
     }
     public double getRotationDegrees(){
-        double rotationDegrees = Math.toDegrees(mainOdometer.getRotationRadians());
+        double rotationDegrees = Math.toDegrees(mainOdometer.getRotationRadiansSafe());
         rotationDegrees = bMath.regularizeAngleDeg(rotationDegrees);
         return rotationDegrees;
     }
     public double getLeftOdo(){
-        return mainOdometer.getLeft();
+        return mainOdometer.getLeftSafe();
     }
     public double getRightOdo(){
-        return mainOdometer.getRight();
+        return mainOdometer.getRightSafe();
     }
     public double getMidOdo(){
-        return mainOdometer.getMiddle();
+        return mainOdometer.getMiddleSafe();
     }
 
     /**
