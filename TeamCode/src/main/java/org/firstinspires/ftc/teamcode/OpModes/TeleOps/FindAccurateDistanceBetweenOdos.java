@@ -14,7 +14,6 @@ public class FindAccurateDistanceBetweenOdos extends TeleOpScript{
     Telemetry telemetry;
     Robot robot;
     double changeScale;
-    BNO055IMU imu;
     Toggle up, down, left, right;
 
     @Override
@@ -23,30 +22,42 @@ public class FindAccurateDistanceBetweenOdos extends TeleOpScript{
         down.toggle(gamepad.dpad_down);
         left.toggle(gamepad.dpad_left);
         right.toggle(gamepad.dpad_right);
-
+        double angleDeg = robot.getRotationDegreesNonRegularized();
         handleChangeScale();
+        adjustEstimate();
 
         telemetry.addData("est distance between left and right odo",
                 Config.distanceBetweenLeftAndRightOdometersCm);
         telemetry.addData("change scale", changeScale);
-        telemetry.addData("est current angle (degrees)", robot.getRotationDegreesNonRegularized());
-        double turn = gamepad.left_stick_x;
+        telemetry.addData("est current angle (degrees)", angleDeg);
+        telemetry.addData("est rotations", angleDeg / 360.0);
+        double turn = gamepad.left_stick_x * 0.2;
+        telemetry.addData("turn power", turn);
         robot.setDrivePowers(-turn, turn);
     }
     void handleChangeScale(){
-        if(left.getBool()){
+        if(left.justChanged()){
             changeScale *= 0.5;
         }
-        else if(right.getBool()){
+        else if(right.justChanged()){
             changeScale *= 2;
+        }
+        if(gamepad.y){
+            changeScale = 4;
+        }
+        if(gamepad.b){
+            changeScale = 1;
         }
     }
     void adjustEstimate(){
-        if(up.getBool()){
+        if(up.justChanged()){
             Config.distanceFromLeftOdoToMiddleOdoCm += changeScale;
         }
-        else if(down.getBool()){
+        else if(down.justChanged()){
             Config.distanceBetweenLeftAndRightOdometersCm -= changeScale;
+        }
+        if(gamepad.a){
+            Config.distanceBetweenLeftAndRightOdometersCm = 197;
         }
     }
 

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.FindAccurateDistanceBetweenOdos;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControllerTwo;
@@ -20,6 +21,7 @@ public class OnlyTeleOp extends GenericOpMode {
         while(opModeIsActive()) {
             teleOp.loop();
             telemetry.update();
+            Robot.get().update(true);
         }
     }
 }
