@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
+import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
 public class Launcher {
     static final double SERVO_OUT = Config.launcherServoOut, SERVO_IN = Config.launcherServoIn;
-
     MotorPairEX motors;
     DcMotorEx m1;
     DcMotorEx m2;
@@ -16,13 +18,14 @@ public class Launcher {
 
     double flickerTargetPos = SERVO_OUT;
 
-    double targetVelocity = Config.defaultTargetLauncherSpeed;
-    boolean launchRequested = false;
-    boolean continuousFire = false;
-    boolean waitForServo = true;
-    boolean launchOverride = true;
+    private double targetVelocity = Config.defaultTargetLauncherSpeed;
+    private double currentVelocity;
+    private boolean launchRequested = false;
+    private boolean continuousFire = false;
+    private boolean waitForServo = true;
+    private boolean launchOverride = true;
 
-    ElapsedTime launchTimer = new ElapsedTime();
+    ElapsedTime launchTimer;
     LaunchMode launchMode;
     public enum LaunchMode {
         IDLE,
@@ -31,6 +34,10 @@ public class Launcher {
         RETRACT
     }
 
+    private double[] velocityLog;
+    private double[] velocityLogTime;
+    private int velocityLogPointer;
+    ElapsedTime velocityPointTime;
 
 
 
@@ -41,9 +48,18 @@ public class Launcher {
         motors.setDriveMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER)
                 .setDriveMode(DcMotorEx.RunMode.RUN_USING_ENCODER)
                 .setDirection(DcMotorEx.Direction.REVERSE)
+                .setVelocityPIDfCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, Config.launcherPIDF);
         ;
         flicker = DataHub.hardwareMap.get(Servo.class, Config.launcherServo);
         launchMode = LaunchMode.IDLE;
+        launchTimer = new ElapsedTime();
+
+        velocityLogPointer = 0;
+        velocityLog = new double[Config.VELOCITY_LOG_SIZE];
+        velocityLogTime = new double[Config.VELOCITY_LOG_SIZE];
+        velocityPointTime = new ElapsedTime();
+        Utils.fillArray(velocityLog,0);
+        Utils.fillArray(velocityLogTime,0);
     }
 @Deprecated
     Launcher setPower(double power){
@@ -57,6 +73,10 @@ public class Launcher {
     }
 
     Launcher updateLauncher (){
+        //Writes current velocity to the velocityLog
+        recordVelocity(motors.getAverageVelocity());
+        //reads average velocity from log
+        currentVelocity = getRollingAverage(Config.VELOCITY_AVERAGE_TIME_MS);
         switch (launchMode){
             default:
             case IDLE:
@@ -72,11 +92,12 @@ public class Launcher {
                 if (waitForServo){ launchTimer.reset(); }
                 flickerTargetPos = SERVO_IN;
 
+
                 //Checks if all conditions are met and actuates the launcher if they are
                 if ( launchRequested &&
                         (launchOverride ||
                         (
-                                Math.abs(targetVelocity - motors.getAverageVelocity()) <= Config.launchVelocityThreshold //Velocity good
+                                Math.abs(targetVelocity - currentVelocity) <= Config.launchVelocityThreshold //Velocity good
                             && (!waitForServo || launchTimer.milliseconds() >= Config.launcherServoTime) //Servo has had enough time to move
                         )
                         )
@@ -90,11 +111,12 @@ public class Launcher {
                 break;
             case PUSH:
                 if (launchTimer.milliseconds()>=Config.launcherServoTime){
-                    if (launchRequested){
-                        launchMode = LaunchMode.SPOOL;
-                    } else {
-                        launchMode = LaunchMode.IDLE;
-                    }
+//                    if (launchRequested){
+//                        launchMode = LaunchMode.SPOOL;
+//                    } else {
+//                        launchMode = LaunchMode.IDLE;
+//                    }
+                    launchMode = LaunchMode.SPOOL;
                     launchTimer.reset();
                 }
         }
@@ -143,6 +165,36 @@ public class Launcher {
      public void setTargetVelocity(double targetVelocity) {this.targetVelocity = targetVelocity;}
 
      public int getLaunchPos() {return motors.getCurrentPositionM1();}
+
+
+     private double getRollingAverage(double duration){
+        double sum = 0;
+        double time = 0;
+        int num = 0;
+        int i = velocityLogPointer;
+        do{
+            sum += velocityLog[i];
+            time += velocityLogTime[i];
+            i--;
+            num++;
+            if(i < 0){i = Config.VELOCITY_LOG_SIZE-1;}
+        } while (time < duration);
+
+        return sum/num;
+     }
+
+     private void recordVelocity(double velocity){
+        velocityLogPointer++;
+        if(velocityLogPointer >= Config.VELOCITY_LOG_SIZE){velocityLogPointer = 0;}
+        velocityLog[velocityLogPointer] = velocity;
+        velocityLogTime[velocityLogPointer] = velocityPointTime.milliseconds();
+        velocityPointTime.reset();
+     }
+
+     public double getCurrentVelocity(){ return currentVelocity; }
+     public double getCurrentVelocityDiff(){return Math.abs(targetVelocity - currentVelocity);}
+
+     public void updatePIDF () {motors.setVelocityPIDfCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, Config.launcherPIDF);}
 
 }
 

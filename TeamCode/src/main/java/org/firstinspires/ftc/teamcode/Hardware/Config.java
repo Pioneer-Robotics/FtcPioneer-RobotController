@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+
 //This class has all of the names and data for all of the things in one place for easy of access / sanity!
 public class Config {
 
@@ -27,12 +29,14 @@ public class Config {
 
 
     public static final String launcherServo = "launcherS";
+    public static final PIDFCoefficients launcherPIDF = new PIDFCoefficients(67,0,0,12.95);
     public static final float launcherServoOut = 0.55f, launcherServoIn = 0.425f;
     public static double maxLauncherSpeed =  2500;
-    public static double defaultTargetLauncherSpeed = 2000;
+    public static double defaultTargetLauncherSpeed = 1750;
 
     public static final double launchVelocityThreshold = 10; //allowable difference in angular velocity before a launch is initiated
     public static final double launcherServoTime = 200; //launcher flick time in ms
+    static final int VELOCITY_LOG_SIZE = 500, VELOCITY_AVERAGE_TIME_MS = 200;
 
     //ODOMETERS
     //Info on the specs of the odometers
