@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Helpers.*;
 public class GoToC extends GoToSquare{
     boolean[] boolList = new boolean[3];
     boolean done;
+    Robot robot;
     Gamepad gamepad;
     SquareMode codeMode;
     Telemetry telemetry;
@@ -22,6 +23,7 @@ public class GoToC extends GoToSquare{
         telemetry = DataHub.telemetry;
         gamepad = DataHub.gamepad1;
         helper = new Toggle(false);
+        robot = Robot.get(); //this will make it easier to write and read the code
     }
 
     enum SquareMode{
@@ -38,12 +40,12 @@ public class GoToC extends GoToSquare{
             case goToSquare:
                 //drive forward a distance
                 if (!boolList[0]){
-                    boolList[0] = Robot.get().driveStraight(150);
+                    boolList[0] = robot.driveStraight(150);
                     telemetry.addLine("driving forward");
                 }
                 if (boolList[0]){
-                    Robot.get().setDrivePowers(0,0);
-                    Robot.get().stopAllMotors();
+                    robot.deactivateDriveStraight();
+                    robot.setDrivePowers(0,0);
                     telemetry.addLine("waiting to back up. Press A to continue");
                     if(helper.justChanged()) {
                         codeMode = SquareMode.goToRingShootPos;
@@ -52,25 +54,24 @@ public class GoToC extends GoToSquare{
                 telemetry.addData("it thinks it's gone too far", boolList[0]);
                 break;
             case goToRingShootPos:
-                Robot.get().allowMovement();
                 //drive backwards
                 if (!boolList[1]) {
                     boolList[1] = Robot.get().driveStraight(-100);
                     telemetry.addLine("driving back");
                 }
                 if (boolList[1]) { //if it has driven backwards
-                    Robot.get().setDrivePowers(0.4, -0.4); //start rotating
+                    robot.setDrivePowers(0.4, -0.4); //start rotating
                     if (Math.abs(Robot.get().getHeading(AngleUnit.DEGREES)) > 87) { //turn
-                        Robot.get().setDrivePowers(0, 0); //stop movement
+                        robot.setDrivePowers(0, 0); //stop movement
                         if (!boolList[2]) { //drive forwards
                             boolList[2] = Robot.get().driveStraight(55);
                         }
                         if (boolList[2]) {
-                            Robot.get().setDrivePowers(0.35, -0.35);
+                            robot.setDrivePowers(0.35, -0.35);
                             if (Math.abs(Robot.get().getRotationDegrees()) > 178.25) {
                                 telemetry.addLine("waiting to start firing. Press A to continue");
                                 if(helper.justChanged()) {
-                                    Robot.get().setDrivePowers(0, 0);
+                                    robot.setDrivePowers(0, 0);
                                     codeMode = SquareMode.DONE;
                                 }
                             }

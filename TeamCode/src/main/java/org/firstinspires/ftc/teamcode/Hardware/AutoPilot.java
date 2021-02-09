@@ -1,47 +1,87 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helpers.*;
-import org.firstinspires.ftc.teamcode.Helpers.DataHub;
+
 
 public class AutoPilot {
-    //these are used for when you just need to drive forward
+    //these are all used as part of the "driveForward()" method
     boolean driveStraightNeeded;
     boolean targetReached; //used to know if the driveStright() method has reached it's goal
-    double startingRightOdoDistance;
-    double startingLeftOdoDistance;
-    double startingRotation; //not used rn
-    double forwardSpeed; //how fast should it move by default?
-    double threshold; //how close to target is close enough?
-    public double forwardDistance; //how far does it need to move (if problems suspect this)
+    private double startingRightOdoDistance;
+    private double startingLeftOdoDistance;
+    private double forwardSpeed; //how fast should it move by default?
+    private double threshold; //how close to target is close enough?
+    public double targetDistance; //how far does it need to move (if problems suspect this)
     DriveMode driveMode; //basically what state are we in?
+
+    //these are used as part of the "turnAbsolute()" method
+    private double startingRotation; //not used rn
+    TurnMode turnMode;
+    boolean turnNeeded;
+    double targetAngle;
+    double turnThreshold;
+    double P; //used to PID the speed thing
+
+    //more general variables
+    Robot robot;
     Telemetry telemetry;
-    Toggle stopRepitions; //basically the idea here is to prevent autoPilot from accidentally running forever
+    Toggle stopReps; //basically the idea here is to prevent autoPilot from accidentally running forever
+    boolean autoPilotNeeded;
 
     AutoPilot(){
+        //block used for "driveStriaght()"
         driveStraightNeeded = false;
         targetReached = false;
         startingRightOdoDistance = 0;
         startingLeftOdoDistance = 0;
-        startingRotation = 0;
         forwardSpeed = 0.3;
         threshold = 10;
-        forwardDistance = 0;
+        targetDistance = 0;
         driveMode = DriveMode.CALCULATE;
+
+
+        //block used for "turnAbsolute()"
+        startingRotation = 0;
+        turnMode = TurnMode.CALCULATE;
+        turnNeeded = false;
+        targetAngle = 0;
+        turnThreshold = Math.toRadians(10); //how close is close enough when it comes to turing?
+        P = 0.1;
+
+
+        //block used for more general things
+        robot = Robot.get();
         telemetry = DataHub.telemetry;
-        stopRepitions = new Toggle(false);
+        stopReps = new Toggle(false);
+        autoPilotNeeded = false;
     }
     enum DriveMode{
         CALCULATE,
         DRIVE_FORWARD,
         EXIT_AUTOPILOT
     }
+    enum TurnMode {
+        CALCULATE,
+        TURN,
+        EXIT_AUTOPILOT
+    }
 
-
-    void deactivateAutoPilot(){
-        driveStraightNeeded = false;
+    /**
+     * we could have called this "{@code doAutoPilot()}". It handles all the movement.
+     */
+    void update(){ //TODO test everything
+        stopReps.set(autoPilotNeeded);
+        if(autoPilotNeeded && !stopReps.justBecameTrue()){
+            //this means you have to call autopilot twice in a row before anything happens
+            if (driveStraightNeeded) {
+                driveStraight();
+            }
+            else if(turnNeeded){ //you shouldn't try to drive straight while turning
+                // (in fact it's rather difficult)
+                turnAbsolute();
+            }
+        }
     }
 
     /**
@@ -56,14 +96,13 @@ public class AutoPilot {
                 startingLeftOdoDistance = Robot.get().getLeftOdo(); //what does the left odo measure right now?
                 startingRightOdoDistance = Robot.get().getRightOdo(); //what does the right odo measure rn?
                 driveMode = DriveMode.DRIVE_FORWARD; //move on the next state
-
                 telemetry.addLine("calculating");
                 break;
             case DRIVE_FORWARD:
-                if((avgChangeInLeftAndRightOdo() - forwardDistance) > threshold){ //we've overshot (gone to far)
+                if((avgChangeInLeftAndRightOdo() - targetDistance) > threshold){ //we've overshot (gone to far)
                     Robot.get().setDrivePowers(-forwardSpeed, -forwardSpeed);
                 }
-                else if ((avgChangeInLeftAndRightOdo() - forwardDistance) < -threshold){ //haven't gone far enough
+                else if ((avgChangeInLeftAndRightOdo() - targetDistance) < -threshold){ //haven't gone far enough
                     Robot.get().setDrivePowers(forwardSpeed, forwardSpeed);
                 }
                 else{ //this means we're in the target range
@@ -78,6 +117,7 @@ public class AutoPilot {
                 driveMode = DriveMode.CALCULATE;
                 break;
         }
+        telemetry.addLine("auto pilot active, running 'drive straight()'");
         telemetry.addData("distance travelled", avgChangeInLeftAndRightOdo());
         targetReached = ans;
     }
@@ -87,16 +127,26 @@ public class AutoPilot {
         double ansRight = Robot.get().getRightOdo() - startingRightOdoDistance;
         return (ansLeft + ansRight) / 2.0;
     }
-    /**
-     * we could have called this "{@code doAutoPilot()}". It handles all the movement.
-     * <b> Important: if this doesn't work, suspect {@code bMath.regularizeAngle()} and
-     * {@code bMath.subtractAnglesRad()}</b>
-     */
-    void update(){ //TODO test everything
-        stopRepitions.set(driveStraightNeeded);
-        if(driveStraightNeeded && !stopRepitions.justBecameTrue()) {
-            //this means you have to call driveStraight twice in a row before anything happens
-            driveStraight();
+
+    void turnAbsolute(){
+        switch(turnMode){
+            case CALCULATE:
+                startingRotation = robot.getRotationRad();
+                turnMode = TurnMode.TURN;
+                break;
+            case TURN:
+                double error = robot.getRotationRad() - targetAngle;
+                if(Math.abs(error) > turnThreshold){
+                    //this means we're not close enough to the target angle
+                    double speed = P * error;
+                    robot.setDrivePowers(-speed, speed);
+                }
+                else{
+                    turnMode = TurnMode.EXIT_AUTOPILOT;
+                }
+                break;
+            case EXIT_AUTOPILOT:
+                break;
         }
     }
 

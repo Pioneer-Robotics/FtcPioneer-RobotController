@@ -48,7 +48,7 @@ public class testDriveStriaght extends AutoScript{
         telemetry.addData("check value (should be false)", check);
         telemetry.addData("distance travelled", Robot.get().avgRightAndLeftOdos());
         telemetry.addData("state", state);
-        telemetry.addData("forward distance value", Robot.get().autoPilot.forwardDistance);
+        telemetry.addData("forward distance value", Robot.get().autoPilot.targetDistance);
     }
 
     @Override

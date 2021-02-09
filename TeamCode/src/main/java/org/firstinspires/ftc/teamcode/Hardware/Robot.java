@@ -135,6 +135,11 @@ public class Robot{
     public double getY(){
         return mainOdometer.getLocationComplex().imag;
     }
+
+    /**
+     * gets the current rotation of the robot as calculated by the odometers
+     * @return the robot's current rotation in radians
+     */
     public double getRotationRad(){
         double rotationRadians = mainOdometer.getRotationRadiansSafe();
         rotationRadians = bMath.regularizeAngleRad(rotationRadians);
@@ -143,6 +148,10 @@ public class Robot{
     public double getRotationDegrees(){
         double rotationDegrees = Math.toDegrees(mainOdometer.getRotationRadiansSafe());
         rotationDegrees = bMath.regularizeAngleDeg(rotationDegrees);
+        return rotationDegrees;
+    }
+    public double getRotationDegreesNonRegularized(){
+        double rotationDegrees = Math.toDegrees(mainOdometer.getRotationRadiansSafe());
         return rotationDegrees;
     }
     public double getLeftOdo(){
@@ -163,9 +172,17 @@ public class Robot{
      * @return true if it has just reached the target distance, false otherwise
      */
     public boolean driveStraight(double distanceCM){
+        autoPilot.autoPilotNeeded = true;
         autoPilot.driveStraightNeeded = true;
-        autoPilot.forwardDistance = distanceCM;
+        autoPilot.targetDistance = distanceCM;
         return autoPilot.targetReached;
+    }
+
+    /**
+     * use to make sure that the robot doesn't keep going when you want it to stop
+     */
+    public void deactivateDriveStraight(){
+        autoPilot.driveStraightNeeded = false;
     }
 
     /**
