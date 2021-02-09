@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.FindAccurateDistanceBetweenOdos;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControllerTwo;
 
-@TeleOp (name = "OnlyTeleOp", group = "example")
-public class OnlyTeleOp extends GenericOpMode {
+@TeleOp (name = "TestingTeleOp", group = "example")
+public class TestingTeleOp extends GenericOpMode {
     @Override
     public void selectAutoAndTeleOp(){
         auto = new NullAuto(); //you need this even if you don't use it
