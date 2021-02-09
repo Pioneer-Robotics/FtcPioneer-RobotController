@@ -12,8 +12,21 @@ import org.firstinspires.ftc.teamcode.Helpers.Toggle;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
 //comment
 public class TwoControllerTwo extends TeleOpScript {
-    private static float TRIGGER_DEADZONE = 0.1f;
-    private static float STICK_DEADZONE = 0.1f;
+    //DEBUG CONFIG:
+    private static final boolean DEBUG = true; //Enable Debug TODO Turn off before comp
+    private static final double DEBUG_CHANGE_BIG = 0.5; //large debug change
+    private static final double DEBUG_CHANGE_SMALL = 0.05; //small debug change
+    private double debugValUp = 0; //initial value for debug Up/down
+    private double debugValLeft = 65.00; //initial value for debug Left/Right
+
+    private boolean doDebugOptions;
+    private Toggle debugValUpChanged;
+    private Toggle debugValLeftChanged;
+
+
+
+    private static final float TRIGGER_DEADZONE = 0.1f;
+    private static final float STICK_DEADZONE = 0.1f;
 
     private Robot robot;
 
@@ -35,7 +48,34 @@ public class TwoControllerTwo extends TeleOpScript {
 
     @Override
     public void loop() {
+        /*============
+        Debugging and Tuning
+         ============*/
+        doDebugOptions = DEBUG && gamepad2.right_bumper;
+        if (doDebugOptions){
+            double debug_change = !gamepad2.left_bumper ? DEBUG_CHANGE_BIG : DEBUG_CHANGE_SMALL;
+            //Whatever you are debugging goes here
+            debugValUpChanged.toggle(gamepad2.dpad_up || gamepad2.dpad_down);
+            if (debugValUpChanged.justChanged()) {
+                if (gamepad2.dpad_up) {debugValUp += debug_change;} else {debugValUp -= debug_change;}
+                robot.updateSettings();
+            }
+            debugValLeftChanged.toggle(gamepad2.dpad_left || gamepad2.dpad_right);
+            if (debugValLeftChanged.justChanged()) {
+                if (gamepad2.dpad_left) {debugValLeft += debug_change;} else {debugValLeft -= debug_change;}
+                robot.updateSettings();
+            }
 
+
+            Config.launcherPIDF.d = debugValUp;
+            Config.launcherPIDF.p = debugValLeft;
+            //Config.launcherPIDF.f = 12.95;
+
+
+            telemetry.addLine("--CONTROLLER DEBUG MODE--");
+            telemetry.addData("UpDown: ",debugValUp);
+            telemetry.addData("LeftRight: ",debugValLeft);
+        }
 
         /*============
         Launcher Control
@@ -51,7 +91,7 @@ public class TwoControllerTwo extends TeleOpScript {
         }
 
         //sets the launchmode to IDLE; should be used to cancel a launch
-        if (gamepad1.dpad_down || gamepad2.dpad_down){
+        if (gamepad1.dpad_down || (gamepad2.dpad_down && !doDebugOptions)){
             robot.emergencyStop();
         }
 
@@ -60,12 +100,12 @@ public class TwoControllerTwo extends TeleOpScript {
             robot.fire();
         }
 
-        decreaseLaunchSpeedToggle.toggle(gamepad2.dpad_left);
-        increaseLaunchSpeedToggle.toggle(gamepad2.dpad_right);
+        decreaseLaunchSpeedToggle.toggle(gamepad2.dpad_left && !doDebugOptions);
+        increaseLaunchSpeedToggle.toggle(gamepad2.dpad_right && !doDebugOptions);
         if (decreaseLaunchSpeedToggle.justChanged()){
-            launcherSpeedFraction += 0.05;
+            launcherSpeedFraction += 0.025;
         } else if (increaseLaunchSpeedToggle.justChanged()){
-            launcherSpeedFraction -= 0.05;
+            launcherSpeedFraction -= 0.025;
         }
         launcherSpeedFraction = Range.clip(launcherSpeedFraction,0.1,1);
         robot.setLauncherTargetVelocity(Config.maxLauncherSpeed*launcherSpeedFraction);
@@ -165,7 +205,6 @@ public class TwoControllerTwo extends TeleOpScript {
 
 
 
-
         robot.update(false);
     }
 
@@ -185,6 +224,10 @@ public class TwoControllerTwo extends TeleOpScript {
         increaseLaunchSpeedToggle = new Toggle(false);
         decreaseLaunchSpeedToggle = new Toggle(false);
         collecting = new Toggle(false);
+
+        doDebugOptions = false;
+        debugValLeftChanged = new Toggle(false);
+        debugValUpChanged = new Toggle(false);
 
     }
     public TwoControllerTwo(){

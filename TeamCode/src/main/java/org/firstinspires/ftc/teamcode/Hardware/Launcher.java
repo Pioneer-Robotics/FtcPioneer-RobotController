@@ -1,15 +1,16 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
+import org.firstinspires.ftc.teamcode.Helpers.Utils;
 
 public class Launcher {
     static final double SERVO_OUT = Config.launcherServoOut, SERVO_IN = Config.launcherServoIn;
-    static final int VELOCITY_LOG_SIZE = 500, VELOCITY_AVERAGE_TIME_MS = 100;
     MotorPairEX motors;
     DcMotorEx m1;
     DcMotorEx m2;
@@ -47,15 +48,18 @@ public class Launcher {
         motors.setDriveMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER)
                 .setDriveMode(DcMotorEx.RunMode.RUN_USING_ENCODER)
                 .setDirection(DcMotorEx.Direction.REVERSE)
+                .setVelocityPIDfCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, Config.launcherPIDF);
         ;
         flicker = DataHub.hardwareMap.get(Servo.class, Config.launcherServo);
         launchMode = LaunchMode.IDLE;
         launchTimer = new ElapsedTime();
 
         velocityLogPointer = 0;
-        velocityLog = new double[VELOCITY_LOG_SIZE];
-        velocityLogTime = new double[VELOCITY_LOG_SIZE];
+        velocityLog = new double[Config.VELOCITY_LOG_SIZE];
+        velocityLogTime = new double[Config.VELOCITY_LOG_SIZE];
         velocityPointTime = new ElapsedTime();
+        Utils.fillArray(velocityLog,0);
+        Utils.fillArray(velocityLogTime,0);
     }
 @Deprecated
     Launcher setPower(double power){
@@ -72,7 +76,7 @@ public class Launcher {
         //Writes current velocity to the velocityLog
         recordVelocity(motors.getAverageVelocity());
         //reads average velocity from log
-        currentVelocity = getRollingAverage(VELOCITY_AVERAGE_TIME_MS);
+        currentVelocity = getRollingAverage(Config.VELOCITY_AVERAGE_TIME_MS);
         switch (launchMode){
             default:
             case IDLE:
@@ -166,20 +170,22 @@ public class Launcher {
      private double getRollingAverage(double duration){
         double sum = 0;
         double time = 0;
+        int num = 0;
         int i = velocityLogPointer;
         do{
             sum += velocityLog[i];
             time += velocityLogTime[i];
-            i++;
-            if(i >= VELOCITY_LOG_SIZE){i = 0;}
+            i--;
+            num++;
+            if(i < 0){i = Config.VELOCITY_LOG_SIZE-1;}
         } while (time < duration);
 
-        return sum/i;
+        return sum/num;
      }
 
      private void recordVelocity(double velocity){
         velocityLogPointer++;
-        if(velocityLogPointer >= VELOCITY_LOG_SIZE){velocityLogPointer = 0;}
+        if(velocityLogPointer >= Config.VELOCITY_LOG_SIZE){velocityLogPointer = 0;}
         velocityLog[velocityLogPointer] = velocity;
         velocityLogTime[velocityLogPointer] = velocityPointTime.milliseconds();
         velocityPointTime.reset();
@@ -187,6 +193,8 @@ public class Launcher {
 
      public double getCurrentVelocity(){ return currentVelocity; }
      public double getCurrentVelocityDiff(){return Math.abs(targetVelocity - currentVelocity);}
+
+     public void updatePIDF () {motors.setVelocityPIDfCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, Config.launcherPIDF);}
 
 }
 

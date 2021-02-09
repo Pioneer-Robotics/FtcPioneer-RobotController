@@ -13,4 +13,15 @@ public class Utils {
         }
         return array;
     }
+
+    //TODO Generalize for all types
+    /**
+     * sets an array to a specific value
+     */
+    public static double[] fillArray(double[] array, double value) {
+        for (int i = 0; i < array.length; i++) {
+            array[i] = value;
+        }
+        return array;
+    }
 }

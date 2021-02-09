@@ -56,6 +56,9 @@ public class Robot{
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
     }
+    public void updateSettings (){
+        launcher.updatePIDF();
+    }
     /**
      * Gets the singleton {@code Robot} object. Use this anytime you need to interact with hardware
      * from an OpMode

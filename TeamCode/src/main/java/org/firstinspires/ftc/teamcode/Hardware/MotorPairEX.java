@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 class MotorPairEX{
     public DcMotorEx motor1;
@@ -60,6 +61,12 @@ class MotorPairEX{
 
     public int getCurrentPositionM1(){
         return motor1.getCurrentPosition();
+    }
+
+    public MotorPairEX setVelocityPIDfCoefficients (DcMotor.RunMode runMode, PIDFCoefficients pidfCoefficients){
+        motor1.setPIDFCoefficients(runMode, pidfCoefficients);
+        motor1.setPIDFCoefficients(runMode, pidfCoefficients);
+        return this;
     }
 
 }
