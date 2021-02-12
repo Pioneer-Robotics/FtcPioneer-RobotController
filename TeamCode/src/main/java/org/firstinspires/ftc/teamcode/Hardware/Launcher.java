@@ -39,6 +39,7 @@ public class Launcher {
     private int velocityLogPointer;
     ElapsedTime velocityPointTime;
 
+    private boolean justLaunched = true;
 
 
     Launcher(){
@@ -73,6 +74,7 @@ public class Launcher {
     }
 
     Launcher updateLauncher (){
+        justLaunched = false;
         //Writes current velocity to the velocityLog
         recordVelocity(motors.getAverageVelocity());
         //reads average velocity from log
@@ -115,8 +117,9 @@ public class Launcher {
 //                        launchMode = LaunchMode.SPOOL;
 //                    } else {
 //                        launchMode = LaunchMode.IDLE;
-//                    }
+//                    }'
                     launchMode = LaunchMode.SPOOL;
+                    justLaunched = true;
                     launchTimer.reset();
                 }
         }
@@ -157,6 +160,10 @@ public class Launcher {
             launchMode = LaunchMode.IDLE;
         }
         launchRequested = false;
+     }
+
+     public boolean justLaunched(){
+        return justLaunched;
      }
 
      public LaunchMode getLaunchMode() {return launchMode;}
