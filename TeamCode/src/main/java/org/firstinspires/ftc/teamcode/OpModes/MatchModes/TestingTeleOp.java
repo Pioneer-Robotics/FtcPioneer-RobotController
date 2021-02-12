@@ -4,15 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.FindAccurateDistanceBetweenOdos;
-import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControllerTwo;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
 
 @TeleOp (name = "TestingTeleOp", group = "example")
 public class TestingTeleOp extends GenericOpMode {
     @Override
     public void selectAutoAndTeleOp(){
         auto = new NullAuto(); //you need this even if you don't use it
-        teleOp = new FindAccurateDistanceBetweenOdos();
+        teleOp = new ExampleTeleOp();
     }
     @Override
     public void runOpMode() throws InterruptedException {
