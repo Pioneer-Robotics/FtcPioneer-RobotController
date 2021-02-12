@@ -1,3 +1,7 @@
+#gradle files (there is a renamed copy that should be locally configured)
+/build.gradle
+
+
 # Built application files
 *.apk
 *.aar

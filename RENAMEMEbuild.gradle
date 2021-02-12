@@ -1,0 +1,34 @@
+/**
+ * Top-level build file for ftc_app project.
+ *
+ * It is extraordinarily rare that you will ever need to edit this file.
+ */
+
+//def os = System.getProperty("os.name").toLowerCase()
+
+
+buildscript {
+
+        repositories {
+            google()
+            jcenter()
+        }
+        dependencies {
+            if (SystemUtils.IS_OS_LINUX) {
+                classpath 'com.android.tools.build:gradle:4.0.1'
+            } else {
+                classpath 'com.android.tools.build:gradle:4.1.1'
+            }
+        }
+
+
+}
+//test commit
+// This is now required because aapt2 has to be downloaded from the
+// google() repository beginning with version 3.2 of the Android Gradle Plugin
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
