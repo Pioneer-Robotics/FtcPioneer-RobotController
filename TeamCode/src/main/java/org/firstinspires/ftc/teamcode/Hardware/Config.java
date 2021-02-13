@@ -18,8 +18,8 @@ public class Config {
     public static final String WobbleMotor = "wobblemotor";
     public static final String WobbleServo = "wobbleservo";
     public static final int WOBBLE_UP_POS = 692, WOBBLE_DOWN_POS = 1800;
-    public static final double Wobble_Servo_Open_Pos = 1.6;
-    public static final double Wobble_Servo_Closed_Pos = 0.0;
+    public static final double Wobble_Servo_Open_Pos = 0;
+    public static final double Wobble_Servo_Closed_Pos = 1;
 
     public static final String collectorMotor = "collector";
     public static final String collectorServoLeft = "collectorServoLeft";
