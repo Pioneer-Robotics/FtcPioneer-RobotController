@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.Helpers.DataHub;
-import org.firstinspires.ftc.teamcode.Helpers.Utils;
+
+import org.firstinspires.ftc.teamcode.Helpers.*;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 
 /**
@@ -20,13 +23,18 @@ public class goTo_ABC extends AutoScript {
      * the magnitude of power we set the motors to when we want to move
      */
     boolean[] moveAUTO = new boolean[15]; //needed a lot of booleans
-    int numberOfShots = 0;
+    int numberOfShots;
     double standardPower;
     SquareMode codeMode;
     Telemetry telemetry;
     int numberOfRings;
 
     GoToSquare goToSquare;
+    ElapsedTime deltaTime;
+    double startTimeFiring;
+
+    Toggle helper;
+    Gamepad gamepad;
 
 
     enum SquareMode {
@@ -34,8 +42,7 @@ public class goTo_ABC extends AutoScript {
         driveToRings,
         measureRings,
         goToSquareThenLineUpForShooting,
-        goToSquare,
-        goToRingShootPos,
+        resetTimer,
         shootRings,
         park,
         DONE
@@ -46,12 +53,16 @@ public class goTo_ABC extends AutoScript {
     @Override
     public void loop() {
         //Robot.get().setDrivePowers(drive, drive); //set both motors to the same power
+        telemetry.addData("elapsed time", deltaTime.seconds());
         telemetry.addData("current mode / stage", codeMode);
         telemetry.addData("Est distance travelled", Robot.get().avgRightAndLeftOdos());
         telemetry.addData("current power", drive);
         telemetry.addData("number of rings", numberOfRings);
         telemetry.addData("current heading from IMU", Robot.get().getHeading(AngleUnit.DEGREES));
         telemetry.addData("degrees from Robot", Robot.get().getRotationDegrees());
+        telemetry.addData("start time firing", startTimeFiring);
+
+        helper.toggle(gamepad.a);
 
             switch (codeMode){
                 case IDLE:{
@@ -91,118 +102,56 @@ public class goTo_ABC extends AutoScript {
                 break;
                 case goToSquareThenLineUpForShooting:
                     if(goToSquare.done){
-                        codeMode = SquareMode.shootRings;
+                        codeMode = SquareMode.resetTimer;
                     }
                     else{
                         goToSquare.goToSquareAndThenToShootPos();
                     }
                 break;
-                case goToSquare: { //this case will not be called
-                    if (numberOfRings == 0){
-                        if (!moveAUTO[8]){
-                            moveAUTO[8] =Robot.get().driveStraight(230);
-                        }
-                        if (moveAUTO[8]){
-                            codeMode = SquareMode.goToRingShootPos;
-                        }
-                    } else if (numberOfRings == 1){
-                        Robot.get().setDrivePowers(leftPowerSWITCH, rightPowerSWITCH);
-                        if (Robot.get().getHeading(AngleUnit.DEGREES) > 30 && Robot.get().getLeftOdo() > 75){
-                            codeMode = SquareMode.goToRingShootPos;
-                        }
-                    } else if (numberOfRings == 4){
-                        if (!moveAUTO[9]){
-                            moveAUTO[9] = Robot.get().driveStraight(55);
-                        }
-                        if (moveAUTO[9]){
-                            codeMode = SquareMode.goToRingShootPos;
-                        }
-                    }
-                }
-                break;
-                case goToRingShootPos:{ //this case will not be called
-                    if (numberOfRings == 0) {
-                        if (!moveAUTO[0]) {
-                            moveAUTO[0] = Robot.get().driveStraight(-150);
-                        }
-                        if (moveAUTO[0]) {
-                            Robot.get().setDrivePowers(0.4, -0.4);
-                            if (Math.abs(Robot.get().getHeading(AngleUnit.DEGREES)) > 87) {
-                                Robot.get().setDrivePowers(0, 0);
-                                if (!moveAUTO[1]) {
-                                    moveAUTO[1] = Robot.get().driveStraight(55);
-                                }
-                                if (moveAUTO[1]) {
-                                    Robot.get().setDrivePowers(0.35, -0.35);
-                                    if (Math.abs(Robot.get().getRotationDegrees()) > 178.25) {
-                                        Robot.get().setDrivePowers(0, 0);
-                                        codeMode = SquareMode.shootRings;
-                                    }
-
-                                }
-                            }
-                        }
-                    } else if (numberOfRings == 1){
-                        if (!moveAUTO[3]){
-                            moveAUTO[3] = Robot.get().driveStraight(-47);
-                        }
-                        if (moveAUTO[3]){
-                            Robot.get().setDrivePowers(-0.15,0.15);
-                            if ((Robot.get().getRotationDegrees() > 10)){
-                                Robot.get().setDrivePowers(0,0);
-                            }
-                            codeMode = SquareMode.shootRings;
-                        }
-
-                    } else if (numberOfRings == 4){
-                        if (!moveAUTO[4]){
-                            moveAUTO[4] = Robot.get().driveStraight(-10);
-                        }
-                        if (moveAUTO[4]){
-                            Robot.get().setDrivePowers(0.3,-0.3);
-                            if (Robot.get().getRotationDegrees() > 87){
-                                Robot.get().setDrivePowers(0,0);
-                            }
-                            if (!moveAUTO[5]){
-                                moveAUTO[5] = Robot.get().driveStraight(25);
-                            }
-                            if (moveAUTO[5]){
-                                Robot.get().setDrivePowers(-0.3,-0.3);
-                                if (Robot.get().getRotationDegrees() < 0){
-                                    Robot.get().setDrivePowers(0,0);
-                                }
-                                codeMode = SquareMode.shootRings;
-                            }
-                        }
-                    }
-                }
-                break;
+                case resetTimer:
+                    deltaTime.reset();
+                    codeMode = SquareMode.shootRings;
+                    break;
                 case shootRings:{
-                    Robot.get().setLauncherPower(1750);
-                    Robot.get().spool();
-                    if (Robot.get().getLauncherVelocity() == 1750){//NEED TO DO 3 TIMES
-                        //in order to stay in the launch limit; lower velocity to 1750
-                        //Robot.get().setContinousFire(true);
-                        numberOfShots ++;
+                    telemetry.addLine("firing");
+                    if(deltaTime.seconds() < 5) {//don't let it fire for > 3 secs
                         Robot.get().fire();
-
+                        Robot.get().requestLaunch();
                     }
-                    if (numberOfShots == 3) {
-                        Robot.get().setLauncherPower(0);
+                    else{
+                        Robot.get().emergencyStop();
                         codeMode = SquareMode.park;
                     }
+//                    if (Robot.get().justShot()){//NEED TO DO 3 TIMES
+//                        //in order to stay in the launch limit; lower velocity to 1750
+//                        //Robot.get().setContinousFire(true);
+//                        numberOfShots++;
+//                    }
+//                    if (numberOfShots == 3) {
+//                        Robot.get().emergencyStop();
+//                        codeMode = SquareMode.park;
+//                    }
                 }
                 break;
                 case park:{
                     if (!moveAUTO[6]){
-                        moveAUTO[6]=Robot.get().driveStraight(-30);
+                        moveAUTO[6] = Robot.get().driveStraight(-30, 0.3, 3);
                     }
                     if (moveAUTO[6]){
-                        codeMode =  SquareMode.DONE;
+                        if(helper.justChanged()) {
+                            codeMode = SquareMode.DONE;
+                        }
                     }
                 }
                 case DONE:{
-                    Robot.get().stopAllMotors();
+                    if(helper.justChanged()){
+                        codeMode = SquareMode.shootRings;
+                        Robot.get().allowMovement();
+                        startTimeFiring = 0;
+                    }
+                    else {
+                        Robot.get().stopAllMotors();
+                    }
 
                 }
             }
@@ -224,6 +173,11 @@ public class goTo_ABC extends AutoScript {
 
         //for loop makes sure all the booleans start as false
         Utils.setBooleanArrayToFalse(moveAUTO);
+        deltaTime = new ElapsedTime();
+        numberOfShots = 0;
+        startTimeFiring = 0;
+        helper = new Toggle(false);
+        gamepad = DataHub.gamepad1;
     }
 }
 

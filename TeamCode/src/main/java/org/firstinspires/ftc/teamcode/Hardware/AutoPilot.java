@@ -10,8 +10,8 @@ public class AutoPilot {
     boolean targetReached; //used to know if the driveStright() method has reached it's goal
     private double startingRightOdoDistance;
     private double startingLeftOdoDistance;
-    private double forwardSpeed; //how fast should it move by default?
-    private double threshold; //how close to target is close enough?
+    double forwardSpeed; //how fast should it move by default?
+    double threshold; //how close to target is close enough?
     public double targetDistance; //how far does it need to move (if problems suspect this)
     DriveMode driveMode; //basically what state are we in?
 
@@ -128,7 +128,7 @@ public class AutoPilot {
         return (ansLeft + ansRight) / 2.0;
     }
 
-    void turnAbsolute(){
+    void turnAbsolute(){ //TODO implement me in Robot
         switch(turnMode){
             case CALCULATE:
                 startingRotation = robot.getRotationRad();
@@ -138,8 +138,8 @@ public class AutoPilot {
                 double error = robot.getRotationRad() - targetAngle;
                 if(Math.abs(error) > turnThreshold){
                     //this means we're not close enough to the target angle
-                    double speed = P * error;
-                    robot.setDrivePowers(-speed, speed);
+                    double speed = P * error; //if error is negative, this will be negative
+                    robot.setDrivePowers(-speed, speed); //left should have the opposite sign of speed
                 }
                 else{
                     turnMode = TurnMode.EXIT_AUTOPILOT;
@@ -149,5 +149,4 @@ public class AutoPilot {
                 break;
         }
     }
-
 }

@@ -170,13 +170,30 @@ public class Robot{
      * used to switch autopilot on and make it run straight
      * WARNING, WILL ROBINSON!!! this will run forever if you let it, need to always check the output
      * for when it becomes true and then stop it.
-     * @param distanceCM the distance you want the robot to drive forward
+     * @param distance the distance you want the robot to drive forward
      * @return true if it has just reached the target distance, false otherwise
      */
-    public boolean driveStraight(double distanceCM){
+    public boolean driveStraight(double distance){
+        autoPilot.autoPilotNeeded = true;
+        autoPilot.driveStraightNeeded = true;
+        autoPilot.targetDistance = distance;
+        autoPilot.forwardSpeed = 0.3;
+        autoPilot.threshold = 10;
+        return autoPilot.targetReached;
+    }
+    public boolean driveStriaght(double distanceCM, double speed){
         autoPilot.autoPilotNeeded = true;
         autoPilot.driveStraightNeeded = true;
         autoPilot.targetDistance = distanceCM;
+        autoPilot.forwardSpeed = speed;
+        return autoPilot.targetReached;
+    }
+    public boolean driveStraight(double distance, double speed, double tolerance){
+        autoPilot.autoPilotNeeded = true;
+        autoPilot.driveStraightNeeded = true;
+        autoPilot.targetDistance = distance;
+        autoPilot.forwardSpeed = speed;
+        autoPilot.threshold = tolerance;
         return autoPilot.targetReached;
     }
 
@@ -220,5 +237,7 @@ public class Robot{
 
     public void setWobbleMotorPower (double power){wobbleArm.setWobbleMotorPower(power);}
     public void setWobbleServoPosition(boolean open){wobbleArm.setWobbleServoPosition(open);}
+
+    public boolean justShot() {return launcher.justLaunched();}
 
 }
