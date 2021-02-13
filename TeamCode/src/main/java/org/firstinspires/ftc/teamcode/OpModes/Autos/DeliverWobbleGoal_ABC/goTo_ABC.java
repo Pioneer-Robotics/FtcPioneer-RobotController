@@ -42,8 +42,7 @@ public class goTo_ABC extends AutoScript {
         driveToRings,
         measureRings,
         goToSquareThenLineUpForShooting,
-        goToSquare,
-        goToRingShootPos,
+        resetTimer,
         shootRings,
         park,
         DONE
@@ -103,18 +102,19 @@ public class goTo_ABC extends AutoScript {
                 break;
                 case goToSquareThenLineUpForShooting:
                     if(goToSquare.done){
-                        codeMode = SquareMode.shootRings;
+                        codeMode = SquareMode.resetTimer;
                     }
                     else{
                         goToSquare.goToSquareAndThenToShootPos();
                     }
                 break;
+                case resetTimer:
+                    deltaTime.reset();
+                    codeMode = SquareMode.shootRings;
+                    break;
                 case shootRings:{
                     telemetry.addLine("firing");
-                    if(startTimeFiring == 0){
-                        startTimeFiring = deltaTime.seconds();
-                    }
-                    if(deltaTime.seconds() > startTimeFiring + 10) {//don't let it fire for > 3 secs
+                    if(deltaTime.seconds() < 5) {//don't let it fire for > 3 secs
                         Robot.get().fire();
                         Robot.get().requestLaunch();
                     }
@@ -135,7 +135,7 @@ public class goTo_ABC extends AutoScript {
                 break;
                 case park:{
                     if (!moveAUTO[6]){
-                        moveAUTO[6] = Robot.get().driveStraight(-30);
+                        moveAUTO[6] = Robot.get().driveStraight(-30, 0.3, 3);
                     }
                     if (moveAUTO[6]){
                         if(helper.justChanged()) {
