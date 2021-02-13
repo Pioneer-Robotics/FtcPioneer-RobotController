@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -118,6 +119,13 @@ public class Robot{
     public void setDrivePowers(double leftPower, double rightPower){
         motorData.leftPower = leftPower;
         motorData.rightPower = rightPower;
+    }
+    public void brake(){
+        chassis.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setDrivePowers(0,0);
+    }
+    public void dontBrake(){
+        chassis.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
     public void setLauncherPower(double power){ motorData.launcherPower = power; }
     public Launcher setLaunchMode(Launcher.LaunchMode launchMode){return setLaunchMode(launchMode);}

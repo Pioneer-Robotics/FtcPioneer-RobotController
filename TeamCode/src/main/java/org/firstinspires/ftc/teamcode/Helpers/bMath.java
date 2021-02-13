@@ -149,18 +149,32 @@ public class bMath {
     }
 
     /**
-     * meant to allow help you find the shortest angle seperating the angle you're at from the angle
-     * you want
-     * @param angle1 the angle you want the robot to be at
-     * @param angle2 the current angle of the robot
+     * meant to allow help you find the shortest angle separating the angle you're
+     * at from the angle you want
+     * @param targetAngle the angle you want the robot to be at
+     * @param currentAngle the current angle of the robot
      * @return an angle between -pi and pi that is the amount you should turn
      */
-    public static double subtractAnglesRad(double angle1, double angle2){
-        angle1 = regularizeAngleRad(angle1);
-        angle2 = regularizeAngleRad(angle2);
-        double ans = angle1 - angle2;
+    public static double subtractAnglesRad(double targetAngle, double currentAngle){
+        targetAngle = regularizeAngleRad(targetAngle);
+        currentAngle = regularizeAngleRad(currentAngle);
+        double ans = targetAngle - currentAngle;
         ans = regularizeAngleRad(ans);
         return ans;
+    }
+
+    /**
+     * meant to allow help you find the shortest angle separating the angle you're
+     * at from the angle you want
+     * @param targetAngle the angle you want the robot to be at
+     * @param currentAngle the current angle of the robot
+     * @return an angle between -180 and 180 that is the amount you should turn
+     */
+    public static double subtractAnglesDeg(double targetAngle, double currentAngle){
+        targetAngle = Math.toRadians(targetAngle);
+        currentAngle = Math.toRadians(currentAngle);
+        double ans = subtractAnglesRad(targetAngle, currentAngle);
+        return Math.toDegrees(ans);
     }
 
     //toRadians and toDegrees are both in the standard Math class, so why did we make them again?

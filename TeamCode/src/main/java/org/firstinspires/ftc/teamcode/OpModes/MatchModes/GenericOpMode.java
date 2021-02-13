@@ -24,7 +24,9 @@ public abstract class GenericOpMode extends LinearOpMode {
         DataHub.init(telemetry,hardwareMap,gamepad1,gamepad2); //this should go before Robot.init()
         Robot.init(auto.startX, auto.startY);
         auto.init();
+        auto.robot = Robot.get();
         teleOp.init();
+        auto.robot = Robot.get();
     }
     public void makeSureRobotDoesntMoveBetweenAutoAndTeleOp(){
         if(30 < deltaTime.seconds() && deltaTime.seconds() < 31){

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
  * this program is meant to drive forward to the "C" square, drop the wobble goal, and park
  */
 
-public class goTo_ABC extends AutoScript {
+public class GoToABC extends AutoScript {
     double drive = 0;
     //only useful in switch statement
     double leftPowerSWITCH = 0.3;
@@ -31,7 +31,6 @@ public class goTo_ABC extends AutoScript {
 
     GoToSquare goToSquare;
     ElapsedTime deltaTime;
-    double startTimeFiring;
 
     Toggle helper;
     Gamepad gamepad;
@@ -60,7 +59,6 @@ public class goTo_ABC extends AutoScript {
         telemetry.addData("number of rings", numberOfRings);
         telemetry.addData("current heading from IMU", Robot.get().getHeading(AngleUnit.DEGREES));
         telemetry.addData("degrees from Robot", Robot.get().getRotationDegrees());
-        telemetry.addData("start time firing", startTimeFiring);
 
         helper.toggle(gamepad.a);
 
@@ -110,32 +108,24 @@ public class goTo_ABC extends AutoScript {
                 break;
                 case resetTimer:
                     deltaTime.reset();
-                    codeMode = SquareMode.shootRings;
+                    codeMode = SquareMode.park;
                     break;
-                case shootRings:{
+                case shootRings:{ //this is skipped, never runs
                     telemetry.addLine("firing");
-                    if(deltaTime.seconds() < 5) {//don't let it fire for > 3 secs
+                    if(deltaTime.seconds() < 5) {//don't let it fire for > 5 secs
                         Robot.get().fire();
-                        Robot.get().requestLaunch();
                     }
                     else{
                         Robot.get().emergencyStop();
                         codeMode = SquareMode.park;
                     }
-//                    if (Robot.get().justShot()){//NEED TO DO 3 TIMES
-//                        //in order to stay in the launch limit; lower velocity to 1750
-//                        //Robot.get().setContinousFire(true);
-//                        numberOfShots++;
-//                    }
-//                    if (numberOfShots == 3) {
-//                        Robot.get().emergencyStop();
-//                        codeMode = SquareMode.park;
-//                    }
                 }
+                odos = false;
                 break;
                 case park:{
+                    odos = true;
                     if (!moveAUTO[6]){
-                        moveAUTO[6] = Robot.get().driveStraight(-30, 0.3, 3);
+                        moveAUTO[6] = Robot.get().driveStraight(-55, 0.3, 3);
                     }
                     if (moveAUTO[6]){
                         if(helper.justChanged()) {
@@ -145,9 +135,8 @@ public class goTo_ABC extends AutoScript {
                 }
                 case DONE:{
                     if(helper.justChanged()){
-                        codeMode = SquareMode.shootRings;
+                        codeMode = SquareMode.resetTimer;
                         Robot.get().allowMovement();
-                        startTimeFiring = 0;
                     }
                     else {
                         Robot.get().stopAllMotors();
@@ -155,8 +144,7 @@ public class goTo_ABC extends AutoScript {
 
                 }
             }
-
-
+            robot.update(odos);
         }
 
 
@@ -175,9 +163,9 @@ public class goTo_ABC extends AutoScript {
         Utils.setBooleanArrayToFalse(moveAUTO);
         deltaTime = new ElapsedTime();
         numberOfShots = 0;
-        startTimeFiring = 0;
         helper = new Toggle(false);
         gamepad = DataHub.gamepad1;
+        odos = true;
     }
 }
 

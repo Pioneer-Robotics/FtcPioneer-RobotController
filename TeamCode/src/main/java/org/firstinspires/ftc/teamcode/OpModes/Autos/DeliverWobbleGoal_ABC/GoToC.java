@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
@@ -14,6 +15,11 @@ public class GoToC extends GoToSquare{
     Telemetry telemetry;
     Toggle helper;
 
+    //these are to make sure the turn was good
+    double error;
+    double tolerance;
+    ElapsedTime deltaTime;
+
     GoToC(){
         Utils.setBooleanArrayToFalse(boolList);
         done = false;
@@ -22,6 +28,9 @@ public class GoToC extends GoToSquare{
         gamepad = DataHub.gamepad1;
         helper = new Toggle(false);
         robot = Robot.get(); //this will make it easier to write and read the code
+
+
+        deltaTime = new ElapsedTime();
     }
 
     enum State {
@@ -30,6 +39,8 @@ public class GoToC extends GoToSquare{
         turnTo90,
         forwardSlightly,
         turnTo180,
+        adjustTurnAccurate,
+        checkTurnWasCorrect,
         DONE
     }
 
@@ -63,14 +74,15 @@ public class GoToC extends GoToSquare{
                 break;
             case turnTo90:
                 robot.setDrivePowers(0.4,-0.4);
-                if(Math.abs( robot.getRotationDegrees() ) > 87.5){
+                if(Math.abs( robot.getRotationDegrees() ) > 85){
+                    robot.brake();
                     robot.setDrivePowers(0,0);
                     state = State.forwardSlightly;
                 }
                 break;
             case forwardSlightly:{
                 if (!boolList[2]){
-                    boolList[2] = robot.driveStraight(50);
+                    boolList[2] = robot.driveStraight(55);
                 }
                 if(boolList[2]){
                     state = State.turnTo180;
@@ -78,12 +90,43 @@ public class GoToC extends GoToSquare{
             }
             case turnTo180:
                 robot.setDrivePowers(0.35,-0.35);
-                if (Math.abs( robot.getRotationDegrees() ) > 175){
-                    state = State.DONE;
+                if (Math.abs( robot.getRotationDegrees() ) > 170){
+                    state = State.adjustTurnAccurate;
                 }
+                break;
+            case adjustTurnAccurate:
+                //error is in degrees
+                error = bMath.subtractAnglesDeg(180, robot.getRotationDegrees());
+                double P = 0.1;
+                tolerance = 3; //tolerance is the amount of allowable error
+                double speed = P * error + 0.32; //0.32 is about the minimum needed to move
+                if(Math.abs(error) > tolerance){ //error is too large so adjust
+                    robot.setDrivePowers(-speed, speed);
+                }
+                else{ //this means we're within tolerance
+                    state = State.checkTurnWasCorrect;
+                    deltaTime.reset();
+                    robot.brake();
+                    robot.setDrivePowers(0,0);
+                }
+                break;
+            case checkTurnWasCorrect:
+                error = bMath.subtractAnglesDeg(180, robot.getRotationDegrees());
+                tolerance = 3; //tolerance is the amount of allowable error
+                robot.setDrivePowers(0,0);
+                if(Math.abs(error) < tolerance){
+                    if(deltaTime.seconds() > 1){
+                        state = State.DONE;
+                    }
+                }
+                else{
+                    state = State.adjustTurnAccurate;
+                }
+
                 break;
             case DONE:
                 super.done = true;
+                robot.dontBrake(); //sets zero power behavior of drive motors to float
                 robot.setDrivePowers(0,0);
                 break;
             default:
