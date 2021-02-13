@@ -38,6 +38,7 @@ public abstract class GenericOpMode extends LinearOpMode {
             auto.loop();
         }
         else{
+            Robot.get().allowMovement();
             telemetry.addLine("teleOp mode");
             teleOp.loop();
         }
@@ -46,25 +47,4 @@ public abstract class GenericOpMode extends LinearOpMode {
         telemetry.update();
     }
 
-    void goStraight(double drive){
-        double turn = 0;
-        double targetAngle = Robot.get().getRotationDegrees();
-        if(Robot.get().getRotationDegrees() >= targetAngle + 3){
-            turn = -.5;
-        }
-        else if(Robot.get().getRotationDegrees() >= targetAngle - 3){
-            turn = .5;
-        }
-        else {
-            drive = bMath.squareInputWithSign(drive);
-            turn = 0.0;
-        }
-        double tgtPowerLeft = turn;
-        double tgtPowerRight = -turn;
-        tgtPowerLeft -= drive;
-        tgtPowerRight -= drive;
-        tgtPowerLeft = Range.clip(tgtPowerLeft, -1.0,1.0);
-        tgtPowerRight = Range.clip(tgtPowerRight, -1.0,1.0);
-        Robot.get().setDrivePowers(tgtPowerLeft,tgtPowerRight);
-    }
 }

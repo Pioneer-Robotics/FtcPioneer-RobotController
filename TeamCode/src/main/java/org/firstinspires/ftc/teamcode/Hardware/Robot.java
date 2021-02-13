@@ -179,6 +179,13 @@ public class Robot{
         autoPilot.targetDistance = distanceCM;
         return autoPilot.targetReached;
     }
+    public boolean driveStriaght(double distanceCM, double speed){
+        autoPilot.autoPilotNeeded = true;
+        autoPilot.driveStraightNeeded = true;
+        autoPilot.targetDistance = distanceCM;
+        autoPilot.forwardSpeed = speed;
+        return autoPilot.targetReached;
+    }
 
     /**
      * use to make sure that the robot doesn't keep going when you want it to stop
@@ -220,5 +227,7 @@ public class Robot{
 
     public void setWobbleMotorPower (double power){wobbleArm.setWobbleMotorPower(power);}
     public void setWobbleServoPosition(boolean open){wobbleArm.setWobbleServoPosition(open);}
+
+    public boolean justShot() {return launcher.justLaunched();}
 
 }

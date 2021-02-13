@@ -39,7 +39,7 @@ public class Launcher {
     private int velocityLogPointer;
     ElapsedTime velocityPointTime;
 
-    private boolean justLaunched = true;
+    private boolean justLaunched = false;
 
 
     Launcher(){
