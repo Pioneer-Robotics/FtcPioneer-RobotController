@@ -100,7 +100,7 @@ public class GoToABC extends AutoScript {
                 break;
                 case goToSquareThenLineUpForShooting:
                     if(goToSquare.done){
-                        codeMode = SquareMode.resetTimer;
+                        codeMode = SquareMode.park; //TODO change this to reset times once launcher works
                     }
                     else{
                         goToSquare.goToSquareAndThenToShootPos();
@@ -108,7 +108,7 @@ public class GoToABC extends AutoScript {
                 break;
                 case resetTimer:
                     deltaTime.reset();
-                    codeMode = SquareMode.park;
+                    codeMode = SquareMode.park; //TODO change this to shootRings once launcher works
                     break;
                 case shootRings:{ //this is skipped, never runs
                     telemetry.addLine("firing");
@@ -125,7 +125,7 @@ public class GoToABC extends AutoScript {
                 case park:{
                     odos = true;
                     if (!moveAUTO[6]){
-                        moveAUTO[6] = Robot.get().driveStraight(-55, 0.3, 3);
+                        moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3);
                     }
                     if (moveAUTO[6]){
                         if(helper.justChanged()) {
