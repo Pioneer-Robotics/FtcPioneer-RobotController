@@ -16,7 +16,7 @@ public class Launcher {
     DcMotorEx m2;
     Servo flicker;
 
-    double flickerTargetPos = SERVO_OUT;
+    double flickerTargetPos = SERVO_IN;
 
     private double targetVelocity = Config.defaultTargetLauncherSpeed;
     private double currentVelocity;
