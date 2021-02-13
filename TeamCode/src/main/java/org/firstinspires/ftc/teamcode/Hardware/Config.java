@@ -24,7 +24,7 @@ public class Config {
     public static final String collectorMotor = "collector";
     public static final String collectorServoLeft = "collectorServoLeft";
     public static final String collectorServoRight = "collectorServoRight";
-    static final float COLLECTOR_SERVO_UP_POS = -0.8f, COLLECTOR_SERVO_DOWN_POS = 0.45f, COLLECTOR_SERVO_MID_POS = 0.3f;
+    public static final float COLLECTOR_SERVO_UP_POS = -0.8f, COLLECTOR_SERVO_DOWN_POS = 0.6f, COLLECTOR_SERVO_MID_POS = 0.45f;
     public static final float COLLECTOR_MAX_SPEED_FRACTION = 0.5f;
 
 
@@ -32,7 +32,7 @@ public class Config {
     public static final PIDFCoefficients launcherPIDF = new PIDFCoefficients(67,0,0,12.95);
     public static final float launcherServoOut = 0.55f, launcherServoIn = 0.425f;
     public static double maxLauncherSpeed =  2500;
-    public static double defaultTargetLauncherSpeed = 1750;
+    public static double defaultTargetLauncherSpeed = 2000;
 
     public static final double launchVelocityThreshold = 10; //allowable difference in angular velocity before a launch is initiated
     public static final double launcherServoTime = 200; //launcher flick time in ms
