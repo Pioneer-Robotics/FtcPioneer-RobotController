@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpScript;
 //comment
 public class TwoControllerTwo extends TeleOpScript {
     //DEBUG CONFIG:
-    private static final boolean DEBUG = true; //Enable Debug TODO Turn off before comp
+    private static final boolean DEBUG = false; //Enable Debug
     private static final double DEBUG_CHANGE_BIG = 0.5; //large debug change
     private static final double DEBUG_CHANGE_SMALL = 0.05; //small debug change
     private double debugValUp = 0; //initial value for debug Up/down
@@ -136,7 +136,18 @@ public class TwoControllerTwo extends TeleOpScript {
             collectorState = "stopped";
         }
 
+        /*============
+        Wobble Goal
+         ============*/
 
+
+        if (Math.abs(gamepad2.left_stick_y)>=STICK_DEADZONE ){
+            robot.setWobbleMotorPower(gamepad2.left_stick_y*0.75);
+        } else {
+            robot.setWobbleMotorPower(0);
+        }
+
+        robot.setWobbleServoPosition(gamepad2.x);
 
 
 

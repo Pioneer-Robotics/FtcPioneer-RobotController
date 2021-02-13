@@ -30,6 +30,7 @@ public class Robot{
     static Launcher launcher;
     static Collector collector;
     static PositionTracker mainOdometer;
+    static WobbleArm wobbleArm;
     HardwareMap hardwareMap;
     MotorData motorData;
     public static AutoPilot autoPilot;
@@ -53,6 +54,7 @@ public class Robot{
         launcher = new Launcher();
         collector = new Collector();
         imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
+        wobbleArm = new WobbleArm();
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
     }
@@ -216,5 +218,7 @@ public class Robot{
     public double getLauncherVelocity() {return launcher.getLaunchVelocity();}
     public void setLauncherTargetVelocity(double targetVelocity) {launcher.setTargetVelocity(targetVelocity);}
 
+    public void setWobbleMotorPower (double power){wobbleArm.setWobbleMotorPower(power);}
+    public void setWobbleServoPosition(boolean open){wobbleArm.setWobbleServoPosition(open);}
 
 }

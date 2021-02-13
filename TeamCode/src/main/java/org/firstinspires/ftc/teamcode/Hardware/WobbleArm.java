@@ -1,0 +1,30 @@
+package org.firstinspires.ftc.teamcode.Hardware;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.Helpers.DataHub;
+
+public class WobbleArm {
+    private final DcMotor wobbleMotor;
+    private final Servo wobbleServo;
+
+
+    public WobbleArm(){
+        wobbleMotor = DataHub.hardwareMap.get(DcMotor.class, Config.WobbleMotor);
+        wobbleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        wobbleServo = DataHub.hardwareMap.get(Servo.class, Config.WobbleServo);
+        wobbleServo.setPosition(Config.Wobble_Servo_Closed_Pos);
+    }
+
+    public void setWobbleMotorPower(double power){
+        wobbleMotor.setPower(power);
+    }
+
+    public void setWobbleServoPosition(boolean open){
+        wobbleServo.setPosition( open ? Config.Wobble_Servo_Open_Pos : Config.Wobble_Servo_Closed_Pos);
+    }
+
+
+}
