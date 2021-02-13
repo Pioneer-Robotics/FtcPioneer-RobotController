@@ -41,7 +41,7 @@ public class TwoControllerTwo extends TeleOpScript {
     Toggle decreaseLaunchSpeedToggle;
 
 
-    double launcherSpeedFraction = 0.70;
+    double launcherSpeedFraction = Config.defaultTargetLauncherSpeed / Config.maxLauncherSpeed ;
     String collectorState = "null";
     Toggle collecting;
 
