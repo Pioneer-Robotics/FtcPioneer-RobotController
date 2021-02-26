@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.OpModes.MatchModes;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC.ABC;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.ServoCalibrator;
@@ -13,7 +12,7 @@ import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControlle
 public class TestingTeleOp extends GenericOpMode {
     @Override
     public void selectAutoAndTeleOp(){
-        auto = new ABC(); //you need this even if you don't use it
+        auto = new NullAuto(); //you need this even if you don't use it
         teleOp = new ExampleTeleOp();
     }
     @Override
