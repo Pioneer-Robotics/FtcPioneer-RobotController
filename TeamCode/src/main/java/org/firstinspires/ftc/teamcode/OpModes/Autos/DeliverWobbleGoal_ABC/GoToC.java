@@ -57,7 +57,7 @@ public class GoToC extends GoToSquare{
             case goToSquare:
                 //drive forward a distance
                 if (!boolList[0]){
-                    boolList[0] = robot.driveStraight(215);
+                    boolList[0] = robot.driveStraight(265);
                     telemetry.addLine("driving forward");
                 }
                 if (boolList[0]){

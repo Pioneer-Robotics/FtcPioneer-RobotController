@@ -8,11 +8,11 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC.GoToAB
 import org.firstinspires.ftc.teamcode.OpModes.Autos.TestLasors;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
 
-@Autonomous(name = "CompAuto")
+@Autonomous(name = "GoToABC")
 public class OnlyAuto extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {
-        auto = new TestLasors();
+        auto = new GoToABC();
         teleOp = new ExampleTeleOp();
     }
 

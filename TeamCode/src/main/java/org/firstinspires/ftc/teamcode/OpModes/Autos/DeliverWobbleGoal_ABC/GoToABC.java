@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 public class GoToABC extends AutoScript {
     double drive = 0;
     //only useful in switch statement
-    //double leftPowerSWITCH = 0.3;
-    //double rightPowerSWITCH = 0.2;
+    double leftPowerSWITCH = 0.3;
+    double rightPowerSWITCH = 0.2;
     /**
      * the magnitude of power we set the motors to when we want to move
      */
@@ -31,20 +31,20 @@ public class GoToABC extends AutoScript {
     Telemetry telemetry;
     int numberOfRings;
 
-    DistanceSensor laserLow;
-    DistanceSensor laserHigh;
-
     GoToSquare goToSquare;
     ElapsedTime deltaTime;
 
     Toggle helper;
     Gamepad gamepad;
 
+    DistanceSensor laserHigh;
+    DistanceSensor laserLow;
+
 
     enum SquareMode {
         IDLE,
         driveToRings,
-        chooseCorrectSquare,
+        measureRings,
         goToSquareThenLineUpForShooting,
         resetTimer,
         shootRings,
@@ -76,35 +76,32 @@ public class GoToABC extends AutoScript {
                 case driveToRings:{
                     //in order to combat return statement on driveStraight, we use a boolean
                     if(!moveAUTO[7]){
-                        moveAUTO[7] = Robot.get().driveStraight(65);
+                        moveAUTO[7] = Robot.get().driveStraight(100);
                     }
                     if (moveAUTO[7]){
-                        checkRings();
-                        codeMode = SquareMode.chooseCorrectSquare;
+                        codeMode = SquareMode.measureRings;
                     }
-                    checkRings();
-
                 }
-                break;
-                case chooseCorrectSquare:{
+                case measureRings:{
+                    numberOfRings = Robot.get().amountOfRings();
+
                     //set the square we want to go to
                     if(numberOfRings == 0){
                         goToSquare = new GoToA();
-                        codeMode = SquareMode.DONE;
                     }
                     else if(numberOfRings == 1){
                         goToSquare = new GoToB();
-                        codeMode = SquareMode.DONE;
                     }
                     else{
                         goToSquare = new GoToC();
-                        codeMode = SquareMode.DONE;
                     }
 
-                    //goToSquare = new GoToA(); //TODO remove this line, it is only here for testing
+                    goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
-                    codeMode = SquareMode.DONE ;
+                    checkRings();
+                    Robot.get().amountOfRings();
+                    codeMode = SquareMode.DONE;
                 }
                 break;
                 case goToSquareThenLineUpForShooting:
@@ -157,6 +154,29 @@ public class GoToABC extends AutoScript {
             robot.update(odos);
         }
 
+    int checkRings(){
+        if (numberOfRings==4){
+            //pass
+        }
+        else if(numberOfRings == 1){
+            if(laserHigh.getDistance(DistanceUnit.CM) < 50){
+                numberOfRings = 4;
+            }
+            else{
+                //pass
+            }
+        }
+        else{
+            if(laserHigh.getDistance(DistanceUnit.CM) < 50){
+                numberOfRings = 4;
+            }
+            else if(laserLow.getDistance(DistanceUnit.CM) < 50){
+                numberOfRings = 1;
+            }
+        }
+        return numberOfRings;
+    }
+
 
 
     @Override
@@ -176,24 +196,9 @@ public class GoToABC extends AutoScript {
         helper = new Toggle(false);
         gamepad = DataHub.gamepad1;
         odos = true;
-        numberOfRings = 0;
 
-        laserLow = Robot.laserLow;
         laserHigh = Robot.laserHigh;
-    }
-
-    void checkRings(){
-        if(laserHigh.getDistance(DistanceUnit.CM) <= 50){
-            numberOfRings = 4;
-        }
-        else if(numberOfRings != 4){
-            if(laserLow.getDistance(DistanceUnit.CM) <= 50){
-                numberOfRings = 1;
-            }
-        }
-        else if(numberOfRings != 4 && numberOfRings != 1){//this is useless, makes seth feel better
-            numberOfRings = 0;
-        }
+        laserLow = Robot.laserLow;
     }
 }
 

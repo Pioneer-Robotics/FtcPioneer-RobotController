@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC.GoToAB
 import org.firstinspires.ftc.teamcode.OpModes.Autos.TestLasors;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
 
-@Autonomous(name = "test auto1", group = "test")
+@Autonomous(name = "test lasors", group = "test")
 public class TestAnyAutoCrap extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {
