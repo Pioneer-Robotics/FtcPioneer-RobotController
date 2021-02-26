@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC.GoToABC;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
 
-@Autonomous(name = "test go to C")
+@Autonomous(name = "CompAuto")
 public class OnlyAuto extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {

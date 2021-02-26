@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class Robot{
-    static DistanceSensor laserHigh;
-    static DistanceSensor laserLow;
+    public static DistanceSensor laserHigh;
+    public static DistanceSensor laserLow;
     static BNO055IMU imu;
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)
@@ -87,10 +87,10 @@ public class Robot{
 
     public int amountOfRings(){
         int amountOfRings;
-        if(laserHigh.getDistance(DistanceUnit.CM) < 6){
+        if(laserHigh.getDistance(DistanceUnit.CM) <= 50){
             amountOfRings = 4;
         }
-        else if(laserLow.getDistance(DistanceUnit.CM) < 6){
+        else if(laserLow.getDistance(DistanceUnit.CM) <= 50){
             amountOfRings = 1;
         }
         else {
@@ -239,12 +239,20 @@ public class Robot{
     public void fire(){launcher.fire();}
     public void spool(){launcher.requestSpool();}
     public void emergencyStop(){launcher.emergencyStop();}
+    public boolean justLaunched(){return launcher.justLaunched();}
     public Launcher.LaunchMode getLaunchMode() {return launcher.launchMode;}
     public double getLauncherVelocity() {return launcher.getLaunchVelocity();}
     public void setLauncherTargetVelocity(double targetVelocity) {launcher.setTargetVelocity(targetVelocity);}
 
     public void setWobbleMotorPower (double power){wobbleArm.setWobbleMotorPower(power);}
     public void setWobbleServoPosition(boolean open){wobbleArm.setWobbleServoPosition(open);}
+
+    public void setWobble90(){
+        wobbleArm.WobbleGoTo90();
+    }
+    public void wobbleChillPos(){
+        wobbleArm.WobbleChillPos();
+    }
 
     public boolean justShot() {return launcher.justLaunched();}
 

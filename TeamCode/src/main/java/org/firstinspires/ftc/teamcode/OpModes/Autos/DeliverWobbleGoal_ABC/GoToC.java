@@ -44,6 +44,11 @@ public class GoToC extends GoToSquare{
         DONE
     }
 
+    enum Yurr{
+        adjustTurnAccurate,
+        checkTurnWasCorrect
+    }
+
     @Override
     void goToSquareAndThenToShootPos() {
         telemetry.addLine("in GoToC");
@@ -90,7 +95,7 @@ public class GoToC extends GoToSquare{
             }
             case turnTo180:
                 robot.setDrivePowers(0.35,-0.35);
-                if (Math.abs( robot.getRotationDegrees() ) > 170){
+                if (Math.abs( robot.getRotationDegrees() ) > 175){
                     state = State.adjustTurnAccurate;
                 }
                 break;
@@ -134,4 +139,5 @@ public class GoToC extends GoToSquare{
                 break;
         }
     }
-}
+
+    }

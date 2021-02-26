@@ -1,15 +1,26 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
+import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 class GoToB extends GoToSquare {
+    Robot robot;
+    double error;
+    double tolerance;
+    ElapsedTime deltaTime;
     void goToSquareAndThenToShootPos() {
 
     }
     enum GOTOB{
-        FORWARD,
-        TURN,
-        BACKWARD
+        goToSquare,
+        goToRingShootPos,
+        turn90,
+        backwardSlightly,
+        adjustTurnAccurate,
+        checkTurnWasCorrect,
+        DONE
     }
     GOTOB gotob;
     boolean[] moveAUTO = new boolean[15];
@@ -18,16 +29,60 @@ class GoToB extends GoToSquare {
 
     public void loop() {
         switch(gotob){
-            case FORWARD:
+            case goToSquare:
                 moveAUTO[1] = false;
-                driveDistance(150, .5, .15);
+                driveDistance(153, .5, .15);
                 if(moveAUTO[1]){
-                    gotob = GOTOB.TURN;
+                    gotob = GOTOB.turn90;
                 }
                 break;
-            case TURN:
-
+            case turn90:
+                Robot.get().setDrivePowers(-0.3,0.3);
+                if ((Robot.get().getRotationDegrees()) < 0){
+                    Robot.get().setDrivePowers(0,0);
+                }
                 break;
+            case adjustTurnAccurate:
+                //error is in degrees
+                error = bMath.subtractAnglesDeg(2, robot.getRotationDegrees());
+                double P = 0.1;
+                tolerance = 3; //tolerance is the amount of allowable error
+                double speed = P * error + 0.32; //0.32 is about the minimum needed to move
+                if(Math.abs(error) > tolerance){ //error is too large so adjust
+                    robot.setDrivePowers(-speed, speed);
+                }
+                else{ //this means we're within tolerance
+                    gotob = gotob.checkTurnWasCorrect;
+                    deltaTime.reset();
+                    robot.brake();
+                    robot.setDrivePowers(0,0);
+                }
+                break;
+            case checkTurnWasCorrect:
+                error = bMath.subtractAnglesDeg(2, robot.getRotationDegrees());
+                tolerance = 3; //tolerance is the amount of allowable error
+                robot.setDrivePowers(0,0);
+                if(Math.abs(error) < tolerance){
+                    if(deltaTime.seconds() > 1){
+                        gotob = gotob.backwardSlightly;
+                    }
+                }
+                else{
+                    gotob = gotob.adjustTurnAccurate;
+                }
+
+            case backwardSlightly:
+                if (!moveAUTO[2]){
+                    moveAUTO[2] = Robot.get().driveStraight(-40);
+                }
+                if (moveAUTO[2]){
+                    gotob = GOTOB.DONE;
+                }
+                break;
+            case DONE:{
+                done = true;
+                break;
+            }
         }
     }
     void driveDistance(double distance, double leftPower, double rightPower){
@@ -44,6 +99,6 @@ class GoToB extends GoToSquare {
     }
 
     public void init() {
-        gotob = GOTOB.FORWARD;
+        gotob = GOTOB.goToSquare;
     }
 }

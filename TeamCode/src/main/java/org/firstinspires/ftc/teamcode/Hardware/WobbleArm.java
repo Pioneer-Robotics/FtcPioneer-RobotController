@@ -9,7 +9,6 @@ public class WobbleArm {
     private final DcMotor wobbleMotor;
     private final Servo wobbleServo;
 
-
     public WobbleArm(){
         wobbleMotor = DataHub.hardwareMap.get(DcMotor.class, Config.WobbleMotor);
         wobbleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -24,6 +23,15 @@ public class WobbleArm {
 
     public void setWobbleServoPosition(boolean open){
         wobbleServo.setPosition( open ? Config.Wobble_Servo_Open_Pos : Config.Wobble_Servo_Closed_Pos);
+
+    }
+    public void WobbleGoTo90(){
+        wobbleMotor.setTargetPosition(Config.WOBBLE_DOWN_POS);
+        wobbleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public void WobbleChillPos(){
+        wobbleMotor.setTargetPosition(Config.WOBBLE_UP_POS);
+        wobbleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
 

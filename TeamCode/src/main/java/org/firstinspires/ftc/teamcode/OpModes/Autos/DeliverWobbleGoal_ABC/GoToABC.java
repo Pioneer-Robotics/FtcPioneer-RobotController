@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
 import org.firstinspires.ftc.teamcode.Helpers.*;
@@ -17,8 +19,8 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 public class GoToABC extends AutoScript {
     double drive = 0;
     //only useful in switch statement
-    double leftPowerSWITCH = 0.3;
-    double rightPowerSWITCH = 0.2;
+    //double leftPowerSWITCH = 0.3;
+    //double rightPowerSWITCH = 0.2;
     /**
      * the magnitude of power we set the motors to when we want to move
      */
@@ -28,6 +30,9 @@ public class GoToABC extends AutoScript {
     SquareMode codeMode;
     Telemetry telemetry;
     int numberOfRings;
+
+    DistanceSensor laserLow;
+    DistanceSensor laserHigh;
 
     GoToSquare goToSquare;
     ElapsedTime deltaTime;
@@ -39,7 +44,7 @@ public class GoToABC extends AutoScript {
     enum SquareMode {
         IDLE,
         driveToRings,
-        measureRings,
+        chooseCorrectSquare,
         goToSquareThenLineUpForShooting,
         resetTimer,
         shootRings,
@@ -74,28 +79,32 @@ public class GoToABC extends AutoScript {
                         moveAUTO[7] = Robot.get().driveStraight(65);
                     }
                     if (moveAUTO[7]){
-                        codeMode = SquareMode.measureRings;
+                        checkRings();
+                        codeMode = SquareMode.chooseCorrectSquare;
                     }
+                    checkRings();
+
                 }
                 break;
-                case measureRings:{
-                    numberOfRings = Robot.get().amountOfRings();
-
+                case chooseCorrectSquare:{
                     //set the square we want to go to
                     if(numberOfRings == 0){
                         goToSquare = new GoToA();
+                        codeMode = SquareMode.DONE;
                     }
                     else if(numberOfRings == 1){
                         goToSquare = new GoToB();
+                        codeMode = SquareMode.DONE;
                     }
                     else{
                         goToSquare = new GoToC();
+                        codeMode = SquareMode.DONE;
                     }
 
-                    goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
+                    //goToSquare = new GoToA(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
-                    codeMode = SquareMode.goToSquareThenLineUpForShooting;
+                    codeMode = SquareMode.DONE ;
                 }
                 break;
                 case goToSquareThenLineUpForShooting:
@@ -134,6 +143,7 @@ public class GoToABC extends AutoScript {
                     }
                 }
                 case DONE:{
+                    checkRings();
                     if(helper.justChanged()){
                         codeMode = SquareMode.resetTimer;
                         Robot.get().allowMovement();
@@ -166,6 +176,24 @@ public class GoToABC extends AutoScript {
         helper = new Toggle(false);
         gamepad = DataHub.gamepad1;
         odos = true;
+        numberOfRings = 0;
+
+        laserLow = Robot.laserLow;
+        laserHigh = Robot.laserHigh;
+    }
+
+    void checkRings(){
+        if(laserHigh.getDistance(DistanceUnit.CM) <= 50){
+            numberOfRings = 4;
+        }
+        else if(numberOfRings != 4){
+            if(laserLow.getDistance(DistanceUnit.CM) <= 50){
+                numberOfRings = 1;
+            }
+        }
+        else if(numberOfRings != 4 && numberOfRings != 1){//this is useless, makes seth feel better
+            numberOfRings = 0;
+        }
     }
 }
 

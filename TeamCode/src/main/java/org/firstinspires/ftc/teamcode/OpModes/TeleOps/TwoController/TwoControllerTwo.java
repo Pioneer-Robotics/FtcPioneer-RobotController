@@ -25,6 +25,7 @@ public class TwoControllerTwo extends TeleOpScript {
 
 
 
+
     private static final float TRIGGER_DEADZONE = 0.1f;
     private static final float STICK_DEADZONE = 0.1f;
 
@@ -39,11 +40,15 @@ public class TwoControllerTwo extends TeleOpScript {
     Toggle collectorRetracted;
     Toggle increaseLaunchSpeedToggle;
     Toggle decreaseLaunchSpeedToggle;
+    Toggle Wobble90_Chill;
 
 
     double launcherSpeedFraction = Config.defaultTargetLauncherSpeed / Config.maxLauncherSpeed ;
     String collectorState = "null";
     Toggle collecting;
+
+    String WobbleArmState = "Human SetPOS";
+
 
 
     @Override
@@ -86,6 +91,8 @@ public class TwoControllerTwo extends TeleOpScript {
         robot.launchOverride(gamepad2.a);
 
         //spools without initiating a launch
+
+
         if (gamepad1.y || gamepad2.y){
             robot.spool();
         }
@@ -99,6 +106,8 @@ public class TwoControllerTwo extends TeleOpScript {
         if (gamepad1.a) {
             robot.fire();
         }
+
+
 
         decreaseLaunchSpeedToggle.toggle(gamepad2.dpad_left && !doDebugOptions);
         increaseLaunchSpeedToggle.toggle(gamepad2.dpad_right && !doDebugOptions);
@@ -148,6 +157,16 @@ public class TwoControllerTwo extends TeleOpScript {
         }
 
         robot.setWobbleServoPosition(gamepad2.x);
+
+        //Wobble Arm Up/Down
+        Wobble90_Chill.toggle(gamepad2.left_bumper);
+        if(Wobble90_Chill.getBool()){
+            Robot.get().setWobble90();
+            WobbleArmState = "90 deg";
+        } else{
+            Robot.get().wobbleChillPos();
+            WobbleArmState = "Chill/Human POS";
+        }
 
 
 
@@ -212,6 +231,9 @@ public class TwoControllerTwo extends TeleOpScript {
         telemetry.addLine("===COLLECTOR ===");
         telemetry.addData("collector", collectorState);
 
+        telemetry.addData("WobbleArm 90/Chill", WobbleArmState);
+
+
         loopTime.reset();
 
 
@@ -231,10 +253,13 @@ public class TwoControllerTwo extends TeleOpScript {
         driveScale = 0.5;
         turnScale = 0.5;
 
+
+        //Toggle good for toggle
         collectorRetracted = new Toggle(true);
         increaseLaunchSpeedToggle = new Toggle(false);
         decreaseLaunchSpeedToggle = new Toggle(false);
         collecting = new Toggle(false);
+        Wobble90_Chill = new Toggle(false);
 
         doDebugOptions = false;
         debugValLeftChanged = new Toggle(false);
