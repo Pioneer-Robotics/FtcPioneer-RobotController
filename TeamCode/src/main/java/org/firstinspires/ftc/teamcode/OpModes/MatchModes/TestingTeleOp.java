@@ -6,8 +6,10 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC.ABC;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.NullAuto;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.SingleControllers.ServoCalibrator;
+import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControllerTwo;
 
-@TeleOp (name = "TestingTeleOp", group = "example")
+@TeleOp (name = "TeleOp Only", group = "example")
 public class TestingTeleOp extends GenericOpMode {
     @Override
     public void selectAutoAndTeleOp(){
