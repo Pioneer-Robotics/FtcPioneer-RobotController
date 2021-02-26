@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class Robot{
-    static DistanceSensor laserHigh;
-    static DistanceSensor laserLow;
+    public static DistanceSensor laserHigh;
+    public static DistanceSensor laserLow;
     static BNO055IMU imu;
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)

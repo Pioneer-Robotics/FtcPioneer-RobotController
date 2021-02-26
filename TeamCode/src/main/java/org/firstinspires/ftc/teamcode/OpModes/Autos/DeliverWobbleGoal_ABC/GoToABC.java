@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
 import org.firstinspires.ftc.teamcode.Helpers.*;
@@ -34,6 +36,9 @@ public class GoToABC extends AutoScript {
 
     Toggle helper;
     Gamepad gamepad;
+
+    DistanceSensor laserHigh;
+    DistanceSensor laserLow;
 
 
     enum SquareMode {
@@ -166,6 +171,16 @@ public class GoToABC extends AutoScript {
         helper = new Toggle(false);
         gamepad = DataHub.gamepad1;
         odos = true;
+
+        laserHigh = Robot.laserHigh;
+        laserLow = Robot.laserHigh;
+    }
+
+    int checkRings(){
+        if(laserHigh.getDistance(DistanceUnit.CM) < 25){
+
+        }
+        return numberOfRings;
     }
 }
 
