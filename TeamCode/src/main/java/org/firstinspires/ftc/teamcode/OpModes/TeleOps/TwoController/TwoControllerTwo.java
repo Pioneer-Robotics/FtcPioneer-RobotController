@@ -212,7 +212,6 @@ public class TwoControllerTwo extends TeleOpScript {
 //        telemetry.addData("left odo", robot.getLeftOdo());
 //        telemetry.addData("right odo", robot.getRightOdo());
 //        telemetry.addData("mid odo", robot.getMidOdo());
-        telemetry.addData("Amount Of Rings", Robot.get().amountOfRings());
         telemetry.addData("Target Velocity", Config.maxLauncherSpeed*launcherSpeedFraction);
         telemetry.addLine("========\uD83D\uDD28===========\uD83D\uDD28=====");
         telemetry.addLine("MR.SWANKHAMMER CONTROL PANEL");

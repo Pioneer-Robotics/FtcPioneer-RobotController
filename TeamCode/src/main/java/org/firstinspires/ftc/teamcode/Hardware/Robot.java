@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.Helpers.Vector2;
 import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
 public class Robot{
-    public static DistanceSensor laserHigh;
-    public static DistanceSensor laserLow;
+    static RingMeasurer ringMeasurer;
+
     static BNO055IMU imu;
     //this class is meant to be a singleton
     //static robot so that it is the same everywhere (redundant)
@@ -47,8 +47,7 @@ public class Robot{
     }
     public static void init(double startX, double startY){
         robot = new Robot();
-        laserLow = Robot.get().hardwareMap.get(DistanceSensor.class, "laserLow");
-        laserHigh = Robot.get().hardwareMap.get(DistanceSensor.class, "laserHigh");
+        ringMeasurer = new RingMeasurer();
         chassis = new DriveTrain();
         mainOdometer = new PositionTracker(startX, startY, 0);
         autoPilot = new AutoPilot();
@@ -76,29 +75,17 @@ public class Robot{
         motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
         launcher.updateLauncher();
+        ringMeasurer.update();
         if (useOdometers) {updateOdometers();}
 
-        //DEBUG
-        telemetry.addLine("---DEBUG---");
-        telemetry.addData("LauncherRollingAverage:",launcher.getCurrentVelocity());
-        telemetry.addData("launcherVDiff:",launcher.getCurrentVelocityDiff());
-        telemetry.addLine("-----------");
     }
 
-    public int amountOfRings(){
-        int amountOfRings;
-        if(laserHigh.getDistance(DistanceUnit.CM) <= 50){
-            amountOfRings = 4;
-        }
-        else if(laserLow.getDistance(DistanceUnit.CM) <= 50){
-            amountOfRings = 1;
-        }
-        else {
-            amountOfRings = 0;
-        }
-        return amountOfRings;
+    public double getLaserHigh(){
+        return ringMeasurer.highCM;
     }
-
+    public double getLaserLow(){
+        return ringMeasurer.lowCM;
+    }
 
 
     public double getHeading(AngleUnit angleUnit) {

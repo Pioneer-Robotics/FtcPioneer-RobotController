@@ -5,22 +5,19 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
 import org.firstinspires.ftc.teamcode.Helpers.*;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 
+
 /**
  * this program is meant to drive forward to the "C" square, drop the wobble goal, and park
  */
 
 public class GoToABC extends AutoScript {
-    double drive = 0;
     //only useful in switch statement
-    double leftPowerSWITCH = 0.3;
-    double rightPowerSWITCH = 0.2;
     /**
      * the magnitude of power we set the motors to when we want to move
      */
@@ -31,14 +28,13 @@ public class GoToABC extends AutoScript {
     Telemetry telemetry;
     int numberOfRings;
 
+    boolean didLowSeeAnything;
+
     GoToSquare goToSquare;
     ElapsedTime deltaTime;
 
     Toggle helper;
     Gamepad gamepad;
-
-    DistanceSensor laserHigh;
-    DistanceSensor laserLow;
 
 
     enum SquareMode {
@@ -56,46 +52,53 @@ public class GoToABC extends AutoScript {
 
     @Override
     public void loop() {
-        //Robot.get().setDrivePowers(drive, drive); //set both motors to the same power
         telemetry.addData("elapsed time", deltaTime.seconds());
         telemetry.addData("current mode / stage", codeMode);
-        telemetry.addData("Est distance travelled", Robot.get().avgRightAndLeftOdos());
-        telemetry.addData("current power", drive);
+
         telemetry.addData("number of rings", numberOfRings);
-        telemetry.addData("current heading from IMU", Robot.get().getHeading(AngleUnit.DEGREES));
+        telemetry.addData("low saw something", didLowSeeAnything);
+
         telemetry.addData("degrees from Robot", Robot.get().getRotationDegrees());
 
-        helper.toggle(gamepad.a);
 
+
+        helper.toggle(gamepad.a);
             switch (codeMode){
                 case IDLE:{
-                    drive = 0;
                     this.codeMode = SquareMode.driveToRings;
                 }
                 break;
                 case driveToRings:{
-                    //in order to combat return statement on driveStraight, we use a boolean
-                    if(!moveAUTO[7]){
-                        moveAUTO[7] = Robot.get().driveStraight(65);
-                    }
-                    if (moveAUTO[7] == true){
-                        codeMode = SquareMode.measureRings;
-                        //TODO fix why robot goes jit-jit
-                    }
                     checkRings();
-                }
+                    moveAUTO[0] = Robot.get().driveStraight(65);
+                    //reachedTarget.toggle(helper);
+                    if(moveAUTO[0]){
+                        codeMode = SquareMode.measureRings;
+                    }
+//                    //in order to combat return statement on driveStraight, we use a boolean
+//                    if(!moveAUTO[7]){
+//                        moveAUTO[7] = Robot.get().driveStriaght(65,.235);
+//                    }
+//                    if (moveAUTO[7]){
+//
+//                        codeMode = SquareMode.measureRings;
+//                        //TODO fix why robot goes jit-jit
+//                        //TODO test if measureRings case is started too early
+//                    }
+//                    checkRings();
+               }
                 break;
                 case measureRings:{
                     checkRings();
                     //set the square we want to go to
-                    if(numberOfRings == 0){
-                        goToSquare = new GoToA();
+                    if(numberOfRings == 4){
+                        goToSquare = new GoToC();
                     }
                     else if(numberOfRings == 1){
                         goToSquare = new GoToB();
                     }
                     else{
-                        goToSquare = new GoToC();
+                        goToSquare = new GoToA();
                     }
 
                     goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
@@ -153,25 +156,23 @@ public class GoToABC extends AutoScript {
         }
 
 
-    int checkRings(){
-        if (numberOfRings==4){
-            //pass
-        }
-        else if(numberOfRings == 1){
-            if(laserHigh.getDistance(DistanceUnit.CM) < 50){
-                numberOfRings = 4;
-            }
-            else{
-                //pass
-            }
-        }
-        else{
-            if(laserHigh.getDistance(DistanceUnit.CM) < 50){
-                numberOfRings = 4;
-            }
-            else if(laserLow.getDistance(DistanceUnit.CM) < 50){
+    public int checkRings(){
+        double high = robot.getLaserHigh();
+        double low = robot.getLaserLow();
+
+        if (high <50){
+            numberOfRings = 4;
+        } else if (numberOfRings!= 4){
+            if (low < 50){
                 numberOfRings = 1;
             }
+            else if (numberOfRings !=4 && numberOfRings != 1){//code good
+                numberOfRings = 0;
+            }
+        }
+
+        if(low < 50){
+            didLowSeeAnything = true;
         }
         return numberOfRings;
     }
@@ -181,7 +182,6 @@ public class GoToABC extends AutoScript {
     @Override
     public void init() {
         codeMode = SquareMode.IDLE;
-        drive = 0;
         telemetry = DataHub.telemetry;
         startX = 0;
         startY = 0;
@@ -196,10 +196,9 @@ public class GoToABC extends AutoScript {
         gamepad = DataHub.gamepad1;
         odos = true;
 
-        laserHigh = Robot.laserHigh;
-        laserLow = Robot.laserLow;
-
         Utils.setBooleanArrayToFalse(moveAUTO);
+
+        didLowSeeAnything = false;
     }
 }
 

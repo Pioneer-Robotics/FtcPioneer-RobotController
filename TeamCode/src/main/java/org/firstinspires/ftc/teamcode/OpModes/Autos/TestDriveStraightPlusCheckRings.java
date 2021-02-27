@@ -26,8 +26,6 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
     boolean helper = false;
 
     int numberOfRings;
-    DistanceSensor laserHigh;
-    DistanceSensor laserLow;
 
     double highMeasure;
     double lowMeasure;
@@ -103,8 +101,6 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
         helper = false;
 
         numberOfRings = 0;
-        laserHigh = Robot.laserHigh;
-        laserLow = Robot.laserLow;
 
         highs =  new ArrayList<Double>(16);
         lows =  new ArrayList<Double>(16);
@@ -141,8 +137,8 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
         milliseconds = deltaTime.milliseconds();
         double deltaMilliseconds = milliseconds - millisecondsLast;
 
-        highMeasure = laserHigh.getDistance(DistanceUnit.CM);
-        lowMeasure = laserLow.getDistance(DistanceUnit.CM);
+        highMeasure = robot.getLaserHigh();
+        lowMeasure = robot.getLaserLow();
 
         highs.add(highs.size(), deltaMilliseconds); //fills the Arraylist w/ data from the how long it was between things
         lows.add(lows.size(), deltaMilliseconds);

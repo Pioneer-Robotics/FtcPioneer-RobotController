@@ -51,22 +51,18 @@ public class GoToC extends GoToSquare{
 
     @Override
     void goToSquareAndThenToShootPos() {
-        telemetry.addLine("in GoToC");
         helper.toggle(gamepad.a);
         switch (state) {
             case goToSquare:
                 //drive forward a distance
                 if (!boolList[0]){
                     boolList[0] = robot.driveStraight(220);
-                    telemetry.addLine("driving forward");
                 }
                 if (boolList[0]){
                     robot.deactivateDriveStraight();
                     robot.setDrivePowers(0,0);
-                    telemetry.addLine("waiting to back up. Press A to continue");
                     state = State.backUp;
                 }
-                telemetry.addData("it thinks it's gone too far", boolList[0]);
                 break;
             case backUp:
                 if(!boolList[1]){

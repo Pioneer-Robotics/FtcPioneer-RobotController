@@ -5,18 +5,15 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class TestLasors extends AutoScript{
-    DistanceSensor laserHigh;
-    DistanceSensor laserLow;
+
     @Override
     public void loop() {
-        telemetry.addData("laser high", laserHigh.getDistance(DistanceUnit.CM));
-        telemetry.addData("laser low", laserLow.getDistance(DistanceUnit.CM));
+        telemetry.addData("laser high", robot.getLaserHigh());
+        telemetry.addData("laser low", robot.getLaserLow());
     }
 
     @Override
     public void init() {
         standardInit();
-        laserHigh = robot.laserHigh;
-        laserLow = robot.laserLow;
     }
 }
