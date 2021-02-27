@@ -76,12 +76,14 @@ public class GoToABC extends AutoScript {
                 case driveToRings:{
                     //in order to combat return statement on driveStraight, we use a boolean
                     if(!moveAUTO[7]){
-                        moveAUTO[7] = Robot.get().driveStraight(100);
+                        moveAUTO[7] = Robot.get().driveStraight(65);
                     }
-                    if (moveAUTO[7]){
+                    if (moveAUTO[7] = true){
                         codeMode = SquareMode.measureRings;
                     }
+                    checkRings();
                 }
+                break;
                 case measureRings:{
                     numberOfRings = Robot.get().amountOfRings();
 
@@ -100,7 +102,6 @@ public class GoToABC extends AutoScript {
 
                     //move to the next state
                     checkRings();
-                    Robot.get().amountOfRings();
                     codeMode = SquareMode.DONE;
                 }
                 break;
@@ -139,6 +140,7 @@ public class GoToABC extends AutoScript {
                         }
                     }
                 }
+                break;
                 case DONE:{
                     checkRings();
                     if(helper.justChanged()){
@@ -148,11 +150,15 @@ public class GoToABC extends AutoScript {
                     else {
                         Robot.get().stopAllMotors();
                     }
+                    robot.stopAllMotors();
 
                 }
+                break;
             }
             robot.update(odos);
+
         }
+
 
     int checkRings(){
         if (numberOfRings==4){
@@ -181,7 +187,7 @@ public class GoToABC extends AutoScript {
 
     @Override
     public void init() {
-        codeMode = SquareMode. IDLE;
+        codeMode = SquareMode.IDLE;
         drive = 0;
         telemetry = DataHub.telemetry;
         startX = 0;
@@ -199,6 +205,8 @@ public class GoToABC extends AutoScript {
 
         laserHigh = Robot.laserHigh;
         laserLow = Robot.laserLow;
+
+        Utils.setBooleanArrayToFalse(moveAUTO);
     }
 }
 

@@ -113,6 +113,7 @@ public class AutoPilot {
                 break;
             case EXIT_AUTOPILOT:
                 driveStraightNeeded = false;
+                autoPilotNeeded = false;
                 ans = true;
                 driveMode = DriveMode.CALCULATE;
                 break;

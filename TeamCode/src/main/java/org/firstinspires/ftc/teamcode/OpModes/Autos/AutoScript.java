@@ -13,12 +13,13 @@ public abstract class AutoScript {
     public abstract void init();
 
     /**
-     * almost always the thing to call when you want to init an Auto. Not literally always, so
-     * optional, but 99% of the time.
+     * almost always the thing to call when you want to init an Auto. You might need to add
+     * more stuff, but this is the basic
      */
     public void standardInit(){
         startX = 0;
         startY = 0;
+        odos = true;
         robot = Robot.get();
         telemetry = DataHub.telemetry;
     }
