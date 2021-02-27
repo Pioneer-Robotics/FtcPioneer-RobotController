@@ -47,14 +47,14 @@ public class GoToA extends GoToSquare {
                 break;
             case backward:
                 if (!boolList[1]) {
-                    boolList[1] = Robot.get().driveStraight(-35);
+                    boolList[1] = Robot.get().driveStraight(-25);
                 }
                 if (boolList[1]) {
                     codeMode = SquareMode.turn90;
                 }
             case turn90:
                 Robot.get().setDrivePowers(0.4, -0.4);
-                if (Math.abs(Robot.get().getHeading(AngleUnit.DEGREES)) > 87) {
+                if (Math.abs(Robot.get().getHeading(AngleUnit.DEGREES)) > 85) {
                     Robot.get().setDrivePowers(0, 0);
                     codeMode = SquareMode.forwardSlightly;
                 }
@@ -69,7 +69,7 @@ public class GoToA extends GoToSquare {
                 break;
             case turn180:
                 Robot.get().setDrivePowers(0.35, -0.35);
-                if (Math.abs(Robot.get().getRotationDegrees()) > 178.25) {
+                if (Math.abs(Robot.get().getRotationDegrees()) > 175) {
                     Robot.get().setDrivePowers(0, 0);
                     codeMode = SquareMode.adjustTurnAccurate;
                 }

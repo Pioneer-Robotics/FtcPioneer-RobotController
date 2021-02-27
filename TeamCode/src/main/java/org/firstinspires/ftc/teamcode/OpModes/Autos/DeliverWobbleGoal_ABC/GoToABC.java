@@ -78,15 +78,15 @@ public class GoToABC extends AutoScript {
                     if(!moveAUTO[7]){
                         moveAUTO[7] = Robot.get().driveStraight(65);
                     }
-                    if (moveAUTO[7] = true){
+                    if (moveAUTO[7] == true){
                         codeMode = SquareMode.measureRings;
+                        //TODO fix why robot goes jit-jit
                     }
                     checkRings();
                 }
                 break;
                 case measureRings:{
-                    numberOfRings = Robot.get().amountOfRings();
-
+                    checkRings();
                     //set the square we want to go to
                     if(numberOfRings == 0){
                         goToSquare = new GoToA();
@@ -101,8 +101,7 @@ public class GoToABC extends AutoScript {
                     goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
-                    checkRings();
-                    codeMode = SquareMode.DONE;
+                    codeMode = SquareMode.goToSquareThenLineUpForShooting;
                 }
                 break;
                 case goToSquareThenLineUpForShooting:
@@ -135,7 +134,7 @@ public class GoToABC extends AutoScript {
                         moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3);
                     }
                     if (moveAUTO[6]){
-                        if(helper.justChanged()) {
+                        {
                             codeMode = SquareMode.DONE;
                         }
                     }
@@ -143,14 +142,8 @@ public class GoToABC extends AutoScript {
                 break;
                 case DONE:{
                     checkRings();
-                    if(helper.justChanged()){
-                        codeMode = SquareMode.resetTimer;
-                        Robot.get().allowMovement();
-                    }
-                    else {
                         Robot.get().stopAllMotors();
-                    }
-                    robot.stopAllMotors();
+                        robot.stopAllMotors();
 
                 }
                 break;
