@@ -5,14 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC.GoToABC;
+import org.firstinspires.ftc.teamcode.OpModes.Autos.TestCheckRings;
+import org.firstinspires.ftc.teamcode.OpModes.Autos.TestDriveStraightPlusCheckRings;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.TestLasors;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
 
-@Autonomous(name = "GoToABC")
+@Autonomous(name = "Test check rings")
 public class OnlyAuto extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {
-        auto = new GoToABC();
+        auto = new TestCheckRings();
         teleOp = new ExampleTeleOp();
     }
 

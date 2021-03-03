@@ -176,7 +176,7 @@ public class Robot{
         autoPilot.threshold = 10;
         return autoPilot.targetReached;
     }
-    public boolean driveStriaght(double distanceCM, double speed){
+    public boolean driveStraight(double distanceCM, double speed){
         autoPilot.autoPilotNeeded = true;
         autoPilot.driveStraightNeeded = true;
         autoPilot.targetDistance = distanceCM;

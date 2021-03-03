@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos;
 
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
@@ -25,13 +23,12 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
     boolean check;
     boolean helper = false;
 
-    int numberOfRings;
-
-    double highMeasure;
-    double lowMeasure;
 
     ArrayList<Double> highs;
     ArrayList<Double> lows;
+
+    double highMeasure;
+    double lowMeasure;
 
     double meanHigh;
     double meanLow;
@@ -40,6 +37,7 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
     double MADlow;
 
     enum State{
+        START,
         MOVE_FORWARD,
         MOVE_BACK,
         STOP
@@ -48,15 +46,18 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
     public void loop() {
         telemetry.addData("state (move or not)", state);
         measure();
-        checkRings();
         stats();
+        checkRings();
 
         switch(state){
+            case START:
+                state = State.MOVE_FORWARD;
+                break;
             case MOVE_FORWARD:
-                helper = Robot.get().driveStraight(100);
+                helper = robot.driveStraight(60.0, 0.23);
                 //reachedTarget.toggle(helper);
                 if(helper){
-                    state = State.MOVE_BACK;
+                    state = State.STOP;
                     check = true;
                 }
                 break;
@@ -72,20 +73,18 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
                 Robot.get().setDrivePowers(0,0);
                 break;
         }
-        telemetry.addData("helper value", helper);
-        telemetry.addData("check value (should be false)", check);
-        telemetry.addData("distance travelled", Robot.get().avgRightAndLeftOdos());
-        telemetry.addData("state", state);
-        telemetry.addData("forward distance value", Robot.get().autoPilot.targetDistance);
+//        telemetry.addData("helper value", helper);
+//        telemetry.addData("check value (should be false)", check);
+//        telemetry.addData("distance travelled", Robot.get().avgRightAndLeftOdos());
+//        telemetry.addData("state", state);
+//        telemetry.addData("forward distance value", Robot.get().autoPilot.targetDistance);
 
         telemetry.addLine("======================================================");
         telemetry.addData("number of rings", numberOfRings);
+        telemetry.addData("high", robot.getLaserHigh());
+        telemetry.addData("low", robot.getLaserLow());
         telemetry.addData("high mean", meanHigh);
-        telemetry.addData("low mean", meanLow);
-        telemetry.addData("high MAD", MADhigh);
-        telemetry.addData("low MAD", MADlow);
         telemetry.addData("milliseconds", milliseconds);
-        telemetry.addData("high length", highs.size());
 
     }
 
@@ -109,28 +108,7 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
         milliseconds = 0;
         millisecondsLast = 0;
     }
-    int checkRings(){
-        if (numberOfRings==4){
-            //pass
-        }
-        else if(numberOfRings == 1){
-            if(highMeasure < 50){
-                numberOfRings = 4;
-            }
-            else{
-                //pass
-            }
-        }
-        else{
-            if(highMeasure < 50){
-                numberOfRings = 4;
-            }
-            else if(lowMeasure < 50){
-                numberOfRings = 1;
-            }
-        }
-        return numberOfRings;
-    }
+
 
     void measure(){
         millisecondsLast = milliseconds;

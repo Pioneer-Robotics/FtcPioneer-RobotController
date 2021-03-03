@@ -17,18 +17,13 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
  */
 
 public class GoToABC extends AutoScript {
-    //only useful in switch statement
-    /**
-     * the magnitude of power we set the motors to when we want to move
-     */
-    boolean[] moveAUTO = new boolean[15]; //needed a lot of booleans
+
+    boolean[] moveAUTO = new boolean[15]; //need a lot of booleans
     int numberOfShots;
     double standardPower;
     SquareMode codeMode;
     Telemetry telemetry;
     int numberOfRings;
-
-    boolean didLowSeeAnything;
 
     GoToSquare goToSquare;
     ElapsedTime deltaTime;
@@ -38,7 +33,6 @@ public class GoToABC extends AutoScript {
 
 
     enum SquareMode {
-        IDLE,
         driveToRings,
         measureRings,
         goToSquareThenLineUpForShooting,
@@ -56,7 +50,6 @@ public class GoToABC extends AutoScript {
         telemetry.addData("current mode / stage", codeMode);
 
         telemetry.addData("number of rings", numberOfRings);
-        telemetry.addData("low saw something", didLowSeeAnything);
 
         telemetry.addData("degrees from Robot", Robot.get().getRotationDegrees());
 
@@ -64,10 +57,6 @@ public class GoToABC extends AutoScript {
 
         helper.toggle(gamepad.a);
             switch (codeMode){
-                case IDLE:{
-                    this.codeMode = SquareMode.driveToRings;
-                }
-                break;
                 case driveToRings:{
                     checkRings();
                     moveAUTO[0] = Robot.get().driveStraight(65);
@@ -170,10 +159,6 @@ public class GoToABC extends AutoScript {
                 numberOfRings = 0;
             }
         }
-
-        if(low < 50){
-            didLowSeeAnything = true;
-        }
         return numberOfRings;
     }
 
@@ -181,7 +166,7 @@ public class GoToABC extends AutoScript {
 
     @Override
     public void init() {
-        codeMode = SquareMode.IDLE;
+        codeMode = SquareMode.driveToRings;
         telemetry = DataHub.telemetry;
         startX = 0;
         startY = 0;
@@ -198,7 +183,6 @@ public class GoToABC extends AutoScript {
 
         Utils.setBooleanArrayToFalse(moveAUTO);
 
-        didLowSeeAnything = false;
     }
 }
 

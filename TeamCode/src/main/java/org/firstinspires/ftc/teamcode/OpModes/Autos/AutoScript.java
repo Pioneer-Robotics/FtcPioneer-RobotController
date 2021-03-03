@@ -12,6 +12,9 @@ public abstract class AutoScript {
     public abstract void loop();
     public abstract void init();
 
+    int numberOfRings;
+    double thresholdForRingSighting;
+
     /**
      * almost always the thing to call when you want to init an Auto. You might need to add
      * more stuff, but this is the basic
@@ -22,5 +25,31 @@ public abstract class AutoScript {
         odos = true;
         robot = Robot.get();
         telemetry = DataHub.telemetry;
+
+        numberOfRings = 0;
+        thresholdForRingSighting = 40;
+    }
+
+    void checkRings() {
+        double highMeasure = robot.getLaserHigh();
+        double lowMeasure = robot.getLaserLow();
+
+        if(numberOfRings == 0){
+            if(highMeasure < thresholdForRingSighting){
+                numberOfRings = 4;
+            }
+            else if(lowMeasure < thresholdForRingSighting){
+                numberOfRings = 1;
+            }
+        }
+        else if(numberOfRings == 1){
+            if(highMeasure < thresholdForRingSighting){
+                numberOfRings = 4;
+            }
+        }
+        else{
+            //this means number of rings = 4, leave it like that
+            numberOfRings = 4;
+        }
     }
 }

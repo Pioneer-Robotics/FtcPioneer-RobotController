@@ -10,11 +10,15 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.TestDriveStraightPlusCheckRi
 import org.firstinspires.ftc.teamcode.OpModes.Autos.TestLasors;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
 
+
+//IMPORTANT!!!
+//NO ONE SKREW WITH THIS, WE USE IT A LOT!!!
 @Autonomous(name = "test lasors", group = "test")
-public class TestAnyAutoCrap extends GenericOpMode{
+public class TestLasers extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {
-        auto = new TestDriveStraightPlusCheckRings();
+
+        auto = new TestLasors();//TODO auto = new TestLasors(). DO NOT CHANGE!!!
         teleOp = new TeleOpStandard(); //not sure if this is right teleOp, good enough for now
     }
 
