@@ -93,7 +93,7 @@ public class GoToABC extends AutoScript {
                         goToSquare = new GoToA();
                     }
 
-                    goToSquare = new GoToA(); //TODO remove this line, it is only here for testing
+                    goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
                     codeMode = SquareMode.goToSquareThenLineUpForShooting;
