@@ -22,7 +22,6 @@ public class GoToABC extends AutoScript {
     int numberOfShots;
     double standardPower;
     SquareMode codeMode;
-    Telemetry telemetry;
 
     GoToSquare goToSquare;
     ElapsedTime deltaTime;
@@ -105,14 +104,13 @@ public class GoToABC extends AutoScript {
                     goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
-                    codeMode = SquareMode.DONE;
+                    codeMode = SquareMode.goToSquareThenLineUpForShooting;
                 }
                 break;
                 case goToSquareThenLineUpForShooting:
                     robot.setDrivePowers(0,0);
                     if(goToSquare.done){
-                        codeMode = SquareMode.resetTimer;
-                        //TODO change this to reset times once launcher works
+                        codeMode = SquareMode.resetTimer; //TODO change this to reset times once launcher works
                     }
                     else{
                         goToSquare.goToSquareAndThenToShootPos();
@@ -120,7 +118,7 @@ public class GoToABC extends AutoScript {
                 break;
                 case resetTimer:
                     deltaTime.reset();
-                    codeMode = SquareMode.shootRings;
+                    codeMode = SquareMode.shootRings; //TODO change this to shootRings once launcher works
                     break;
                 case shootRings:{ //this is skipped, never runs
                     telemetry.addLine("firing");
@@ -162,10 +160,8 @@ public class GoToABC extends AutoScript {
                     }
                     Robot.get().launchOverride(true);
                 }
-                useOdos = false;
                 break;
                 case park:{
-                    useOdos = true;
                     if (!moveAUTO[6]){
                         moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3);
                     }
@@ -177,6 +173,7 @@ public class GoToABC extends AutoScript {
                 }
                 break;
                 case DONE:{
+                    robot.stopAllMotors();
                     checkRings();
                     robot.setDrivePowers(0,0);
                 }
@@ -189,9 +186,9 @@ public class GoToABC extends AutoScript {
     @Override
     public void init() {
         codeMode = SquareMode.driveToRings;
-        telemetry = DataHub.telemetry;
-        startX = 0;
-        startY = 0;
+
+        standardInit();
+
         standardPower = 0.2; //TODO raise this speed when we feel it's safe
         //standard power needs to be greater than 0.1 or the robot won't move
 
@@ -201,7 +198,7 @@ public class GoToABC extends AutoScript {
         numberOfShots = 0;
         helper = new Toggle(false);
         gamepad = DataHub.gamepad1;
-        useOdos = true;
+
 
         Utils.setBooleanArrayToFalse(moveAUTO);
 

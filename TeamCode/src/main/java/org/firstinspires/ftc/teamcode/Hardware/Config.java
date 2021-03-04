@@ -30,7 +30,7 @@ public class Config {
 
     public static final String launcherServo = "launcherS";
     public static final PIDFCoefficients launcherPIDF = new PIDFCoefficients(67,0,0,12.95);
-    public static final float launcherServoOut = 0.55f, launcherServoIn = 0.435f;
+    public static final float launcherServoOut = 0.55f, launcherServoIn = 0.420f;
     public static double maxLauncherSpeed =  2500;
     public static double defaultTargetLauncherSpeed = 2000;
 

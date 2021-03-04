@@ -51,7 +51,7 @@ public class GoToC extends GoToSquare{
             case goToSquare:
                 //drive forward a distance
                 if (!boolList[0]){
-                    boolList[0] = robot.driveStraight(15);
+                    boolList[0] = robot.driveStraight(220);
                 }
                 if (boolList[0]){
                     robot.deactivateDriveStraight();
@@ -78,7 +78,7 @@ public class GoToC extends GoToSquare{
                 break;
             case forwardSlightly:{
                 if (!boolList[2]){
-                    boolList[2] = robot.driveStraight(55);
+                    boolList[2] = robot.driveStraight(62);
                 }
                 if(boolList[2]){
                     state = State.turnTo180;

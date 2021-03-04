@@ -115,6 +115,7 @@ public class AutoPilot {
                 driveStraightNeeded = false;
                 autoPilotNeeded = false;
                 ans = true;
+                robot.setDrivePowers(0,0);
                 driveMode = DriveMode.CALCULATE;
                 break;
         }

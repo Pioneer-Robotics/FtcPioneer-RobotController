@@ -10,7 +10,7 @@ public abstract class AutoScript {
 
     public double startX, startY;
     public Robot robot;
-    Telemetry telemetry;
+    public Telemetry telemetry;
     public abstract void loop();
     public abstract void init();
 

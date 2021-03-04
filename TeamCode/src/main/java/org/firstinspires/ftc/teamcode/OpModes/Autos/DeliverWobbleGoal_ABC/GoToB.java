@@ -16,7 +16,7 @@ class GoToB extends GoToSquare {
     enum GOTOB{
         goToSquare,
         goToRingShootPos,
-        turn90,
+        turnTo0,
         backwardSlightly,
         adjustTurnAccurate,
         checkTurnWasCorrect,
@@ -33,10 +33,10 @@ class GoToB extends GoToSquare {
                 moveAUTO[1] = false;
                 driveDistance(153, .5, .15);
                 if(moveAUTO[1]){
-                    gotob = GOTOB.turn90;
+                    gotob = GOTOB.turnTo0;
                 }
                 break;
-            case turn90:
+            case turnTo0:
                 Robot.get().setDrivePowers(-0.3,0.3);
                 if ((Robot.get().getRotationDegrees()) < 0){
                     Robot.get().setDrivePowers(0,0);
