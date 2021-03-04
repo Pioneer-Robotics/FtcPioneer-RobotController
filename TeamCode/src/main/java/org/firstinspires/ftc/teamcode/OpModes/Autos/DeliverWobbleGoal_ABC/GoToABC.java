@@ -25,7 +25,6 @@ public class GoToABC extends AutoScript {
     double standardPower;
     SquareMode codeMode;
     Telemetry telemetry;
-    int numberOfRings;
 
     GoToSquare goToSquare;
     ElapsedTime deltaTime;
@@ -52,6 +51,7 @@ public class GoToABC extends AutoScript {
 
 
     enum SquareMode {
+        start,
         driveToRings,
         measureRings,
         goToSquareThenLineUpForShooting,
@@ -67,15 +67,18 @@ public class GoToABC extends AutoScript {
     public void loop() {
         telemetry.addData("elapsed time", deltaTime.seconds());
         telemetry.addData("current mode / stage", codeMode);
-
         telemetry.addData("number of rings", numberOfRings);
-
         telemetry.addData("degrees from Robot", Robot.get().getRotationDegrees());
 
 
 
         helper.toggle(gamepad.a);
             switch (codeMode){
+                case start:{
+                    numberOfRings = 0; //for some reason it likes to start by thinking there are 4 rings
+                    codeMode = SquareMode.driveToRings;
+                break;
+                }
                 case driveToRings:{
                     checkRings();
                     if (!moveAUTO[0]){
@@ -83,20 +86,9 @@ public class GoToABC extends AutoScript {
                     }
                     //reachedTarget.toggle(helper);
                     if(moveAUTO[0]){
-                        codeMode = SquareMode.DONE;
+                        codeMode = SquareMode.measureRings;
                         robot.setDrivePowers(0,0);
                     }
-//                    //in order to combat return statement on driveStraight, we use a boolean
-//                    if(!moveAUTO[7]){
-//                        moveAUTO[7] = Robot.get().driveStriaght(65,.235);
-//                    }
-//                    if (moveAUTO[7]){
-//
-//                        codeMode = SquareMode.measureRings;
-//                        //TODO fix why robot goes jit-jit
-//                        //TODO test if measureRings case is started too early
-//                    }
-//                    checkRings();
                }
                 break;
                 case measureRings:{
@@ -115,7 +107,7 @@ public class GoToABC extends AutoScript {
                     goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
-                    codeMode = SquareMode.goToSquareThenLineUpForShooting;
+                    codeMode = SquareMode.DONE;
                 }
                 break;
                 case goToSquareThenLineUpForShooting:
@@ -187,32 +179,11 @@ public class GoToABC extends AutoScript {
                 break;
                 case DONE:{
                     checkRings();
-                        robot.setDrivePowers(0,0);
-
+                    robot.setDrivePowers(0,0);
                 }
                 break;
             }
-            robot.update(odos);
-
         }
-
-
-    public int checkRings(){
-        double high = robot.getLaserHigh();
-        double low = robot.getLaserLow();
-
-        if (high <50){
-            numberOfRings = 4;
-        } else if (numberOfRings!= 4){
-            if (low < 50){
-                numberOfRings = 1;
-            }
-            else if (numberOfRings !=4 && numberOfRings != 1){//code good
-                numberOfRings = 0;
-            }
-        }
-        return numberOfRings;
-    }
 
 
 

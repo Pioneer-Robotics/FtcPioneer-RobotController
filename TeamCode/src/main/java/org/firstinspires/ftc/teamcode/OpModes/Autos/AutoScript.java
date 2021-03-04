@@ -12,7 +12,7 @@ public abstract class AutoScript {
     public abstract void loop();
     public abstract void init();
 
-    int numberOfRings;
+    public int numberOfRings;
     double thresholdForRingSighting;
 
     /**
@@ -30,7 +30,7 @@ public abstract class AutoScript {
         thresholdForRingSighting = 40;
     }
 
-    void checkRings() {
+    public void checkRings() {
         double highMeasure = robot.getLaserHigh();
         double lowMeasure = robot.getLaserLow();
 
