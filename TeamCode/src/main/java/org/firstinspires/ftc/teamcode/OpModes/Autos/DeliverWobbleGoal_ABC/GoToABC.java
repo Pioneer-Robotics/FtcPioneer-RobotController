@@ -59,10 +59,13 @@ public class GoToABC extends AutoScript {
             switch (codeMode){
                 case driveToRings:{
                     checkRings();
-                    moveAUTO[0] = Robot.get().driveStraight(65);
+                    if (!moveAUTO[0]){
+                        moveAUTO[0] = Robot.get().driveStraight(65);
+                    }
                     //reachedTarget.toggle(helper);
                     if(moveAUTO[0]){
-                        codeMode = SquareMode.measureRings;
+                        codeMode = SquareMode.DONE;
+                        robot.setDrivePowers(0,0);
                     }
 //                    //in order to combat return statement on driveStraight, we use a boolean
 //                    if(!moveAUTO[7]){
@@ -90,13 +93,14 @@ public class GoToABC extends AutoScript {
                         goToSquare = new GoToA();
                     }
 
-                    goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
+                    goToSquare = new GoToA(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
                     codeMode = SquareMode.goToSquareThenLineUpForShooting;
                 }
                 break;
                 case goToSquareThenLineUpForShooting:
+                    robot.setDrivePowers(0,0);
                     if(goToSquare.done){
                         codeMode = SquareMode.park; //TODO change this to reset times once launcher works
                     }
@@ -134,8 +138,7 @@ public class GoToABC extends AutoScript {
                 break;
                 case DONE:{
                     checkRings();
-                        Robot.get().stopAllMotors();
-                        robot.stopAllMotors();
+                        robot.setDrivePowers(0,0);
 
                 }
                 break;

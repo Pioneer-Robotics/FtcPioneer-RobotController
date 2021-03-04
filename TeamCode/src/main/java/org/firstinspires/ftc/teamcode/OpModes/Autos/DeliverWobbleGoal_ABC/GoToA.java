@@ -39,7 +39,7 @@ public class GoToA extends GoToSquare {
         switch (codeMode) {
             case goToSquare:
                 if (!boolList[0]) {
-                    boolList[0] = Robot.get().driveStraight(80);
+                    boolList[0] = Robot.get().driveStraight(85);
                 }
                 if (boolList[0]) {
                     codeMode = SquareMode.goToRingShootPos;

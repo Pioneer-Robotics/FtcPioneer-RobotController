@@ -10,11 +10,11 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.TestDriveStraightPlusCheckRi
 import org.firstinspires.ftc.teamcode.OpModes.Autos.TestLasors;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
 
-@Autonomous(name = "Test check rings")
+@Autonomous(name = "CoMpAuTo")
 public class OnlyAuto extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {
-        auto = new TestCheckRings();
+        auto = new GoToABC();
         teleOp = new ExampleTeleOp();
     }
 
