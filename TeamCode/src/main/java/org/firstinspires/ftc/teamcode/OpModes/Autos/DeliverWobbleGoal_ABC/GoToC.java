@@ -61,7 +61,7 @@ public class GoToC extends GoToSquare{
                 break;
             case backUp:
                 if(!boolList[1]){
-                    boolList[1] = robot.driveStraight(-155);
+                    boolList[1] = robot.driveStraight(-145);
                 }
                 if(boolList[1]){
                     robot.setDrivePowers(0,0);

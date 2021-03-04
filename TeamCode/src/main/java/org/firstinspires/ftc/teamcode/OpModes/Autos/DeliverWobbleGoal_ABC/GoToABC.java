@@ -24,12 +24,11 @@ public class GoToABC extends AutoScript {
     SquareMode codeMode;
 
     GoToSquare goToSquare;
-    ElapsedTime deltaTime;
 
     Toggle helper;
     Gamepad gamepad;
 
-    //TODO REMOVE CRAP:
+    //Dumb Launch:
 
     enum DumbLaunch{
         IDLE,
@@ -43,6 +42,7 @@ public class GoToABC extends AutoScript {
 
     Servo flicker;
 
+    byte timesFired = 0;
     //
 
 
@@ -131,7 +131,7 @@ public class GoToABC extends AutoScript {
                             launcherQuit.reset();
                             break;
                         case SPOOLING:
-                            if (launchTimer.seconds() >= 3) {
+                            if (launchTimer.seconds() >= 2) {
                                 flicker.setPosition(Config.launcherServoOut);
                                 launchMode = DumbLaunch.PUSHING;
                                 launchTimer.reset();
@@ -142,19 +142,20 @@ public class GoToABC extends AutoScript {
                                 flicker.setPosition(Config.launcherServoIn);
                                 launchMode = DumbLaunch.RETRACTING;
                                 launchTimer.reset();
+
                             }
                             break;
                         case RETRACTING:
-                            if (launchTimer.seconds() >= 1) {
+                            if (launchTimer.seconds() >= 0.3) {
                                 flicker.setPosition(Config.launcherServoOut);
                                 launchMode = DumbLaunch.PUSHING;
                                 launchTimer.reset();
+                                timesFired++;
                             }
                             break;
 
                     }
-                    if (launcherQuit.seconds() < 10) {
-                    } else {
+                    if (timesFired >= 3 ) {
                         codeMode = SquareMode.park;
                         Robot.get().emergencyStop();
                     }
@@ -194,7 +195,7 @@ public class GoToABC extends AutoScript {
 
         //for loop makes sure all the booleans start as false
         Utils.setBooleanArrayToFalse(moveAUTO);
-        deltaTime = new ElapsedTime();
+
         numberOfShots = 0;
         helper = new Toggle(false);
         gamepad = DataHub.gamepad1;

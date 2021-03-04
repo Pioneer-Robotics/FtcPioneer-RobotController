@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
@@ -13,6 +15,8 @@ public abstract class AutoScript {
     public Telemetry telemetry;
     public abstract void loop();
     public abstract void init();
+
+    public ElapsedTime deltaTime;
 
     public int numberOfRings;
     double thresholdForRingSighting;
@@ -30,12 +34,13 @@ public abstract class AutoScript {
 
         robot = Robot.get();
         telemetry = DataHub.telemetry;
+        deltaTime = new ElapsedTime();
 
         numberOfRings = 0;
         thresholdForRingSighting = 40;
     }
 
-    public void checkRings() {
+    void checkRingsReal() {
         double highMeasure = robot.getLaserHigh();
         double lowMeasure = robot.getLaserLow();
 
@@ -55,6 +60,14 @@ public abstract class AutoScript {
         else{
             //this means number of rings = 4, leave it like that
             numberOfRings = 4;
+        }
+    }
+    public void checkRings(){
+        if(deltaTime.milliseconds() > 1000){
+            checkRingsReal();
+        }
+        else {
+            numberOfRings = 0;
         }
     }
 }
