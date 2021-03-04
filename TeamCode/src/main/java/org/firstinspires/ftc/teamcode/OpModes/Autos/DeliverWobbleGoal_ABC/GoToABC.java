@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Config;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
@@ -113,7 +111,8 @@ public class GoToABC extends AutoScript {
                 case goToSquareThenLineUpForShooting:
                     robot.setDrivePowers(0,0);
                     if(goToSquare.done){
-                        codeMode = SquareMode.park; //TODO change this to reset times once launcher works
+                        codeMode = SquareMode.resetTimer;
+                        //TODO change this to reset times once launcher works
                     }
                     else{
                         goToSquare.goToSquareAndThenToShootPos();
@@ -121,7 +120,7 @@ public class GoToABC extends AutoScript {
                 break;
                 case resetTimer:
                     deltaTime.reset();
-                    codeMode = SquareMode.park; //TODO change this to shootRings once launcher works
+                    codeMode = SquareMode.shootRings;
                     break;
                 case shootRings:{ //this is skipped, never runs
                     telemetry.addLine("firing");
@@ -163,10 +162,10 @@ public class GoToABC extends AutoScript {
                     }
                     Robot.get().launchOverride(true);
                 }
-                odos = false;
+                useOdos = false;
                 break;
                 case park:{
-                    odos = true;
+                    useOdos = true;
                     if (!moveAUTO[6]){
                         moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3);
                     }
@@ -202,7 +201,7 @@ public class GoToABC extends AutoScript {
         numberOfShots = 0;
         helper = new Toggle(false);
         gamepad = DataHub.gamepad1;
-        odos = true;
+        useOdos = true;
 
         Utils.setBooleanArrayToFalse(moveAUTO);
 

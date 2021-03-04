@@ -5,7 +5,9 @@ import org.firstinspires.ftc.teamcode.Hardware.Robot;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 
 public abstract class AutoScript {
-    public boolean odos;
+    public boolean useOdos;
+    public boolean useDumbLaunch;
+
     public double startX, startY;
     public Robot robot;
     Telemetry telemetry;
@@ -22,7 +24,10 @@ public abstract class AutoScript {
     public void standardInit(){
         startX = 0;
         startY = 0;
-        odos = true;
+
+        useOdos = true;
+        useDumbLaunch = true;
+
         robot = Robot.get();
         telemetry = DataHub.telemetry;
 

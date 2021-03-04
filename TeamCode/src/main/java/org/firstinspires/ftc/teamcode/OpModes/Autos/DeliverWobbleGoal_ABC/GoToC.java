@@ -44,11 +44,6 @@ public class GoToC extends GoToSquare{
         DONE
     }
 
-    enum Yurr{
-        adjustTurnAccurate,
-        checkTurnWasCorrect
-    }
-
     @Override
     void goToSquareAndThenToShootPos() {
         helper.toggle(gamepad.a);
