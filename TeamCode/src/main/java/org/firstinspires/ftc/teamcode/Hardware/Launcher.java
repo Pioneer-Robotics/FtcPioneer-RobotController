@@ -41,8 +41,12 @@ public class Launcher {
 
     private boolean justLaunched = false;
 
+    private final Telemetry telemetry;
 
-    Launcher(){
+/*
+ *   This needs to use update with dumbLauncher set to true
+ */
+    Launcher( Telemetry telemetry){
         m1 = DataHub.hardwareMap.get(DcMotorEx.class, Config.launcherMotor1);
         m2 = DataHub.hardwareMap.get(DcMotorEx.class, Config.launcherMotor2);
         motors = new MotorPairEX(m1, m2);
@@ -61,11 +65,10 @@ public class Launcher {
         velocityPointTime = new ElapsedTime();
         Utils.fillArray(velocityLog,0);
         Utils.fillArray(velocityLogTime,0);
-    }
-@Deprecated
-    Launcher setPower(double power){
-        motors.setPower(power);
-        return this;
+
+
+
+        this.telemetry = telemetry;
     }
 
     Launcher setLaunchMode(LaunchMode launchMode){
@@ -73,7 +76,7 @@ public class Launcher {
         return this;
     }
 
-    Launcher updateLauncher (){
+    Launcher updateLauncher (boolean controlServo){
         justLaunched = false;
         //Writes current velocity to the velocityLog
         recordVelocity(motors.getAverageVelocity());
@@ -90,16 +93,15 @@ public class Launcher {
                 motors.setVelocity(targetVelocity);
 
                 //Checks if the servo is in the right position and instructs the program to wait until it is, otherwise
-                waitForServo = flickerTargetPos != SERVO_IN;
-                if (waitForServo){ launchTimer.reset(); }
+                if (flickerTargetPos != SERVO_IN) { waitForServo = true ; launchTimer.reset();};
                 flickerTargetPos = SERVO_IN;
 
-
+                telemetry.addData("launchTimer: ", launchTimer.milliseconds());
                 //Checks if all conditions are met and actuates the launcher if they are
                 if ( launchRequested &&
                         (launchOverride ||
                         (
-                                Math.abs(targetVelocity - currentVelocity) <= Config.launchVelocityThreshold //Velocity good
+                                (Math.abs(targetVelocity - currentVelocity) <= Config.launchVelocityThreshold )//Velocity good
                             && (!waitForServo || launchTimer.milliseconds() >= Config.launcherServoTime) //Servo has had enough time to move
                         )
                         )
@@ -108,7 +110,7 @@ public class Launcher {
                     flickerTargetPos = SERVO_OUT;
                     launchTimer.reset();
                     launchMode = LaunchMode.PUSH;
-                    launchRequested = continuousFire; // Keep launch requested if launcher is in continuous fire mode
+                    //launchRequested = continuousFire; // Keep launch requested if launcher is in continuous fire mode
                 }
                 break;
             case PUSH:
@@ -122,10 +124,12 @@ public class Launcher {
                     justLaunched = true;
                     launchTimer.reset();
                 }
+                break;
         }
 
-        flicker.setPosition(flickerTargetPos);
-
+        if (controlServo) {
+            flicker.setPosition(flickerTargetPos);
+        }
         return this;
     }
 

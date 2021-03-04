@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Hardware.Config;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
 import org.firstinspires.ftc.teamcode.Helpers.*;
@@ -30,6 +32,23 @@ public class GoToABC extends AutoScript {
 
     Toggle helper;
     Gamepad gamepad;
+
+    //TODO REMOVE CRAP:
+
+    enum DumbLaunch{
+        IDLE,
+        SPOOLING,
+        PUSHING,
+        RETRACTING,
+    }
+    DumbLaunch launchMode = DumbLaunch.IDLE;
+    ElapsedTime launchTimer;
+    ElapsedTime launcherQuit;
+
+    Servo flicker;
+
+    //
+
 
 
     enum SquareMode {
@@ -114,13 +133,43 @@ public class GoToABC extends AutoScript {
                     break;
                 case shootRings:{ //this is skipped, never runs
                     telemetry.addLine("firing");
-                    if(deltaTime.seconds() < 5) {//don't let it fire for > 5 secs
-                        Robot.get().fire();
+                    switch (launchMode) {
+                        case IDLE:
+                            launchTimer.reset();
+                            launchMode = DumbLaunch.SPOOLING;
+                            Robot.get().spool();
+                            flicker.setPosition(Config.launcherServoIn);
+                            launcherQuit.reset();
+                            break;
+                        case SPOOLING:
+                            if (launchTimer.seconds() >= 3) {
+                                flicker.setPosition(Config.launcherServoOut);
+                                launchMode = DumbLaunch.PUSHING;
+                                launchTimer.reset();
+                            }
+                            break;
+                        case PUSHING:
+                            if (launchTimer.seconds() >= 1) {
+                                flicker.setPosition(Config.launcherServoIn);
+                                launchMode = DumbLaunch.RETRACTING;
+                                launchTimer.reset();
+                            }
+                            break;
+                        case RETRACTING:
+                            if (launchTimer.seconds() >= 1) {
+                                flicker.setPosition(Config.launcherServoOut);
+                                launchMode = DumbLaunch.PUSHING;
+                                launchTimer.reset();
+                            }
+                            break;
+
                     }
-                    else{
-                        Robot.get().emergencyStop();
+                    if (launcherQuit.seconds() < 10) {
+                    } else {
                         codeMode = SquareMode.park;
+                        Robot.get().emergencyStop();
                     }
+                    Robot.get().launchOverride(true);
                 }
                 odos = false;
                 break;
@@ -185,6 +234,12 @@ public class GoToABC extends AutoScript {
         odos = true;
 
         Utils.setBooleanArrayToFalse(moveAUTO);
+
+
+        //DumbLaunchControl Stuff
+        launchTimer = new ElapsedTime();
+        launcherQuit = new ElapsedTime();
+        flicker = DataHub.hardwareMap.get(Servo.class, Config.launcherServo);
 
     }
 }

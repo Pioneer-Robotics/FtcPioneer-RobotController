@@ -51,7 +51,7 @@ public class Robot{
         chassis = new DriveTrain();
         mainOdometer = new PositionTracker(startX, startY, 0);
         autoPilot = new AutoPilot();
-        launcher = new Launcher();
+        launcher = new Launcher(robot.telemetry);
         collector = new Collector();
         imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
         wobbleArm = new WobbleArm();
@@ -70,14 +70,17 @@ public class Robot{
         return robot;
     }
     public void update(boolean useOdometers){
+        update(useOdometers, false);
+    }
+
+    public void update(boolean useOdometers, boolean dumbLauncher){
         autoPilot.update(); //needs to go before setMotorPowers stuff
         //when autoPilot is on, it will ignore user input
         motorData.handleFullStop(); //this needs to go immediately before the setMotorPowers stuff
         chassis.setMotorPowers(motorData.leftPower,motorData.rightPower);
-        launcher.updateLauncher();
         ringMeasurer.update();
         if (useOdometers) {updateOdometers();}
-
+        launcher.updateLauncher(!dumbLauncher);
     }
 
     public double getLaserHigh(){

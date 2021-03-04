@@ -35,7 +35,7 @@ public class Config {
     public static double defaultTargetLauncherSpeed = 2000;
 
     public static final double launchVelocityThreshold = 10; //allowable difference in angular velocity before a launch is initiated
-    public static final double launcherServoTime = 200; //launcher flick time in ms
+    public static final double launcherServoTime = 500; //launcher flick time in ms //TODO reduce
     public static final int VELOCITY_LOG_SIZE = 500, VELOCITY_AVERAGE_TIME_MS = 100;
 
     //ODOMETERS
