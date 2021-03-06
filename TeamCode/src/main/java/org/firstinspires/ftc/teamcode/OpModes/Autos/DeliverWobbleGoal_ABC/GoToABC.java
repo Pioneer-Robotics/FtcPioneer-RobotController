@@ -102,7 +102,6 @@ private static final int DETECT_DELAY = 500;
                     else{
                         goToSquare = new GoToA();
                     }
-
                     //move to the next state
                     codeMode = SquareMode.goToSquareThenLineUpForShooting;
                 }
@@ -163,8 +162,9 @@ private static final int DETECT_DELAY = 500;
                 }
                 break;
                 case park:{
-                    if (Robot.get().driveStraight(-60, 0.3, 3)){
+                    if (moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3)){
                         codeMode = SquareMode.DONE;
+                        robot.deactivateDriveStraight();
                     }
                 }
                 break;

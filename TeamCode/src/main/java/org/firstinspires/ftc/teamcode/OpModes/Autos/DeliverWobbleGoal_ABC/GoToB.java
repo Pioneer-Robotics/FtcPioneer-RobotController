@@ -13,7 +13,7 @@ class GoToB extends GoToSquare {
     void goToSquareAndThenToShootPos() {
 
     }
-    enum GOTOB{
+    enum SquareMode {
         goToSquare,
         goToRingShootPos,
         turnTo0,
@@ -22,18 +22,18 @@ class GoToB extends GoToSquare {
         checkTurnWasCorrect,
         DONE
     }
-    GOTOB gotob;
+    SquareMode GoB;
     boolean[] moveAUTO = new boolean[15];
     double startingPos = 0;
     double DriveDistance = 0;
 
     public void loop() {
-        switch(gotob){
+        switch(GoB){
             case goToSquare:
                 moveAUTO[1] = false;
                 driveDistance(153, .5, .15);
                 if(moveAUTO[1]){
-                    gotob = GOTOB.turnTo0;
+                    GoB = SquareMode.turnTo0;
                 }
                 break;
             case turnTo0:
@@ -52,7 +52,7 @@ class GoToB extends GoToSquare {
                     robot.setDrivePowers(-speed, speed);
                 }
                 else{ //this means we're within tolerance
-                    gotob = gotob.checkTurnWasCorrect;
+                    GoB = GoB.checkTurnWasCorrect;
                     deltaTime.reset();
                     robot.brake();
                     robot.setDrivePowers(0,0);
@@ -64,11 +64,11 @@ class GoToB extends GoToSquare {
                 robot.setDrivePowers(0,0);
                 if(Math.abs(error) < tolerance){
                     if(deltaTime.seconds() > 1){
-                        gotob = gotob.backwardSlightly;
+                        GoB = GoB.backwardSlightly;
                     }
                 }
                 else{
-                    gotob = gotob.adjustTurnAccurate;
+                    GoB = GoB.adjustTurnAccurate;
                 }
 
             case backwardSlightly:
@@ -76,7 +76,7 @@ class GoToB extends GoToSquare {
                     moveAUTO[2] = Robot.get().driveStraight(-40);
                 }
                 if (moveAUTO[2]){
-                    gotob = GOTOB.DONE;
+                    GoB = SquareMode.DONE;
                 }
                 break;
             case DONE:{
@@ -99,6 +99,6 @@ class GoToB extends GoToSquare {
     }
 
     public void init() {
-        gotob = GOTOB.goToSquare;
+        GoB = SquareMode.goToSquare;
     }
 }

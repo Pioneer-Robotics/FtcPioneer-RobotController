@@ -11,7 +11,7 @@ public class GoToC extends GoToSquare{
     boolean[] boolList = new boolean[10];
     Robot robot;
     Gamepad gamepad;
-    State state;
+    SquareMode GoC;
     Telemetry telemetry;
     Toggle helper;
 
@@ -23,7 +23,7 @@ public class GoToC extends GoToSquare{
     GoToC(){
         Utils.setBooleanArrayToFalse(boolList);
         done = false;
-        state = State.goToSquare;
+        GoC = SquareMode.goToSquare;
         telemetry = DataHub.telemetry;
         gamepad = DataHub.gamepad1;
         helper = new Toggle(false);
@@ -33,7 +33,7 @@ public class GoToC extends GoToSquare{
         deltaTime = new ElapsedTime();
     }
 
-    enum State {
+    enum SquareMode {
         goToSquare,
         backUp,
         turnTo90,
@@ -47,7 +47,7 @@ public class GoToC extends GoToSquare{
     @Override
     void goToSquareAndThenToShootPos() {
         helper.toggle(gamepad.a);
-        switch (state) {
+        switch (GoC) {
             case goToSquare:
                 //drive forward a distance
                 if (!boolList[0]){
@@ -56,7 +56,7 @@ public class GoToC extends GoToSquare{
                 if (boolList[0]){
                     robot.deactivateDriveStraight();
                     robot.setDrivePowers(0,0);
-                    state = State.backUp;
+                    GoC = SquareMode.backUp;
                 }
                 break;
             case backUp:
@@ -65,7 +65,7 @@ public class GoToC extends GoToSquare{
                 }
                 if(boolList[1]){
                     robot.setDrivePowers(0,0);
-                    state = State.turnTo90;
+                    GoC = SquareMode.turnTo90;
                 }
                 break;
             case turnTo90:
@@ -73,7 +73,7 @@ public class GoToC extends GoToSquare{
                 if(Math.abs( robot.getRotationDegrees() ) > 85){
                     robot.brake();
                     robot.setDrivePowers(0,0);
-                    state = State.forwardSlightly;
+                    GoC = SquareMode.forwardSlightly;
                 }
                 break;
             case forwardSlightly:{
@@ -81,13 +81,13 @@ public class GoToC extends GoToSquare{
                     boolList[2] = robot.driveStraight(62);
                 }
                 if(boolList[2]){
-                    state = State.turnTo180;
+                    GoC = SquareMode.turnTo180;
                 }
             }
             case turnTo180:
                 robot.setDrivePowers(0.35,-0.35);
                 if (Math.abs( robot.getRotationDegrees() ) > 175){
-                    state = State.adjustTurnAccurate;
+                    GoC = SquareMode.adjustTurnAccurate;
                 }
                 break;
             case adjustTurnAccurate:
@@ -100,7 +100,7 @@ public class GoToC extends GoToSquare{
                     robot.setDrivePowers(-speed, speed);
                 }
                 else{ //this means we're within tolerance
-                    state = State.checkTurnWasCorrect;
+                    GoC = SquareMode.checkTurnWasCorrect;
                     deltaTime.reset();
                     robot.brake();
                     robot.setDrivePowers(0,0);
@@ -112,11 +112,11 @@ public class GoToC extends GoToSquare{
                 robot.setDrivePowers(0,0);
                 if(Math.abs(error) < tolerance){
                     if(deltaTime.seconds() > 1){
-                        state = State.DONE;
+                        GoC = SquareMode.DONE;
                     }
                 }
                 else{
-                    state = State.adjustTurnAccurate;
+                    GoC = SquareMode.adjustTurnAccurate;
                 }
 
                 break;
@@ -126,7 +126,7 @@ public class GoToC extends GoToSquare{
                 robot.setDrivePowers(0,0);
                 break;
             default:
-                state = State.DONE;
+                GoC = SquareMode.DONE;
                 break;
         }
     }
