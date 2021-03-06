@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
  */
 
 public class GoToABC extends AutoScript {
-private static final int DETECT_DELAY = 2000;
+private static final int DETECT_DELAY = 500;
 
     boolean[] moveAUTO = new boolean[15]; //need a lot of booleans
     double standardPower;
@@ -75,6 +75,7 @@ private static final int DETECT_DELAY = 2000;
                 case start:{
                     //numberOfRings = 0; //for some reason it likes to start by thinking there are 4 rings
                     codeMode = SquareMode.driveToRings;
+                    deltaTime.reset();
                 break;
                 }
                 case driveToRings:{
@@ -96,13 +97,11 @@ private static final int DETECT_DELAY = 2000;
                         goToSquare = new GoToC();
                     }
                     else if(numberOfRings == 1){
-                        goToSquare = new GoToB();
+                        goToSquare = new GoToC(); //TODO change this once B is done
                     }
                     else{
                         goToSquare = new GoToA();
                     }
-
-                    //goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
                     codeMode = SquareMode.goToSquareThenLineUpForShooting;
@@ -118,7 +117,7 @@ private static final int DETECT_DELAY = 2000;
                     }
                 break;
                 case resetTimer:
-                    deltaTime.reset();
+                    //deltaTime.reset(); TODO remove if robot still shoots
                     codeMode = SquareMode.shootRings; //TODO change this to shootRings once launcher works
                     break;
                 case shootRings:{ //this is skipped, never runs
@@ -164,13 +163,8 @@ private static final int DETECT_DELAY = 2000;
                 }
                 break;
                 case park:{
-                    if (!moveAUTO[6]){
-                        moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3);
-                    }
-                    if (moveAUTO[6]){
-                        {
-                            codeMode = SquareMode.DONE;
-                        }
+                    if (Robot.get().driveStraight(-60, 0.3, 3)){
+                        codeMode = SquareMode.DONE;
                     }
                 }
                 break;
@@ -187,7 +181,7 @@ private static final int DETECT_DELAY = 2000;
 
     @Override
     public void init() {
-        codeMode = SquareMode.driveToRings;
+        codeMode = SquareMode.start;
 
         standardInit();
 
