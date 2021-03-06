@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Config;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
@@ -17,11 +16,13 @@ import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
  */
 
 public class GoToABC extends AutoScript {
+private static final int DETECT_DELAY = 2000;
 
     boolean[] moveAUTO = new boolean[15]; //need a lot of booleans
-    int numberOfShots;
     double standardPower;
     SquareMode codeMode;
+
+
 
     GoToSquare goToSquare;
 
@@ -72,14 +73,14 @@ public class GoToABC extends AutoScript {
         helper.toggle(gamepad.a);
             switch (codeMode){
                 case start:{
-                    numberOfRings = 0; //for some reason it likes to start by thinking there are 4 rings
+                    //numberOfRings = 0; //for some reason it likes to start by thinking there are 4 rings
                     codeMode = SquareMode.driveToRings;
                 break;
                 }
                 case driveToRings:{
-                    checkRings();
+                    checkRingsDelayed(DETECT_DELAY);
                     if (!moveAUTO[0]){
-                        moveAUTO[0] = Robot.get().driveStraight(65);
+                        moveAUTO[0] = Robot.get().driveStraight(105); //prev 65 increased by 40
                     }
                     //reachedTarget.toggle(helper);
                     if(moveAUTO[0]){
@@ -89,7 +90,7 @@ public class GoToABC extends AutoScript {
                }
                 break;
                 case measureRings:{
-                    checkRings();
+                    checkRingsDelayed(DETECT_DELAY);
                     //set the square we want to go to
                     if(numberOfRings == 4){
                         goToSquare = new GoToC();
@@ -101,7 +102,7 @@ public class GoToABC extends AutoScript {
                         goToSquare = new GoToA();
                     }
 
-                    goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
+                    //goToSquare = new GoToC(); //TODO remove this line, it is only here for testing
 
                     //move to the next state
                     codeMode = SquareMode.goToSquareThenLineUpForShooting;
@@ -175,7 +176,7 @@ public class GoToABC extends AutoScript {
                 break;
                 case DONE:{
                     robot.stopAllMotors();
-                    checkRings();
+                    checkRingsDelayed(DETECT_DELAY);
                     robot.setDrivePowers(0,0);
                 }
                 break;
@@ -196,7 +197,6 @@ public class GoToABC extends AutoScript {
         //for loop makes sure all the booleans start as false
         Utils.setBooleanArrayToFalse(moveAUTO);
 
-        numberOfShots = 0;
         helper = new Toggle(false);
         gamepad = DataHub.gamepad1;
 

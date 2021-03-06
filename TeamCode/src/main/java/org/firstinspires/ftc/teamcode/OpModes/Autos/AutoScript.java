@@ -20,6 +20,7 @@ public abstract class AutoScript {
 
     public int numberOfRings;
     double thresholdForRingSighting;
+    private boolean ringsDetected = false;
 
     /**
      * almost always the thing to call when you want to init an Auto. You might need to add
@@ -40,31 +41,45 @@ public abstract class AutoScript {
         thresholdForRingSighting = 40;
     }
 
-    void checkRingsReal() {
-        double highMeasure = robot.getLaserHigh();
-        double lowMeasure = robot.getLaserLow();
+//    void checkRingsNow() {
+//        double highMeasure = robot.getLaserHigh();
+//        double lowMeasure = robot.getLaserLow();
+//
+//        if(numberOfRings == 0){
+//            if(highMeasure < thresholdForRingSighting){
+//                numberOfRings = 4;
+//            }
+//            else if(lowMeasure < thresholdForRingSighting){
+//                numberOfRings = 1;
+//            }
+//        }
+//        else if(numberOfRings == 1){
+//            if(highMeasure < thresholdForRingSighting){
+//                numberOfRings = 4;
+//            }
+//        }
+//        else{
+//            //this means number of rings = 4, leave it like that
+//            numberOfRings = 4;
+//        }
+//    }
 
-        if(numberOfRings == 0){
-            if(highMeasure < thresholdForRingSighting){
-                numberOfRings = 4;
-            }
-            else if(lowMeasure < thresholdForRingSighting){
-                numberOfRings = 1;
-            }
+    void checkRingsNow() {
+        double high = robot.getLaserHigh();
+        double low = robot.getLaserLow();
+        if (!ringsDetected){
+            if(high < thresholdForRingSighting){ numberOfRings = 4; ringsDetected = true;}
+            else if(low < thresholdForRingSighting){ numberOfRings = 1; ringsDetected = true;}
         }
-        else if(numberOfRings == 1){
-            if(highMeasure < thresholdForRingSighting){
-                numberOfRings = 4;
-            }
-        }
-        else{
-            //this means number of rings = 4, leave it like that
-            numberOfRings = 4;
-        }
+        telemetry.addData("high: ", high);
+        telemetry.addData("low: ", low);
+
     }
-    public void checkRings(){
-        if(deltaTime.milliseconds() > 1000){
-            checkRingsReal();
+
+
+    public void checkRingsDelayed(int delayMS){
+        if(deltaTime.milliseconds() > delayMS){
+            checkRingsNow();
         }
         else {
             numberOfRings = 0;

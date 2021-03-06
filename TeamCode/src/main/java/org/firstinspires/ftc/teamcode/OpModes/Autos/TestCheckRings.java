@@ -11,7 +11,7 @@ public class TestCheckRings extends AutoScript{
     @Override
     public void loop() {
         A.toggle(gamepad.a);
-        checkRings();
+        checkRingsDelayed(1000);
         if(A.justChanged()){
             resetCheckRings();
         }

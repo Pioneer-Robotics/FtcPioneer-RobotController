@@ -51,7 +51,7 @@ public class GoToC extends GoToSquare{
             case goToSquare:
                 //drive forward a distance
                 if (!boolList[0]){
-                    boolList[0] = robot.driveStraight(220);
+                    boolList[0] = robot.driveStraight(220 - 40);
                 }
                 if (boolList[0]){
                     robot.deactivateDriveStraight();

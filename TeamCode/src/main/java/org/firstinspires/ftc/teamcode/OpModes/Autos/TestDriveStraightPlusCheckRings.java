@@ -47,7 +47,7 @@ public class TestDriveStraightPlusCheckRings extends AutoScript{
         telemetry.addData("state (move or not)", state);
         measure();
         stats();
-        checkRings();
+        checkRingsDelayed(1000);
 
         switch(state){
             case START:

@@ -3,14 +3,21 @@
  *
  * It is extraordinarily rare that you will ever need to edit this file.
  */
+
+//def os = System.getProperty("os.name").toLowerCase()
+
+
 buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
-    }
+
+        repositories {
+            google()
+            jcenter()
+        }
+        dependencies {
+                classpath 'com.android.tools.build:gradle:4.0.2'
+        }
+
+
 }
 //test commit
 // This is now required because aapt2 has to be downloaded from the
