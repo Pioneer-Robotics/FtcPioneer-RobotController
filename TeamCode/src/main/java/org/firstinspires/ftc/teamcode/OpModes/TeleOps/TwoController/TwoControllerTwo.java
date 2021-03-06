@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -107,6 +108,13 @@ public class TwoControllerTwo extends TeleOpScript {
             robot.fire();
         }
 
+        if(gamepad2.right_bumper){
+            launcherSpeedFraction = 0.8;
+        }
+        if(gamepad2.left_bumper){
+            launcherSpeedFraction = (0.7);
+        }
+
 
 
         decreaseLaunchSpeedToggle.toggle(gamepad2.dpad_left && !doDebugOptions);
@@ -159,14 +167,14 @@ public class TwoControllerTwo extends TeleOpScript {
         robot.setWobbleServoPosition(gamepad2.x);
 
         //Wobble Arm Up/Down
-        Wobble90_Chill.toggle(gamepad2.left_bumper);
-        if(Wobble90_Chill.getBool()){
-            Robot.get().setWobble90();
-            WobbleArmState = "90 deg";
-        } else{
-            Robot.get().wobbleChillPos();
-            WobbleArmState = "Chill/Human POS";
-        }
+//        Wobble90_Chill.toggle(gamepad2.left_bumper);
+//        if(Wobble90_Chill.getBool()){
+//            Robot.get().setWobble90();
+//            WobbleArmState = "90 deg";
+//        } else{
+//            Robot.get().wobbleChillPos();
+//            WobbleArmState = "Chill/Human POS";
+//        }
 
 
 
@@ -230,7 +238,7 @@ public class TwoControllerTwo extends TeleOpScript {
         telemetry.addLine("===COLLECTOR ===");
         telemetry.addData("collector", collectorState);
 
-        telemetry.addData("WobbleArm 90/Chill", WobbleArmState);
+        //telemetry.addData("WobbleArm 90/Chill", WobbleArmState);
 
 
         loopTime.reset();
@@ -263,6 +271,7 @@ public class TwoControllerTwo extends TeleOpScript {
         doDebugOptions = false;
         debugValLeftChanged = new Toggle(false);
         debugValUpChanged = new Toggle(false);
+        robot.setWobbleRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }
     public TwoControllerTwo(){

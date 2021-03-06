@@ -110,7 +110,7 @@ public class Launcher {
                     flickerTargetPos = SERVO_OUT;
                     launchTimer.reset();
                     launchMode = LaunchMode.PUSH;
-                    //launchRequested = continuousFire; // Keep launch requested if launcher is in continuous fire mode
+                    launchRequested = continuousFire; // Keep launch requested if launcher is in continuous fire mode
                 }
                 break;
             case PUSH:

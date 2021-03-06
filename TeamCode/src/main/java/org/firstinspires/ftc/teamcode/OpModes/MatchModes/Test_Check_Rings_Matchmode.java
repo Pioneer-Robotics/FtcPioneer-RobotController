@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TeleOpStandard;
 //IMPORTANT!!!
 //NO ONE SKREW WITH THIS, WE USE IT A LOT!!!
 @Autonomous(name = "test check rings", group = "test")
-public class TestLasers extends GenericOpMode{
+public class Test_Check_Rings_Matchmode extends GenericOpMode{
     @Override
     public void selectAutoAndTeleOp() {
 

@@ -243,7 +243,11 @@ public class Robot{
     public void wobbleChillPos(){
         wobbleArm.WobbleChillPos();
     }
+    public void setWobbleRunMode(DcMotor.RunMode runMode) {
+        wobbleArm.setRunMode(runMode);
+    }
 
     public boolean justShot() {return launcher.justLaunched();}
+
 
 }

@@ -162,9 +162,11 @@ private static final int DETECT_DELAY = 500;
                 }
                 break;
                 case park:{
-                    if (moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3)){
-                        codeMode = SquareMode.DONE;
-                        robot.deactivateDriveStraight();
+                    if(!moveAUTO[6]) {
+                        moveAUTO[6] = Robot.get().driveStraight(-40, 0.3, 3);
+                    }
+                    if (moveAUTO[6]){
+                        robot.setDrivePowers(0,0);
                     }
                 }
                 break;
