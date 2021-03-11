@@ -35,6 +35,7 @@ public class Robot{
     HardwareMap hardwareMap;
     MotorData motorData;
     public static AutoPilot autoPilot;
+    static VuforiaBitmapRingDetector camera;
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
@@ -53,10 +54,12 @@ public class Robot{
         autoPilot = new AutoPilot();
         launcher = new Launcher(robot.telemetry);
         collector = new Collector();
+        VuforiaBitmapRingDetector camera = new VuforiaBitmapRingDetector(robot.telemetry);
         imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
         wobbleArm = new WobbleArm();
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
         imu.initialize(params);
+
     }
     public void updateSettings (){
         launcher.updatePIDF();
@@ -246,6 +249,9 @@ public class Robot{
     public void setWobbleRunMode(DcMotor.RunMode runMode) {
         wobbleArm.setRunMode(runMode);
     }
+
+    public int getRingsWithCamera(double scanX, double scanY, double scanH){return camera.getRings(scanX,scanY,scanH);}
+
 
     public boolean justShot() {return launcher.justLaunched();}
 

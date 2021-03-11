@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.renderscript.Int2;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -16,6 +20,10 @@ public class VuforiaBitmapRingDetector {
 
     private final Telemetry telemetry;
 
+    VuforiaLocalizer.CloseableFrame frame;
+    private Bitmap image;
+
+    ElapsedTime actionTimer;
 
     VuforiaBitmapRingDetector(Telemetry telemetry){
 
@@ -44,6 +52,73 @@ public class VuforiaBitmapRingDetector {
 
         telemetry.update();
         this.telemetry = telemetry;
+        actionTimer = new ElapsedTime();
+    }
+
+
+
+    int getRings(double scanX, double scanY, double scanH){
+        int num = -1;
+
+        try {
+            frame = vuforia.getFrameQueue().take();
+            //Convert frame to bitmap
+            image = vuforia.convertFrameToBitmap(frame);
+
+            //If multiple points on the image need to be checked, the additional checks would go here
+            if  (image != null) {
+                num = getRingCountFromSaturation(
+                        getSaturationFromVerticalLine(image, scanX, scanY - scanH / 2, scanY + scanH / 2)
+                );
+            }
+
+        } catch (InterruptedException e){
+            telemetry.addLine("ISSUE IN VUFORIA FRAME GATHERING");
+            telemetry.update();
+        }
+
+
+        return num;
+    }
+
+    private float getSaturationFromVerticalLine(Bitmap bitmap, double scanX, double scanMinY, double scanMaxY) {
+
+        int x = (int) (bitmap.getWidth() * scanX);
+
+
+        float[] hsv = new float[3];
+        float totalSaturation = 0;
+
+        int minY = (int) (scanMinY * (double) bitmap.getHeight());
+        int maxY = (int) (scanMaxY * (double) bitmap.getHeight());
+
+
+        for (int y = minY; y < maxY; y++) {
+            Color.colorToHSV(bitmap.getPixel(x, y),hsv);
+            totalSaturation += hsv[1];
+        }
+
+        totalSaturation /= maxY-minY;
+
+        return totalSaturation;
+    }
+
+    private byte getRingCountFromSaturation(float saturation){
+        byte num;
+
+        //Determine the midpoint between each of the target saturation values.
+        final float max0 = Config.targetSaturation0 + (Config.targetSaturation1 - Config.targetSaturation0) / 2;
+        final float max1 = Config.targetSaturation1 + (Config.targetSaturation4 - Config.targetSaturation1) / 2;
+
+        if (saturation <= max0){
+            num = 0;
+        } else if (saturation > max0 && saturation < max1){
+            num = 1;
+        } else {
+            num = 4;
+        }
+
+        return num;
     }
 
 

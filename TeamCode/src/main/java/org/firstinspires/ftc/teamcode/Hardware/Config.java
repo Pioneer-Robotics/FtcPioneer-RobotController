@@ -48,9 +48,11 @@ public class Config {
     public static final double distanceBetweenLeftAndRightOdometersCm = 19.406;
     public static double distanceFromLeftOdoToMiddleOdoCm = 7.5; //TODO figure out what's going on here
 
-    //CAMERA
+    //RING DETECTION CAMERA
     public static final String camera = "Webcam 1";
-
+    public static final float targetSaturation0 =   0f; //TODO figure out actual value
+    public static final float targetSaturation1 =   0.5f;
+    public static final float targetSaturation4 =   1f;
 
 
     //The max speed our wheel motors will ever rotate (in ticks per second),
