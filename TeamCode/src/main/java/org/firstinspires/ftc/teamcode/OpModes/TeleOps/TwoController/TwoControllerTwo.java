@@ -166,7 +166,7 @@ public class TwoControllerTwo extends TeleOpScript {
 
         robot.setWobbleServoPosition(gamepad2.x);
 
-        //Wobble Arm Up/Down
+        //Wobble Arm Up/Down TODO add this in when hardware for that is there
 //        Wobble90_Chill.toggle(gamepad2.left_bumper);
 //        if(Wobble90_Chill.getBool()){
 //            Robot.get().setWobble90();
