@@ -48,6 +48,11 @@ public class Config {
     public static final double distanceBetweenLeftAndRightOdometersCm = 19.406;
     public static double distanceFromLeftOdoToMiddleOdoCm = 7.5; //TODO figure out what's going on here
 
+    //CAMERA
+    public static final String camera = "Webcam 1";
+
+
+
     //The max speed our wheel motors will ever rotate (in ticks per second),
         // 3 rotations per second. Used in calibration.
     @Deprecated
