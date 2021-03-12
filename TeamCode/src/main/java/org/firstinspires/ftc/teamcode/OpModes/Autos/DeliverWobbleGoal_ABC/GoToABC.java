@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Config;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
 
@@ -21,6 +22,8 @@ private static final int DETECT_DELAY = 500;
     boolean[] moveAUTO = new boolean[15]; //need a lot of booleans
     double standardPower;
     SquareMode codeMode;
+
+    Telemetry telemetry;
 
 
 
@@ -63,10 +66,10 @@ private static final int DETECT_DELAY = 500;
 
     @Override
     public void loop() {
-        telemetry.addData("elapsed time", deltaTime.seconds());
-        telemetry.addData("current mode / stage", codeMode);
-        telemetry.addData("number of rings", numberOfRings);
-        telemetry.addData("degrees from Robot", Robot.get().getRotationDegrees());
+//        telemetry.addData("elapsed time", deltaTime.seconds());
+//        telemetry.addData("current mode / stage", codeMode);
+//        telemetry.addData("number of rings", numberOfRings);
+//        telemetry.addData("degrees from Robot", Robot.get().getRotationDegrees());
 
 
 
@@ -81,7 +84,7 @@ private static final int DETECT_DELAY = 500;
                 case driveToRings:{
                     checkRingsDelayed(DETECT_DELAY);
                     if (!moveAUTO[0]){
-                        moveAUTO[0] = Robot.get().driveStraight(105); //prev 65 increased by 40
+                        moveAUTO[0] = Robot.get().driveStraight(65); //prev 65 increased by 40
                     }
                     //reachedTarget.toggle(helper);
                     if(moveAUTO[0]){
@@ -97,11 +100,12 @@ private static final int DETECT_DELAY = 500;
                         goToSquare = new GoToC();
                     }
                     else if(numberOfRings == 1){
-                        goToSquare = new GoToC(); //TODO change this once B is done
+                        goToSquare = new GoToB();
                     }
                     else{
                         goToSquare = new GoToA();
                     }
+
                     //move to the next state
                     codeMode = SquareMode.goToSquareThenLineUpForShooting;
                 }
@@ -119,8 +123,8 @@ private static final int DETECT_DELAY = 500;
                     //deltaTime.reset(); TODO remove if robot still shoots
                     codeMode = SquareMode.shootRings; //TODO change this to shootRings once launcher works
                     break;
-                case shootRings:{ //this is skipped, never runs
-                    telemetry.addLine("firing");
+                case shootRings:{
+                    //telemetry.addLine("firing");
                     switch (launchMode) {
                         case IDLE:
                             launchTimer.reset();
