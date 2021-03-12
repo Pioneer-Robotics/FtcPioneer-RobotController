@@ -17,7 +17,7 @@ public class OnlyAuto extends GenericOpMode{
     @Override
     public void runOpMode() throws InterruptedException {
         selectAutoAndTeleOp();
-        initAndWaitForStart();
+        initAndWaitForStart(true,0.5,0.5,0.1);
         while(opModeIsActive()){
             auto.loop();
             Robot.get().update(auto.useOdos,true);
