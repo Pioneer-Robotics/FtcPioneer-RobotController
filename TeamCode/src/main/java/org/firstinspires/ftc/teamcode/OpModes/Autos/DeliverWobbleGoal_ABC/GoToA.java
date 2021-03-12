@@ -1,44 +1,34 @@
 package org.firstinspires.ftc.teamcode.OpModes.Autos.DeliverWobbleGoal_ABC;
 
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-import org.firstinspires.ftc.teamcode.Helpers.*;
+import org.firstinspires.ftc.teamcode.Helpers.Utils;
+import org.firstinspires.ftc.teamcode.Helpers.bMath;
 
-public class GoToA extends GoToSquare{
-    boolean[] boolList = new boolean[10];
+public class GoToA extends GoToSquare {
     Robot robot;
-    Gamepad gamepad;
-    SquareMode GoA;
-    Telemetry telemetry;
-    Toggle helper;
-
-    //these are to make sure the turn was good
     double error;
     double tolerance;
     ElapsedTime deltaTime;
+    boolean[] boolList = new boolean[3];
+    boolean done;
+    SquareMode codeMode;
 
-    GoToA(){
+    GoToA() {
         Utils.setBooleanArrayToFalse(boolList);
         done = false;
-        GoA = SquareMode.goToSquare;
-        telemetry = DataHub.telemetry;
-        gamepad = DataHub.gamepad1;
-        helper = new Toggle(false);
-        robot = Robot.get(); //this will make it easier to write and read the code
-
-
-        deltaTime = new ElapsedTime();
+        codeMode = SquareMode.goToSquare;
     }
 
     enum SquareMode {
         goToSquare,
-        backUp,
-        turnTo90,
+        backward,
+        turn90,
         forwardSlightly,
-        turnTo180,
+        turn180,
+        goToRingShootPos,
         adjustTurnAccurate,
         checkTurnWasCorrect,
         DONE
@@ -46,48 +36,42 @@ public class GoToA extends GoToSquare{
 
     @Override
     void goToSquareAndThenToShootPos() {
-        helper.toggle(gamepad.a);
-        switch (GoA) {
+        switch (codeMode) {
             case goToSquare:
-                //drive forward a distance
-                if (!boolList[0]){
-                    boolList[0] = robot.driveStraight(180-120);
+                if (!boolList[0]) {
+                    boolList[0] = Robot.get().driveStraight(70);
                 }
-                if (boolList[0]){
-                    robot.deactivateDriveStraight();
-                    robot.setDrivePowers(0,0);
-                    GoA = SquareMode.backUp;
+                if (boolList[0]) {
+                    codeMode = SquareMode.goToRingShootPos;
                 }
                 break;
-            case backUp:
-                if(!boolList[1]){
-                    boolList[1] = robot.driveStraight(-20);
+            case backward:
+                if (!boolList[1]) {
+                    boolList[1] = Robot.get().driveStraight(-30);
                 }
-                if(boolList[1]){
-                    robot.setDrivePowers(0,0);
-                    GoA = SquareMode.turnTo90;
+                if (boolList[1]) {
+                    codeMode = SquareMode.turn90;
                 }
-                break;
-            case turnTo90:
-                robot.setDrivePowers(0.4,-0.4);
-                if(Math.abs( robot.getRotationDegrees() ) > 85){
-                    robot.brake();
-                    robot.setDrivePowers(0,0);
-                    GoA = SquareMode.forwardSlightly;
+            case turn90:
+                Robot.get().setDrivePowers(0.4, -0.4);
+                if (Math.abs(Robot.get().getHeading(AngleUnit.DEGREES)) > 85) {
+                    Robot.get().setDrivePowers(0, 0);
+                    codeMode = SquareMode.forwardSlightly;
                 }
                 break;
-            case forwardSlightly:{
-                if (!boolList[2]){
-                    boolList[2] = robot.driveStraight(62);
+            case forwardSlightly:
+                if (!boolList[2]) {
+                    boolList[2] = Robot.get().driveStraight(55);
                 }
-                if(boolList[2]){
-                    GoA = SquareMode.turnTo180;
+                if (boolList[2]) {
+                    codeMode = SquareMode.turn180;
                 }
-            }
-            case turnTo180:
-                robot.setDrivePowers(0.35,-0.35);
-                if (Math.abs( robot.getRotationDegrees() ) > 175){
-                    GoA = SquareMode.adjustTurnAccurate;
+                break;
+            case turn180:
+                Robot.get().setDrivePowers(0.35, -0.35);
+                if (Math.abs(Robot.get().getRotationDegrees()) > 175) {
+                    Robot.get().setDrivePowers(0, 0);
+                    codeMode = SquareMode.adjustTurnAccurate;
                 }
                 break;
             case adjustTurnAccurate:
@@ -96,39 +80,31 @@ public class GoToA extends GoToSquare{
                 double P = 0.1;
                 tolerance = 3; //tolerance is the amount of allowable error
                 double speed = P * error + 0.32; //0.32 is about the minimum needed to move
-                if(Math.abs(error) > tolerance){ //error is too large so adjust
+                if (Math.abs(error) > tolerance) { //error is too large so adjust
                     robot.setDrivePowers(-speed, speed);
-                }
-                else{ //this means we're within tolerance
-                    GoA = SquareMode.checkTurnWasCorrect;
+                } else { //this means we're within tolerance
+                    codeMode = SquareMode.checkTurnWasCorrect;
                     deltaTime.reset();
                     robot.brake();
-                    robot.setDrivePowers(0,0);
+                    robot.setDrivePowers(0, 0);
                 }
                 break;
             case checkTurnWasCorrect:
                 error = bMath.subtractAnglesDeg(180, robot.getRotationDegrees());
                 tolerance = 3; //tolerance is the amount of allowable error
-                robot.setDrivePowers(0,0);
-                if(Math.abs(error) < tolerance){
-                    if(deltaTime.seconds() > 1){
-                        GoA = SquareMode.DONE;
+                robot.setDrivePowers(0, 0);
+                if (Math.abs(error) < tolerance) {
+                    if (deltaTime.seconds() > 1) {
+                        codeMode = SquareMode.DONE;
                     }
-                }
-                else{
-                    GoA = SquareMode.adjustTurnAccurate;
+                } else {
+                    codeMode = SquareMode.adjustTurnAccurate;
                 }
 
                 break;
             case DONE:
-                super.done = true;
-                robot.dontBrake(); //sets zero power behavior of drive motors to float
-                robot.setDrivePowers(0,0);
-                break;
-            default:
-                GoA = SquareMode.DONE;
+                done = true;
                 break;
         }
     }
-
 }
