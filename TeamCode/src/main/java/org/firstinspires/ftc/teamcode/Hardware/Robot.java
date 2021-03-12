@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Helpers.BulkReader;
 import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Vector2;
@@ -32,9 +33,12 @@ public class Robot{
     static Collector collector;
     static PositionTracker mainOdometer;
     static WobbleArm wobbleArm;
+    public static AutoPilot autoPilot;
+
     HardwareMap hardwareMap;
     MotorData motorData;
-    public static AutoPilot autoPilot;
+    BulkReader bulkReader;
+
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
@@ -42,6 +46,7 @@ public class Robot{
         this.telemetry = DataHub.telemetry;
         this.hardwareMap = DataHub.hardwareMap;
         motorData = new MotorData();
+        bulkReader = new BulkReader();
         //the robot object does not exist until this method completes, so trying to create
             //new "DriveTrain" objects and similar such will not work
     }
