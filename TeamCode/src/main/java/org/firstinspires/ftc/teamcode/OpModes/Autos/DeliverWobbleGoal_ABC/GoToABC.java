@@ -7,8 +7,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Hardware.Config;
 import org.firstinspires.ftc.teamcode.Hardware.Robot;
-
-import org.firstinspires.ftc.teamcode.Helpers.*;
+import org.firstinspires.ftc.teamcode.Helpers.DataHub;
+import org.firstinspires.ftc.teamcode.Helpers.Toggle;
+import org.firstinspires.ftc.teamcode.Helpers.Utils;
 import org.firstinspires.ftc.teamcode.OpModes.Autos.AutoScript;
 
 
@@ -22,10 +23,14 @@ private static final int DETECT_DELAY = 500;
     boolean[] moveAUTO = new boolean[15]; //need a lot of booleans
     double standardPower;
     SquareMode codeMode;
+    Wobble wobble;
 
     Telemetry telemetry;
 
+    public double begdis;
+    public double tgdist;
 
+    boolean dist = false;
 
     GoToSquare goToSquare;
 
@@ -49,7 +54,12 @@ private static final int DETECT_DELAY = 500;
     byte timesFired = 0;
     //
 
-
+    enum Wobble{
+        Turn,
+        MoveArmAndForward,
+        ArmUpTurn180,
+        Forward
+    }
 
     enum SquareMode {
         start,
@@ -59,9 +69,8 @@ private static final int DETECT_DELAY = 500;
         resetTimer,
         shootRings,
         park,
+        WobbleGoal,
         DONE
-
-
     }
 
     @Override
@@ -159,12 +168,60 @@ private static final int DETECT_DELAY = 500;
 
                     }
                     if (timesFired >= 3 ) {
-                        codeMode = SquareMode.park;
+                        codeMode = SquareMode.WobbleGoal;
                         Robot.get().emergencyStop();
                     }
                     Robot.get().launchOverride(true);
                 }
                 break;
+                case WobbleGoal:
+                    switch (wobble){
+                        case Turn:
+                            double angle = Robot.angle();
+                            robot.setDrivePowers(-.35,.35);
+                            if(angle <= 165){
+                                robot.setDrivePowers(0,0);
+                                wobble = Wobble.MoveArmAndForward;
+                            }
+                            break;
+                        case MoveArmAndForward:
+                            //robot.setWobble90();  this is where it will go
+                            robot.setDrivePowers(.25,.25);
+                            if(!dist){
+                                begdis = Robot.get().getRightOdo();
+                                tgdist = begdis + 50;
+                                dist = true;
+                            }
+                            if(Robot.get().getRightOdo() >= tgdist){
+                                Robot.get().setDrivePowers(0,0);
+                                wobble = Wobble.ArmUpTurn180;
+                                dist = false;
+                            }
+                            break;
+                        case ArmUpTurn180:
+                            //Move arm up goes here
+                            double angle2 = Robot.angle();
+                            robot.setDrivePowers(-.25,.25);
+                            if(angle2 > 20){
+                                robot.setDrivePowers(0,0);
+                                wobble = Wobble.Forward;
+                            }
+                            break;
+                        case Forward:
+                            robot.setDrivePowers(.25,.25);
+                            if(!dist){
+                                begdis = Robot.get().getRightOdo();
+                                tgdist = begdis + 100;
+                                dist = true;
+                            }
+                            if(Robot.get().getRightOdo() >= tgdist){
+                                Robot.get().setDrivePowers(0,0);
+                                codeMode = SquareMode.park;
+                                dist = false;
+                            }
+                            break;
+                    }
+                    break;
                 case park:{
                     if(!moveAUTO[6]) {
                         moveAUTO[6] = Robot.get().driveStraight(-40, 0.3, 3);
