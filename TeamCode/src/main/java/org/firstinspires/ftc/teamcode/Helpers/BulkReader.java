@@ -23,33 +23,13 @@ public class BulkReader {
         hardwareMap = DataHub.hardwareMap;
         allHubs = hardwareMap.getAll(LynxModule.class);
         setAllHubsToManualBulkRead();
-        initMotors();
         robot = Robot.get();
-    }
-
-    private void initMotors(){
-        odoLeft = hardwareMap.get(DcMotorEx.class, Config.motorRT);
-        odoRight = hardwareMap.get(DcMotorEx.class, Config.motorLT);
-        odoMiddle = hardwareMap.get(DcMotorEx.class, Config.motorRB);
     }
 
     private void setAllHubsToManualBulkRead(){
         for (LynxModule module : allHubs) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
-    }
-    private void initHashMap(){
-        encoders = new HashMap<DcMotorEx, Integer>(5);
-        encoders.put(odoLeft, 0);
-        encoders.put(odoRight, 0);
-        encoders.put(odoMiddle, 0);
-    }
-
-    //Robot.update() should start by pulling data
-    public void pullData(){
-        encoders.put(odoLeft, odoLeft.getCurrentPosition());
-        encoders.put(odoRight, odoRight.getCurrentPosition());
-        encoders.put(odoMiddle, odoMiddle.getCurrentPosition());
     }
 
     //Robot.update() should end by clearing cache
