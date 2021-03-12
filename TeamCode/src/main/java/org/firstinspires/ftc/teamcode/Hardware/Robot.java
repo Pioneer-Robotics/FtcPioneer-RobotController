@@ -86,6 +86,7 @@ public class Robot{
         ringMeasurer.update();
         if (useOdometers) {updateOdometers();}
         launcher.updateLauncher(!dumbLauncher);
+        bulkReader.clearCache();
     }
 
     public double getLaserHigh(){

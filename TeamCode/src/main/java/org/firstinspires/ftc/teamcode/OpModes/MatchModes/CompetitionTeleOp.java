@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.OpModes.TeleOps.ExampleTeleOp;
 import org.firstinspires.ftc.teamcode.OpModes.TeleOps.TwoController.TwoControllerTwo;
 
 @TeleOp (name = "CompTeleOp", group = "example")
-public class CompetitionTeleop extends GenericOpMode {
+public class CompetitionTeleOp extends GenericOpMode {
     @Override
     public void selectAutoAndTeleOp(){
         auto = new NullAuto(); //you need this even if you don't use it
@@ -21,7 +21,7 @@ public class CompetitionTeleop extends GenericOpMode {
         while(opModeIsActive()) {
             teleOp.loop();
             telemetry.update();
-            Robot.get().update(false);
+            Robot.get().update(true); //TODO change to false to remove lag
         }
     }
 }

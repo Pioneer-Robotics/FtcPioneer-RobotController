@@ -245,7 +245,7 @@ public class TwoControllerTwo extends TeleOpScript {
 
 
 
-        robot.update(false);
+
     }
 
     @Override

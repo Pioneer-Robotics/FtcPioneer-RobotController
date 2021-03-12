@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Helpers.Toggle;
@@ -9,7 +10,7 @@ public class Collector{
 
 
     ServoPair servos;
-    DcMotor collectorMotor;
+    DcMotorEx collectorMotor;
     Toggle collectorON;
     boolean collecting;
     float collectorSpeed;
@@ -26,8 +27,8 @@ public class Collector{
         servos = new ServoPair(Robot.get().hardwareMap.get(Servo.class,Config.collectorServoLeft),
                  Robot.get().hardwareMap.get(Servo.class,Config.collectorServoRight),
                 true);
-        collectorMotor = Robot.get().hardwareMap.get(DcMotor.class,Config.collectorMotor);
-        collectorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        collectorMotor = Robot.get().hardwareMap.get(DcMotorEx.class,Config.collectorMotor);
+        collectorMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         collectorSpeed = 1;
         collecting=false;
     }
