@@ -21,7 +21,7 @@ public class CompetitionTeleOp extends GenericOpMode {
         while(opModeIsActive()) {
             teleOp.loop();
             telemetry.update();
-            Robot.get().update(true); //TODO change to false to remove lag
+            Robot.get().update(false);
         }
     }
 }
