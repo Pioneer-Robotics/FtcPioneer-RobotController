@@ -1,27 +1,26 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 class MotorPair {
-    public DcMotor motor1;
-    public DcMotor motor2;
+    public DcMotorEx motor1;
+    public DcMotorEx motor2;
 
-    public MotorPair(DcMotor motorA, DcMotor motorB){
+    public MotorPair(DcMotorEx motorA, DcMotorEx motorB){
          motor1 = motorA;
          motor2 = motorB;
     }
-    public MotorPair setDriveMode(DcMotor.RunMode mode) {
+    public MotorPair setDriveMode(DcMotorEx.RunMode mode) {
          motor1.setMode(mode);
          motor2.setMode(mode);
          return this;
     }
-    public MotorPair setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior){
+    public MotorPair setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior behavior){
         motor1.setZeroPowerBehavior(behavior);
         motor2.setZeroPowerBehavior(behavior);
         return this;
     }
-    public MotorPair setDirection(DcMotorSimple.Direction direction){
+    public MotorPair setDirection(DcMotorEx.Direction direction){
         motor1.setDirection(direction);
         motor2.setDirection(direction);
         return this;

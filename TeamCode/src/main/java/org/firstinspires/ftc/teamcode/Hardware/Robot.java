@@ -1,17 +1,15 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Helpers.BulkReader;
 import org.firstinspires.ftc.teamcode.Helpers.ComplexNum;
 import org.firstinspires.ftc.teamcode.Helpers.DataHub;
 import org.firstinspires.ftc.teamcode.Helpers.Vector2;
@@ -32,10 +30,14 @@ public class Robot{
     static Collector collector;
     static PositionTracker mainOdometer;
     static WobbleArm wobbleArm;
+    public static AutoPilot autoPilot;
+
     HardwareMap hardwareMap;
     MotorData motorData;
     public static AutoPilot autoPilot;
     static VuforiaBitmapRingDetector camera;
+    BulkReader bulkReader;
+
 
 
     //private constructor because we don't want anybody instantiating Robot more than once
@@ -43,6 +45,7 @@ public class Robot{
         this.telemetry = DataHub.telemetry;
         this.hardwareMap = DataHub.hardwareMap;
         motorData = new MotorData();
+        bulkReader = new BulkReader();
         //the robot object does not exist until this method completes, so trying to create
             //new "DriveTrain" objects and similar such will not work
     }
@@ -84,6 +87,7 @@ public class Robot{
         ringMeasurer.update();
         if (useOdometers) {updateOdometers();}
         launcher.updateLauncher(!dumbLauncher);
+        bulkReader.clearCache();
     }
 
     public double getLaserHigh(){
@@ -248,6 +252,10 @@ public class Robot{
     }
     public void setWobbleRunMode(DcMotor.RunMode runMode) {
         wobbleArm.setRunMode(runMode);
+    }
+
+    public static double angle(){
+        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public int getRingsWithCamera(double scanX, double scanY, double scanH){return camera.getRings(scanX,scanY,scanH);}
