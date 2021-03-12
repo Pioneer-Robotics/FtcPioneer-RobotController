@@ -13,6 +13,7 @@ public class AutoPilot {
     double forwardSpeed; //how fast should it move by default?
     double threshold; //how close to target is close enough?
     public double targetDistance; //how far does it need to move (if problems suspect this)
+    boolean FixingStraightNeeded;
     DriveMode driveMode; //basically what state are we in?
 
     //these are used as part of the "turnAbsolute()" method
@@ -22,6 +23,11 @@ public class AutoPilot {
     double targetAngle;
     double turnThreshold;
     double P; //used to PID the speed thing
+    double SavedRotation;
+    double AngleToleranceSmall = Robot.get().getRotationDegrees() -3;
+    double AngleToleranceBig = Robot.get().getRotationDegrees() + 3;
+
+    FixDS DS;
 
     //more general variables
     Robot robot;
@@ -44,6 +50,7 @@ public class AutoPilot {
         //block used for "turnAbsolute()"
         startingRotation = 0;
         turnMode = TurnMode.CALCULATE;
+
         turnNeeded = false;
         targetAngle = 0;
         turnThreshold = Math.toRadians(10); //how close is close enough when it comes to turing?
@@ -55,6 +62,11 @@ public class AutoPilot {
         telemetry = DataHub.telemetry;
         stopReps = new Toggle(false);
         autoPilotNeeded = false;
+    }
+    enum FixDS{
+        CALCULATE,
+        FIX,
+        EXIT_FixDS
     }
     enum DriveMode{
         CALCULATE,
@@ -90,15 +102,18 @@ public class AutoPilot {
      */
     void driveStraight(){
         boolean ans = false;
+        double startingDeg = 0;
         switch(driveMode){
             case CALCULATE: //this should only run once, not every cycle, and it shouldn't be possible to run again until the full run finishes
                 startingRotation = Robot.get().getRotationRad(); //remembers the rotation we want to keep
                 startingLeftOdoDistance = Robot.get().getLeftOdo(); //what does the left odo measure right now?
                 startingRightOdoDistance = Robot.get().getRightOdo(); //what does the right odo measure rn?
                 driveMode = DriveMode.DRIVE_FORWARD; //move on the next state
+                startingDeg = robot.getRotationDegrees();
                 telemetry.addLine("calculating");
                 break;
             case DRIVE_FORWARD:
+                double AngleDelta = bMath.subtractAnglesDeg(startingDeg, robot.getRotationDegrees());
                 if((avgChangeInLeftAndRightOdo() - targetDistance) > threshold){ //we've overshot (gone to far)
                     Robot.get().setDrivePowers(-forwardSpeed, -forwardSpeed);
                 }
@@ -108,6 +123,10 @@ public class AutoPilot {
                 else{ //this means we're in the target range
                     driveMode = DriveMode.EXIT_AUTOPILOT;
                 }
+                if (Math.abs(AngleDelta) > 3){
+                SuperStraight();
+                FixingStraightNeeded = true;
+            }
                 telemetry.addLine("driving forward");
                 telemetry.addData("distance travelled", avgChangeInLeftAndRightOdo());
                 break;
@@ -149,6 +168,37 @@ public class AutoPilot {
                 break;
             case EXIT_AUTOPILOT:
                 break;
+        }
+    }
+    void SuperStraight(){
+        switch (DS){
+            case FIX:{
+                CheckLeavingDM();
+                SavedRotation = robot.getRotationDegrees();
+                if (SavedRotation < SavedRotation +3){
+                    robot.setDrivePowers(0.25,0.4);
+                } else if (SavedRotation < SavedRotation -3){
+                    robot.setDrivePowers(0.4,0.25);
+                } else {
+                    DS = FixDS.EXIT_FixDS;
+                }
+            }
+            break;
+            case EXIT_FixDS:{
+                FixingStraightNeeded = false;
+                driveMode = DriveMode.DRIVE_FORWARD;
+            }
+            }
+    }
+    void CheckLeavingDM(){
+        if((avgChangeInLeftAndRightOdo() - targetDistance) > threshold){ //we've overshot (gone to far)
+            Robot.get().setDrivePowers(-forwardSpeed, -forwardSpeed);
+        }
+        else if ((avgChangeInLeftAndRightOdo() - targetDistance) < -threshold){ //haven't gone far enough
+            Robot.get().setDrivePowers(forwardSpeed, forwardSpeed);
+        }
+        else{ //this means we're in the target range
+            driveMode = DriveMode.EXIT_AUTOPILOT;
         }
     }
 }

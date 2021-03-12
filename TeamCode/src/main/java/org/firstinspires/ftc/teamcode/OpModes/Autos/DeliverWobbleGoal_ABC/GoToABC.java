@@ -81,7 +81,7 @@ private static final int DETECT_DELAY = 500;
                 case driveToRings:{
                     checkRingsDelayed(DETECT_DELAY);
                     if (!moveAUTO[0]){
-                        moveAUTO[0] = Robot.get().driveStraight(105); //prev 65 increased by 40
+                        moveAUTO[0] = Robot.get().driveStraight(65); //prev 65 increased by 40
                     }
                     //reachedTarget.toggle(helper);
                     if(moveAUTO[0]){
@@ -162,15 +162,16 @@ private static final int DETECT_DELAY = 500;
                 }
                 break;
                 case park:{
-                    if (moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3)){
-                        codeMode = SquareMode.DONE;
-                        robot.deactivateDriveStraight();
+                    if (!moveAUTO[6]){
+                        moveAUTO[6] = Robot.get().driveStraight(-60, 0.3, 3);
+                    }
+                    if (moveAUTO[6]){
+                        robot.setDrivePowers(0,0);
                     }
                 }
                 break;
                 case DONE:{
                     robot.stopAllMotors();
-                    checkRingsDelayed(DETECT_DELAY);
                     robot.setDrivePowers(0,0);
                 }
                 break;
