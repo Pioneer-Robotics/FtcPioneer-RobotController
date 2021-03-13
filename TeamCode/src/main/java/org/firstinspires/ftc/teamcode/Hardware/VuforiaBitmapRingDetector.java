@@ -58,8 +58,9 @@ public class VuforiaBitmapRingDetector {
 
 
     int getRings(double scanX, double scanY, double scanH){
-        int num = -1;
-
+        int num0 = -1; //if anybody makes this an array, I skin you
+        int num1 = -1;
+        int num2 = -1;
         try {
             frame = vuforia.getFrameQueue().take();
             //Convert frame to bitmap
@@ -67,9 +68,15 @@ public class VuforiaBitmapRingDetector {
 
             //If multiple points on the image need to be checked, the additional checks would go here
             if  (image != null) {
-                num = getRingCountFromSaturation(
-                        getSaturationFromVerticalLine(image, scanX, scanY - scanH / 2, scanY + scanH / 2)
-                );
+                float saturation= getSaturationFromVerticalLine(image, scanX - Config.cameraSamplingDistance, scanY - scanH / 2, scanY + scanH / 2);
+                num0 = getRingCountFromSaturation(saturation);
+                telemetry.addData("Saturation0: ", saturation);
+                saturation= getSaturationFromVerticalLine(image, scanX, scanY - scanH / 2, scanY + scanH / 2);
+                num1 = getRingCountFromSaturation(saturation);
+                telemetry.addData("Saturation1: ", saturation);
+                saturation= getSaturationFromVerticalLine(image, scanX + Config.cameraSamplingDistance, scanY - scanH / 2, scanY + scanH / 2);
+                num2 = getRingCountFromSaturation(saturation);
+                telemetry.addData("Saturation2: ", saturation);
             }
 
         } catch (InterruptedException e){
@@ -78,7 +85,7 @@ public class VuforiaBitmapRingDetector {
         }
 
 
-        return num;
+        return Math.max(num0, Math.max(num1,num2));
     }
 
     private float getSaturationFromVerticalLine(Bitmap bitmap, double scanX, double scanMinY, double scanMaxY) {

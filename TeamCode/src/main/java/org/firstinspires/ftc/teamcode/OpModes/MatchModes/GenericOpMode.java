@@ -14,7 +14,7 @@ public abstract class GenericOpMode extends LinearOpMode {
     ElapsedTime deltaTime;
     AutoScript auto;
     TeleOpScript teleOp;
-    public int numberOfRings = -1;
+    private int numberOfRings = -1;
     public abstract void selectAutoAndTeleOp();
     public void initAndWaitForStart(){
         initAndWaitForStart(false, 0, 0, 0);
@@ -23,7 +23,11 @@ public abstract class GenericOpMode extends LinearOpMode {
         handleInits();
         if (checkRings){
             checkRingsLoop(scanX,scanY,scanH);
+            telemetry.addLine("Ring Loop Entered");
+            telemetry.update();
         } else {
+            telemetry.addLine("Wait Loop Entered");
+            telemetry.update();
             waitForStart();
         }
     }
@@ -46,6 +50,7 @@ public abstract class GenericOpMode extends LinearOpMode {
     private void checkRingsLoop(double scanX, double scanY, double scanH){
         while(!isStarted() && !isStopRequested()){
             numberOfRings = Robot.get().getRingsWithCamera(scanX, scanY, scanH);
+            telemetry.addData("NumberOfRings: ",numberOfRings);
             telemetry.update();
         }
     }
@@ -63,6 +68,9 @@ public abstract class GenericOpMode extends LinearOpMode {
         makeSureRobotDoesntMoveBetweenAutoAndTeleOp();
         Robot.get().update(true);
         telemetry.update();
+    }
+    public int getNumberOfRings(){
+        return numberOfRings;
     }
 
 

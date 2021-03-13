@@ -34,7 +34,6 @@ public class Robot{
 
     HardwareMap hardwareMap;
     MotorData motorData;
-    public static AutoPilot autoPilot;
     static VuforiaBitmapRingDetector camera;
     BulkReader bulkReader;
 
@@ -57,7 +56,7 @@ public class Robot{
         autoPilot = new AutoPilot();
         launcher = new Launcher(robot.telemetry);
         collector = new Collector();
-        VuforiaBitmapRingDetector camera = new VuforiaBitmapRingDetector(robot.telemetry);
+        camera = new VuforiaBitmapRingDetector(robot.telemetry);
         imu = Robot.get().hardwareMap.get(BNO055IMU.class, "imu");
         wobbleArm = new WobbleArm();
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
